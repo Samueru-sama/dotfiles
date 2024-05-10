@@ -1,0 +1,93 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "color": {
+      "1": "36",
+      "2": "36"
+    },
+    "padding": {
+      "left": 1,
+      "right": 2,
+      "top": 1
+    }
+  },
+  "display": {
+    "separator": " ",
+    "color": {
+      "keys": "36"
+    }
+  },
+  "modules": [
+    "separator",
+    {
+     "key": "Weather",
+     "type": "command",
+     "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/fastfetch/weatherinfo"
+    },
+    {
+     "key": "Date & Time",
+     "type": "command",
+     "text": "( fastfetch -s datetime --pipe -l none; fastfetch -s uptime --pipe -l none ) | sed 's/Date & Time //g; s/Uptime/- Up:/g' | tr '\n' ' '",
+    },
+    "separator",
+    {
+     "key": "System",
+     "type": "command",
+     "text": "( fastfetch -s os --pipe -l none; fastfetch -s kernel --pipe -l none ) | sed 's/Kernel/- Kernel/g; s/OS //g' | tr '\n' ' '",
+    },
+    {
+     "key": "Packages",
+     "type": "command",
+     "text": "( fastfetch -s packages --pipe -l none; echo \"-\"; am -f --less && echo \"(AppMan)\" ) | sed 's/Packages //g' | tr '\n' ' '",
+    },
+    {
+     "key": "WM & Theme",
+     "type": "command",
+     "text": "( fastfetch -s wm --pipe -l none; fastfetch -s theme --pipe -l none ) | sed 's/WM //g; s/Theme/-/g' | tr '\n' ' '"
+    },
+    {
+      "key": "Icon & Font",
+      "type": "command",
+      "text": "( fastfetch -s icons --pipe -l none; fastfetch -s font --pipe -l none ) | sed 's/Icons //g; s/Font/-/g' | tr '\n' ' '"
+    },
+    {
+      "key": "Terminal & Font",
+      "type": "command",
+      "text": "( fastfetch -s terminal --pipe -l none; fastfetch -s terminalfont --pipe -l none ) | sed 's/Terminal //g; s/Font/-/g' | tr '\n' ' '"
+    },
+    {
+     "key": "Interactive Shell",
+     "type": "shell",
+    },
+    "cpu",
+    "memory",
+    {
+      "key": "Swap",
+      "type": "command",
+      "text": "zramctl --raw | awk 'NR==2{print $5\"iB (\"$4\"iB / \"$3 \"iB) - ZRAM (\"$2\")\"}' | sed 's/\\([GMK]\\)iB/ \\1iB/g; s/BiB/ B/g'"
+    },
+    {
+      "key": "GPU",
+      "type": "command",
+      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/fastfetch/gpuinfo"
+    },
+    {
+      "key": "Vulkan",
+      "type": "command",
+      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/fastfetch/vulkaninfo"
+    },
+    {
+      "type": "display",
+      "compactType": "original-with-refresh-rate"
+    },
+    "disk",
+    "physicaldisk",
+    {
+     "key": "Physical Disk Total IO",
+     "type": "diskio",
+     "detectTotal": true
+    },
+    "break",
+    "colors"
+  ]
+}
