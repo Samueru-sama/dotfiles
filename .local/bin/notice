@@ -1,1 +1,2 @@
 # scripts get symlinked here since this location is part of $PATH
+# the symlink must not have the extension in its name
