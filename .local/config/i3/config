@@ -1,0 +1,338 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # DEFAULT MODKEY / VARIABLES / WORKSPACES / DISPLAYS / LOCKSCREEN # # # # #
+set $MOD Mod4
+set $ALT Mod1
+set $CTRL Control
+set $SHFT Shift
+set $FW for_window
+set $WSP workspace
+set $EXC exec --no-startup-id
+set $EXCA exec_always --no-startup-id
+set $MVTO move container to
+set $RSZ resize set
+set $MVC move position center
+set $FLOAT floating enable
+
+set $MSG i3-msg
+set $BAR polybar
+set $BIND bindsym
+set $WDUNST exec --no-startup-id dunstify -r 33 -t 600
+set $ADUNST dunstify -r 33 -t 1500
+set $CONFIG "${XDG_CONFIG_HOME:-$HOME/.config}"
+set $TXTE mousepad
+
+# using which because command -v doesn't fail if one arg is missing
+$EXCA which $BAR $MSG $TXTE i3lock dunstify rofi xss-lock feh picom \
+|| notify-send -u critical 'i3 Config WARNING!' 'MISSING DEPENDENCY!'
+
+set $WS1 WorkSpace "1"
+set $WS2 WorkSpace "2"
+set $WS3 WorkSpace "3"
+set $WS4 WorkSpace "4"
+set $WS5 WorkSpace "5"
+set $WS6 WorkSpace "6"
+set $WS7 WorkSpace "7"
+set $WS8 WorkSpace "8"
+set $WS9 WorkSpace "9"
+set $WS10 WorkSpace "10"
+set $WS11 WorkSpace "11:GAME"
+set $WS12 WorkSpace "12:CHAT"
+
+set $D1 output DP-1
+set $D2 output DP-2
+set $D3 output DP-3
+
+$WS1 $D1
+$WS2 $D2
+$WS3 $D3
+$WS4 $D1
+$WS5 $D2
+$WS6 $D3
+$WS7 $D1
+$WS8 $D2
+$WS9 $D3
+$WS11 $D2
+$WS12 $D3
+
+$EXC aplay -c 2 -f S16_LE -r 2000 /dev/random & sleep 5 && killall aplay
+$EXCA picom || fastcompmgr &
+$EXCA xset dpms 0 0 300 &
+$EXC sleep 2 && pulsemixer --set-volume 65 &
+$EXCA --no-startup-id screenlayout &
+$EXC fehbg &
+$EXC xss-lock --transfer-sleep-lock -- i3lock -c 091f2e --nofork --clock \
+--time-color='#F0C674' --date-color='#FFFFFF' --inside-color='#0e1f30' \
+--time-str="%l:%M %p" --date-str="%A %d/%m/%y"
+
+$BIND $MOD+$SHFT+equal $EXC "xrandr --setmonitor extended auto DP-1,DP-2,DP-3 \
+&& killall $BAR && $BAR main"
+$BIND $MOD+equal $EXC xrandr --delmonitor extended && killall $BAR \
+&& sleep 0.1 && $BAR main | $BAR work1 | $BAR work3
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # COLORS / FONT / GAPS / BORDERS /  # # # # # # # # # # # # # 
+# class                     border  backgr   text  indicator child_border
+client.focused             #F0C674 #091f2e #F0C674  #A54242   #F0C674
+client.unfocused           #707880 #091f2e #d4d9d6  #707880   #091f2e
+client.focused_inactive    #707880 #091f2e #d4d9d6  #707880   #091f2e
+font pango:Nimbus Sans Bold 8.5
+gaps inner 6
+gaps outer 0
+smart_gaps off
+default_border pixel 1
+default_floating_border pixel 1
+mouse_warping output
+focus_follows_mouse no
+focus_on_window_activation focus
+$FW [urgent="latest"] focus
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # SWITCH TO WORKSPACES  # # # # # # # # # # # # # # # # # #
+$BIND $MOD+1 $WS1, $WDUNST "$WS1"
+$BIND $MOD+2 $WS2, $WDUNST "$WS2"
+$BIND $MOD+3 $WS3, $WDUNST "$WS3"
+$BIND $MOD+4 $WS4, $WDUNST "$WS4"
+$BIND $MOD+5 $WS5, $WDUNST "$WS5"
+$BIND $MOD+6 $WS6, $WDUNST "$WS6"
+$BIND $MOD+7 $WS7, $WDUNST "$WS7"
+$BIND $MOD+8 $WS8, $WDUNST "$WS8"
+$BIND $MOD+9 $WS9, $WDUNST "$WS9"
+$BIND $MOD+0 $WS10, $WDUNST "$WS10"
+
+$BIND $MOD+mod2+KP_1 $WS1, $WDUNST "$WS1"
+$BIND $MOD+mod2+KP_2 $WS2, $WDUNST "$WS2"
+$BIND $MOD+mod2+KP_3 $WS3, $WDUNST "$WS3"
+$BIND $MOD+mod2+KP_4 $WS4, $WDUNST "$WS4"
+$BIND $MOD+mod2+KP_5 $WS5, $WDUNST "$WS5"
+$BIND $MOD+mod2+KP_6 $WS6, $WDUNST "$WS6"
+$BIND $MOD+mod2+KP_7 $WS7, $WDUNST "$WS7"
+$BIND $MOD+mod2+KP_8 $WS8, $WDUNST "$WS8"
+$BIND $MOD+mod2+KP_9 $WS9, $WDUNST "$WS9"
+$BIND $MOD+mod2+KP_0 $WS10, $WDUNST "$WS10"
+$BIND $MOD+mod2+KP_Divide $WS11, $WDUNST "$WS11"
+$BIND $MOD+mod2+KP_Multiply $WS12, $WDUNST "$WS12"
+
+$BIND $MOD+$SHFT+Left move left 360 px
+$BIND $MOD+$SHFT+Down move down 245 px
+$BIND $MOD+$SHFT+Up move up 245 px
+$BIND $MOD+$SHFT+Right move right 360 px
+
+$BIND $MOD+$SHFT+s move left 360 px
+$BIND $MOD+$SHFT+d move down 245 px
+$BIND $MOD+$SHFT+e move up 245 px
+$BIND $MOD+$SHFT+f move right 360 px
+
+$BIND $MOD+$SHFT+h move left 360 px
+$BIND $MOD+$SHFT+j move down 245 px
+$BIND $MOD+$SHFT+k move up 245 px
+$BIND $MOD+$SHFT+l move right 360 px
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # MOVE FOCUS KEYS # # # # # # # # # # # # # # # # # #
+$BIND $MOD+Left focus left
+$BIND $MOD+Down focus down
+$BIND $MOD+Up focus up
+$BIND $MOD+Right focus right
+
+$BIND $MOD+s focus left
+$BIND $MOD+d focus down
+$BIND $MOD+e focus up
+$BIND $MOD+f focus right
+
+$BIND $MOD+h focus left
+$BIND $MOD+j focus down
+$BIND $MOD+k focus up
+$BIND $MOD+l focus right
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # RESIZE WINDOW # # # # # # # # # # # # # # # # # # #
+$BIND $MOD+$CTRL+Left resize shrink width 100 px or 15 ppt
+$BIND $MOD+$CTRL+Down resize shrink height 100 px or 15 ppt
+$BIND $MOD+$CTRL+Up resize grow height 100 px or 15 ppt
+$BIND $MOD+$CTRL+Right resize grow width 100 px or 15 ppt
+
+$BIND $MOD+$CTRL+s resize shrink width 100 px or 15 ppt
+$BIND $MOD+$CTRL+d resize shrink height 100 px or 15 ppt
+$BIND $MOD+$CTRL+e resize grow height 100 px or 15 ppt
+$BIND $MOD+$CTRL+f resize grow width 100 px or 15 ppt
+
+$BIND $MOD+$CTRL+h resize shrink width 100 px or 15 ppt
+$BIND $MOD+$CTRL+j resize shrink height 100 px or 15 ppt
+$BIND $MOD+$CTRL+k resize grow height 100 px or 15 ppt
+$BIND $MOD+$CTRL+l resize grow width 100 px or 15 ppt
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # MOVE WINDOW TO WORKSPACE/MONITOR  # # # # # # # # # # # # #
+$BIND $MOD+$SHFT+1 $MVTO $WS1, $WS1, $WDUNST "$WS1"
+$BIND $MOD+$SHFT+2 $MVTO $WS2, $WS2, $WDUNST "$WS2"
+$BIND $MOD+$SHFT+3 $MVTO $WS3, $WS3, $WDUNST "$WS3"
+$BIND $MOD+$SHFT+4 $MVTO $WS4, $WS4, $WDUNST "$WS4"
+$BIND $MOD+$SHFT+5 $MVTO $WS5, $WS5, $WDUNST "$WS5"
+$BIND $MOD+$SHFT+6 $MVTO $WS6, $WS6, $WDUNST "$WS6"
+$BIND $MOD+$SHFT+7 $MVTO $WS7, $WS7, $WDUNST "$WS7"
+$BIND $MOD+$SHFT+8 $MVTO $WS8, $WS8, $WDUNST "$WS8"
+$BIND $MOD+$SHFT+9 $MVTO $WS9, $WS9, $WDUNST "$WS9"
+$BIND $MOD+$SHFT+0 $MVTO $WS10, $WS10, $WDUNST "$WS10"
+
+$BIND $MOD+$SHFT+Mod2+KP_1 $MVTO $WS1, $WS1, $WDUNST "$WS1"
+$BIND $MOD+$SHFT+Mod2+KP_2 $MVTO $WS2, $WS2, $WDUNST "$WS2"
+$BIND $MOD+$SHFT+Mod2+KP_3 $MVTO $WS3, $WS3, $WDUNST "$WS3"
+$BIND $MOD+$SHFT+Mod2+KP_4 $MVTO $WS4, $WS4, $WDUNST "$WS4"
+$BIND $MOD+$SHFT+Mod2+KP_5 $MVTO $WS5, $WS5, $WDUNST "$WS5"
+$BIND $MOD+$SHFT+Mod2+KP_6 $MVTO $WS6, $WS6, $WDUNST "$WS6"
+$BIND $MOD+$SHFT+Mod2+KP_7 $MVTO $WS7, $WS7, $WDUNST "$WS7"
+$BIND $MOD+$SHFT+Mod2+KP_8 $MVTO $WS8, $WS8, $WDUNST "$WS8"
+$BIND $MOD+$SHFT+Mod2+KP_9 $MVTO $WS9, $WS9, $WDUNST "$WS9"
+$BIND $MOD+$SHFT+Mod2+KP_0 $MVTO $WS10, $WS10, $WDUNST "$WS10"
+$BIND $MOD+$SHFT+Mod2+KP_Divide $MVTO $WS11, $WS11, $WDUNST "$WS11"
+$BIND $MOD+$SHFT+Mod2+KP_Multiply $MVTO $WS12, $WS12, $WDUNST "$WS12"
+
+$BIND $MOD+$SHFT+Mod2+KP_End $MVTO $WS1, $WS1, $WDUNST "$WS1"
+$BIND $MOD+$SHFT+Mod2+KP_Down $MVTO $WS2, $WS2, $WDUNST "$WS2"
+$BIND $MOD+$SHFT+Mod2+KP_Next $MVTO $WS3, $WS3, $WDUNST "$WS3"
+$BIND $MOD+$SHFT+Mod2+KP_Left $MVTO $WS4, $WS4, $WDUNST "$WS4"
+$BIND $MOD+$SHFT+Mod2+KP_Begin $MVTO $WS5, $WS5, $WDUNST "$WS5"
+$BIND $MOD+$SHFT+Mod2+KP_Right $MVTO $WS6, $WS6, $WDUNST "$WS6"
+$BIND $MOD+$SHFT+Mod2+KP_Home $MVTO $WS7, $WS7, $WDUNST "$WS7"
+$BIND $MOD+$SHFT+Mod2+KP_Up $MVTO $WS8, $WS8, $WDUNST "$WS8"
+$BIND $MOD+$SHFT+Mod2+KP_Prior $MVTO $WS9, $WS9, $WDUNST "$WS9"
+$BIND $MOD+$SHFT+Mod2+KP_Insert $MVTO $WS10, $WS10, $WDUNST "$WS11"
+#$BIND $MOD+$SHFT+Mod2+KP_Delete $MVTO $WS11, $WS11, $WDUNST "$WS12"
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # WINDOW MANAGER COMMAND KEYS # # # # # # # # # # # # # # #
+floating_modifier $MOD
+tiling_drag modifier titlebar
+$BIND $MOD+a $EXC togglefocus
+$BIND $MOD+$CTRL+a focus parent
+$BIND $MOD+$SHFT+r layout toggle splitv splith tabbed
+$BIND $MOD+r layout toggle splith tabbed splitv
+$BIND $MOD+q kill
+$BIND $MOD+z split toggle
+$BIND $MOD+g fullscreen toggle
+$BIND $MOD+$SHFT+space floating toggle, $RSZ 708 385, $MVC
+$BIND $MOD+$ALT+space floating toggle
+$BIND $MOD+space focus mode_toggle
+$BIND $MOD+$SHFT+x $EXC scratchpad &
+$BIND $MOD+x $EXC $MSG "scratchpad show" && $ADUNST "Scratchpad Toggled" &
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # AUTOSTART APPLICATIONS / FLOATING WINDOWS / BORDERS # # # # # # # # #
+$EXCA dunst &
+$EXCA setxkbmap -layout us,latam -option 'grp:alt_shift_toggle'
+$EXC tmpfs &
+$EXC getfetch &
+$EXC sleep 1 && xfce4-clipman &
+$EXC pipewire & pipewire-pulse &
+$EXC wireplumber &
+$EXC $BAR main & $BAR work1 & $BAR work3 &
+$EXC xfce-polkit &
+$EXC kdemount &
+$EXC numlockx &
+#$EXCA i3-auto-tiling &
+
+$FW [class="Deadbeef" title="^(?i)(?!Track Properties)(?!Spectrum options)\
+(?!Waveform Properties)(?!Converter)(?!Preferences).*"] $FLOAT, \
+$RSZ 708 353, $MVC, move up 261 px, move right 360px
+
+$FW [class="Deadbeef" title="^(?i)(?=Preferences|Converter|Waveform Properties\
+|Track Properties|Spectrum options).*"] $FLOAT, $MVC
+
+$FW [class="Xfce4-terminal" title="Xterminal"] $FLOAT, $RSZ 708 353, \
+$MVC, move up 260 px, move left 360px
+
+$FW [class="Xfce4-terminal" title="LFterminal"] $FLOAT, $RSZ 708 353, \
+$MVC, move up 260 px, move right 360px
+
+$FW [class="^.*"] border 1pixel
+$FW [class="^steam$"] $FLOAT, move to scratchpad
+$FW [class="Mate-calc" instance="mate-calc"] $FLOAT
+$FW [class="Catfish" instance="catfish"] $FLOAT
+$FW [class="Baobab"] $FLOAT
+$FW [class="File-roller" instance="file-roller"] $FLOAT
+$FW [class="ark"] $FLOAT, $RSZ 600 420, $MVC
+$FW [class="Pavucontrol" instance="pavucontrol"] $FLOAT, $RSZ 530 340, $MVC
+$FW [class="LibreWolf" instance="Places"] $FLOAT
+$FW [class="Nm-connection-editor" instance="nm-connection-editor"] $FLOAT
+$FW [class="Nitrogen" instance="nitrogen"] $FLOAT
+$FW [class="Lxappearance" instance="lxappearance"] $FLOAT
+$FW [class="Wrapper-2.0" instance="wrapper-2.0"] $FLOAT
+$FW [class="Xfce4-panel" instance="xfce4-panel"] $FLOAT
+$FW [class="Zenity" title="Calendar selection"] $FLOAT, \
+$MVC, move up 319 px, move right 594 px
+$FW [instance="origin.exe"] $FLOAT
+$FW [instance="eadesktop.exe"] $FLOAT
+$FW [instance="eaappinstaller.exe"] $FLOAT
+$FW [class="steam"] $MVTO $WS11, $WS11
+$FW [class="yuzu"] $MVTO $WS11, $WS11
+$FW [class="suyu"] $MVTO $WS11, $WS11
+$FW [class="dolphin-emu"] $MVTO $WS11, $WS11
+$FW [class="PPSSPPSDL"] $MVTO $WS11, $WS11
+$FW [class="PPSSPPQt"] $MVTO $WS11, $WS11
+$FW [class="BeamNG.drive.x64"] $MVTO $WS11, $WS11
+#$FW [class="Chat"] $MVTO $WS12, $WS12
+$FW [title="File Operation Progress"] $FLOAT, $MVC
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # MAIN APPlICATIONS AND MEDIA KEYS  # # # # # # # # # # # # # #
+set $RX1 i3-msg '[class="Brave" instance="^(?i)(?!web.telegram.org__k)(?!discord.com__app)(?!web.whatsapp.com).*"] focus'
+$BIND $MOD+F1 $EXC $RX1 && $ADUNST "Brave" || ( brave & $ADUNST "Launching Brave" )
+$BIND $MOD+$SHFT+F1 $EXC brave & $ADUNST "New Brave Window"
+$BIND $MOD+F2 $EXC thunar & kdemount &
+$BIND $MOD+$SHFT+F2 $EXC "xfce4-terminal --title=LFterminal -x zsh -ic 'lf;clear;zsh'"
+$BIND $MOD+F3 $EXC getbeef &
+$BIND $MOD+F4 $EXC braveapps discord whatsapp telegram &
+set $RX2 i3-msg '[class="Brave" instance="piped.kavin.rocks__piped"] focus'
+$BIND $MOD+F5 $EXC $RX2 && $ADUNST "Piped" || ( braveapps piped & $ADUNST "Launching Piped" )
+$BIND $MOD+F6 $EXC steam &
+$BIND $MOD+F7 $EXC $MSG "[class=suyu] focus" && $ADUNST "suyu" || ( suyu & $ADUNST "Launching suyu" )
+
+$BIND $MOD+v $EXC xfce4-popup-clipman &
+$BIND $MOD+$SHFT+z $EXC killall xfce4-clipman && xfce4-clipman & xfce4-screenshooter &
+$BIND $ALT+Tab $EXC rofi-launch alt-tab &
+$BIND $MOD+Tab $EXC rofi-launch menu &
+$BIND $MOD+Return $EXC rofi-launch menu &
+$BIND $MOD+grave $EXC rofi-launch menu &
+$BIND $MOD+o $EXC rofi-launch emoji &
+$BIND $MOD+n $EXC dunstctl history-pop &
+$BIND $MOD+c $EXC pgrep mate-calc && killall mate-calc || mate-calc
+$BIND $MOD+b $EXC pgrep pavucontrol && killall pavucontrol || pavucontrol
+$BIND $CTRL+$ALT+t $EXC gettop &
+$BIND $MOD+KP_Enter $EXC xfce4-terminal --title="Xterminal"
+$BIND $MOD+t $EXC xfce4-terminal &
+$BIND $MOD+$SHFT+q $EXC rofi-launch power-menu
+$BIND $CTRL+$ALT+k $EXC xkill &
+$BIND $MOD+$ALT+s $EXC getscheduler &
+
+$BIND XF86AudioRaiseVolume $EXC getsound VOL+ &
+$BIND XF86AudioLowerVolume $EXC getsound VOL- &
+$BIND $SHFT+XF86AudioRaiseVolume $EXC getsound VOL+ --NOLIMIT &
+$BIND $SHFT+XF86AudioLowerVolume $EXC getsound VOL- --NOLIMIT &
+$BIND XF86AudioMute $EXC getsound TOGGLEMUTE &
+$BIND XF86AudioPlay $EXC playerctl play-pause &
+$BIND XF86AudioPause $EXC playerctl play-pause &
+$BIND XF86AudioNext $EXC playerctl next &
+$BIND XF86AudioPrev $EXC playerctl previous &
+$BIND XF86AudioStop $EXC playerctl stop &
+
+$BIND $MOD+comma $EXC playerctl previous &
+$BIND $MOD+period $EXC playerctl next &
+$BIND $MOD+m $EXC getplayer TOGGLEPLAY &
+$BIND $MOD+$SHFT+comma $EXC getplayer VOL- &
+$BIND $MOD+$SHFT+period $EXC getplayer VOL+ &
+$BIND $MOD+$ALT+comma $EXC playerctl position 5- &
+$BIND $MOD+$ALT+period $EXC playerctl position 5+ &
+$BIND $MOD+$CTRL+comma $EXC getsound VOL- &
+$BIND $MOD+$CTRL+period $EXC getsound VOL+ &
+
+$BIND --whole-window $MOD+button2 floating toggle, $RSZ 708 385, $MVC
+$BIND --whole-window $MOD+button9 $EXC playerctl next &
+$BIND --whole-window $MOD+button8 $EXC playerctl previous &
+$BIND --whole-window $MOD+$SHFT+button8 $EXC getplayer TOGGLEPLAY &
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # EDIT I3 / POLYBAR # # # # # # # # # # # # # # # # # # # #
+$BIND $MOD+$ALT+r $EXC $MSG restart && polybar-msg cmd restart &
+$BIND $MOD+$ALT+p $EXC $TXTE $CONFIG/$BAR/config.ini &
+$BIND $MOD+$ALT+i $EXC $TXTE $CONFIG/i3/config &
+$BIND $MOD+$ALT+d $EXC $TXTE $CONFIG/dunst/dunstrc &
