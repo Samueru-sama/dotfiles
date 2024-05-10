@@ -20,7 +20,7 @@ for args in "$@"; do
 	fi
 
 	if [ "$args" = piped ]; then
-		VID=$(echo "$3" | awk -F / '{print $NF}')
+		VID=$(echo "$@" | awk -F / '{print $NF}')
 		brave --app="https://piped.kavin.rocks/$VID" --window-name="Piped" &
 		exit 0
 	fi
