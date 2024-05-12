@@ -4,11 +4,11 @@
 
 BEGIN { 
 	if (system("command -v free 1>/dev/null") != 0) {
-        print "You need free for this script to work"
-        exit 1
-    }
+		print "You need free for this script to work"
+		exit 1
+	}
 	while (1) {
-		cmd = "free -m"
+		cmd = "sleep 0.75 && free -m"
 		while ((cmd | getline) > 0) 
 			if ($1 == "Mem:") {
 				mem_total = $2
@@ -27,6 +27,5 @@ BEGIN {
 			printf output
 			prev_output = output
 		}
-		system("sleep 0.5")
 	}
 }
