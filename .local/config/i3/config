@@ -20,10 +20,11 @@ set $WDUNST exec --no-startup-id dunstify -r 33 -t 600
 set $ADUNST dunstify -r 33 -t 1500
 set $CONFIG "${XDG_CONFIG_HOME:-$HOME/.config}"
 set $TXTE mousepad
+set $COMP fastcompmgr
 
 # using which because command -v doesn't fail if one arg is missing
-$EXCA which $BAR $MSG $TXTE i3lock dunstify rofi xss-lock feh picom \
-|| notify-send -u critical 'i3 Config WARNING!' 'MISSING DEPENDENCY!'
+$EXCA sleep 2 && which $BAR $MSG $TXTE i3lock dunstify rofi xss-lock feh $COMP \
+xdotool || notify-send -u critical 'i3 Config WARNING!' 'MISSING DEPENDENCY!'
 
 set $WS1 WorkSpace "1"
 set $WS2 WorkSpace "2"
@@ -38,9 +39,9 @@ set $WS10 WorkSpace "10"
 set $WS11 WorkSpace "11:GAME"
 set $WS12 WorkSpace "12:CHAT"
 
-set $D1 output DP-1
-set $D2 output DP-2
-set $D3 output DP-3
+set $D1 output DisplayPort-0
+set $D2 output DisplayPort-1
+set $D3 output DisplayPort-2
 
 $WS1 $D1
 $WS2 $D2
@@ -55,7 +56,7 @@ $WS11 $D2
 $WS12 $D3
 
 $EXC aplay -c 2 -f S16_LE -r 2000 /dev/random & sleep 5 && killall aplay
-$EXCA picom || fastcompmgr &
+$EXCA $COMP &
 $EXCA xset dpms 0 0 300 &
 $EXC sleep 2 && pulsemixer --set-volume 65 &
 $EXCA --no-startup-id screenlayout &
@@ -203,7 +204,9 @@ $BIND $MOD+$SHFT+Mod2+KP_Insert $MVTO $WS10, $WS10, $WDUNST "$WS11"
 # # # # # # # # # # # # WINDOW MANAGER COMMAND KEYS # # # # # # # # # # # # # # #
 floating_modifier $MOD
 tiling_drag modifier titlebar
-$BIND $MOD+a $EXC togglefocus
+set $CHILD i3-msg focus child
+$BIND $MOD+a $EXC i3-msg focus parent || \
+( $CHILD && $CHILD && $CHILD && $CHILD && $CHILD && $CHILD )
 $BIND $MOD+$CTRL+a focus parent
 $BIND $MOD+$SHFT+r layout toggle splitv splith tabbed
 $BIND $MOD+r layout toggle splith tabbed splitv
@@ -290,7 +293,7 @@ $BIND $MOD+F7 $EXC $MSG "[class=suyu] focus" && $ADUNST "suyu" || ( suyu & $ADUN
 $BIND $MOD+v $EXC xfce4-popup-clipman &
 $BIND $MOD+$SHFT+z $EXC killall xfce4-clipman && xfce4-clipman & xfce4-screenshooter &
 $BIND $ALT+Tab $EXC rofi-launch alt-tab &
-$BIND $MOD+Tab $EXC rofi-launch menu &
+$BIND $MOD+Tab $EXC rofi-launch alt-tab &
 $BIND $MOD+Return $EXC rofi-launch menu &
 $BIND $MOD+grave $EXC rofi-launch menu &
 $BIND $MOD+o $EXC rofi-launch emoji &
