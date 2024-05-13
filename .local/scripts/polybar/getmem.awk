@@ -3,29 +3,23 @@
 # USED BY POLYBAR TO PRINT THE RAM AND SWAP USAGE
 
 BEGIN { 
-	if (system("command -v free 1>/dev/null") != 0) {
-		print "You need free for this script to work"
-		exit 1
-	}
 	while (1) {
-		cmd = "sleep 0.75 && free -m"
-		while ((cmd | getline) > 0) 
-			if ($1 == "Mem:") {
-				mem_total = $2
-				mem_used = $2 - $4 - $6
-			}
-			if ($1 == "Swap:") {
-				swap = $3
-			}
-		close(cmd)
-		if (swap > 150) {
-			output = sprintf("%.1f(%.1f)/%.0fGB\n", mem_used / 1024, swap / 1024, mem_total / 1024)
+		while (getline < "/proc/meminfo") {
+			if ($1 == "MemTotal:") { TOTAL = $2 }
+			if ($1 == "MemFree:") { FREE = $2 }
+			if ($1 == "Cached:") { CACHED = $2 }
+			if ($1 == "SwapTotal:") { SWAP_TOTAL = $2 }
+			if ($1 == "SwapFree:") { SWAP_FREE = $2 }
+		}
+		close("/proc/meminfo")
+		USED = (TOTAL - FREE - CACHED) / 1024 / 1024
+		TOTAL_GB = TOTAL / 1024 / 1024
+		SWAP = (SWAP_TOTAL - SWAP_FREE) / 1024 / 1024
+		if (SWAP > 0.15) {
+			printf("%.1f(%.1f)/%.0fGB\n", USED, SWAP, TOTAL_GB)
 		} else {
-			output = sprintf("%.1f/%.0fGB\n", mem_used / 1024, mem_total / 1024)
+			printf("%.1f/%.0fGB\n", USED, TOTAL_GB)
 		}
-		if (output != prev_output) {
-			printf output
-			prev_output = output
-		}
+		system("sleep 1")
 	}
 }
