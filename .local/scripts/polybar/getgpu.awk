@@ -2,30 +2,17 @@
 
 # USED BY POLYBAR TO PRINT THE GPU STATS
 
-BEGIN {
-	if (system("command -v amdgpu_top 1>/dev/null && command -v gron.awk 1>/dev/null") != 0) {
-		print "You need amdgpu_top and gron.awk for this script to work"
-		exit 1
-	}
-	FS = "(=|;)" # IF USING GRON INSTEAD OF GRON.AWK CHANGE FOR "(= |;)" 
-	cmd = "sleep 0.75 && amdgpu_top -J -n 1 | gron.awk"
+BEGIN { 
+	getline TOTALPATH < "/sys/module/amdgpu/drivers/pci:amdgpu/0000:03:00.0/mem_info_vram_total"
+	TOTAL_GB = TOTALPATH / 1024 / 1024 / 1024
+	USED_PATH = "/sys/module/amdgpu/drivers/pci:amdgpu/0000:03:00.0/mem_info_vram_used"
+	CORE_PATH = "/sys/module/amdgpu/drivers/pci:amdgpu/0000:03:00.0/gpu_busy_percent"
 	while (1) {
-		while ((cmd | getline) > 0) {
-			if ($1 ~ "Total VRAM\".*.value") {
-				mem_total = $2
-			}
-			if ($1 ~ "VRAM Usage.*.value") {
-				mem_used = $2
-			}
-			if ($1 ~ "activity.GFX.value") {
-				core = $2
-			}
-		}
-		close(cmd)
-		output = sprintf("%s%% %0.1f/%0.0fGB", core, mem_used / 1024, mem_total / 1024)
-		if (output != prev_output) {
-			printf "%s\n", output
-			prev_output = output
-		}
+		getline USED < USED_PATH
+		getline PERCENT < CORE_PATH
+		close(USED_PATH)
+		close(CORE_PATH)
+		printf("%.0f%% %.1f/%.0fGB\n", PERCENT, USED / 1024 / 1024 / 1024, TOTAL_GB)
+		system("sleep 1")
 	}
 }
