@@ -206,8 +206,7 @@ floating_modifier $MOD
 tiling_drag modifier titlebar
 set $CHILD i3-msg focus child
 $BIND $MOD+a $EXC i3-msg focus parent || \
-( $CHILD && $CHILD && $CHILD && $CHILD && $CHILD && $CHILD )
-$BIND $MOD+$CTRL+a focus parent
+( $CHILD && $CHILD && $CHILD && $CHILD && $CHILD && $CHILD && $CHILD && $CHILD )
 $BIND $MOD+$SHFT+r layout toggle splitv splith tabbed
 $BIND $MOD+r layout toggle splith tabbed splitv
 $BIND $MOD+q kill
