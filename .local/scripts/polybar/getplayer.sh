@@ -8,20 +8,6 @@ if ! command -v playerctl 1>/dev/null || ! command -v dunstify 1>/dev/null; then
 	exit 1
 fi
 
-if [ "$1" = READ-TITLE ]; then
-	OLDOUT=""
-	while true; do
-	    OUT="$(playerctl metadata --format \
-		'{{ status }}: {{ duration(position) }}/{{ duration(mpris:length) }} {{ title }}' 2>/dev/null \
-		| awk '/Paused:|Stopped:/ {printf ("Paused"); exit} {sub($1 FS, ""); printf $0; exit}')"
-	    if [ "$OUT" != "$OLDOUT" ]; then
-	        awk -v v="$OUT" 'BEGIN { print v }'
-	        OLDOUT="$OUT"
-	    fi
-	    sleep 0.5
-	done
-fi
-
 if [ "$1" = VOL+ ]; then
 	playerctl volume 0.10+
 elif [ "$1" = VOL- ]; then
