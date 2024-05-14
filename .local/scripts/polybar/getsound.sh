@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# CONTROLS SYSTEM VOLUME IN POLYBAR AND I3
+
 # SAFETY CHECK
 if ! command -v pulsemixer 1>/dev/null || ! command -v pactl 1>/dev/null || ! command -v dunstify 1>/dev/null; then
 	awk 'BEGIN {print "You need pulsemixer, pactl and dunstify for this script to work"}'

@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# CONTROLS MEDIA PLAYERS IN POLYBAR AND I3
+
 if ! command -v playerctl 1>/dev/null || ! command -v dunstify 1>/dev/null; then
 	awk 'BEGIN {print "You need playerctl and dunstify for this script to work"}'
 	notify-send "Missing dependency"
@@ -9,23 +11,14 @@ fi
 if [ "$1" = READ-TITLE ]; then
 	OLDOUT=""
 	while true; do
-	    OUT="$(playerctl metadata --format '{{ status }}: {{ title }}' 2>/dev/null | \
-		awk '/Paused:|Stopped:/ {printf ("Paused"); exit} {sub($1 FS, ""); printf $0; exit}')"
+	    OUT="$(playerctl metadata --format \
+		'{{ status }}: {{ duration(position) }}/{{ duration(mpris:length) }} {{ title }}' 2>/dev/null \
+		| awk '/Paused:|Stopped:/ {printf ("Paused"); exit} {sub($1 FS, ""); printf $0; exit}')"
 	    if [ "$OUT" != "$OLDOUT" ]; then
 	        awk -v v="$OUT" 'BEGIN { print v }'
 	        OLDOUT="$OUT"
 	    fi
 	    sleep 0.5
-	done
-elif [ "$1" = READ-TIME ]; then
-	OLDOUT=""
-	while true; do
-	    OUT="$(playerctl metadata --format "{{ duration(position) }}/{{ duration(mpris:length) }}" 2>/dev/null)"
-	    if [ "$OUT" != "0:00/" ] && [ "$OUT" != "$OLDOUT" ]; then
-	        awk -v v="$OUT" 'BEGIN { print v }'
-	        OLDOUT="$OUT"
-	    fi
-	    sleep 1
 	done
 fi
 
