@@ -24,7 +24,7 @@ set $COMP fastcompmgr
 
 # using which because command -v doesn't fail if one arg is missing
 $EXCA sleep 2 && which $BAR $MSG $TXTE i3lock dunstify rofi xss-lock feh $COMP \
-xdotool || notify-send -u critical 'i3 Config WARNING!' 'MISSING DEPENDENCY!'
+xdotool killall || notify-send -u critical 'i3 Config WARNING!' 'MISSING DEPENDENCY!'
 
 set $WS1 WorkSpace "1"
 set $WS2 WorkSpace "2"
@@ -39,33 +39,33 @@ set $WS10 WorkSpace "10"
 set $WS11 WorkSpace "11:GAME"
 set $WS12 WorkSpace "12:CHAT"
 
-set $D1 output DisplayPort-0
-set $D2 output DisplayPort-1
-set $D3 output DisplayPort-2
+set $D1 DisplayPort-0
+set $D2 DisplayPort-1
+set $D3 DisplayPort-2
 
-$WS1 $D1
-$WS2 $D2
-$WS3 $D3
-$WS4 $D1
-$WS5 $D2
-$WS6 $D3
-$WS7 $D1
-$WS8 $D2
-$WS9 $D3
-$WS11 $D2
-$WS12 $D3
+$WS1 output $D1
+$WS2 output $D2
+$WS3 output $D3
+$WS4 output $D1
+$WS5 output $D2
+$WS6 output $D3
+$WS7 output $D1
+$WS8 output $D2
+$WS9 output $D3
+$WS11 output $D2
+$WS12 output $D3
 
-$EXC aplay -c 2 -f S16_LE -r 2000 /dev/random & sleep 5 && killall aplay
+#$EXC aplay -c 2 -f S16_LE -r 1000 /dev/random & sleep 5 && killall aplay
 $EXCA $COMP &
 $EXCA xset dpms 0 0 300 &
 $EXC sleep 2 && pulsemixer --set-volume 65 &
 $EXCA --no-startup-id screenlayout &
 $EXC fehbg &
-$EXC xss-lock --transfer-sleep-lock -- i3lock -c 091f2e --nofork --clock \
+$EXC xss-lock --transfer-sleep-lock -- i3lock -c 04090e --nofork --clock \
 --time-color='#F0C674' --date-color='#FFFFFF' --inside-color='#0e1f30' \
 --time-str="%l:%M %p" --date-str="%A %d/%m/%y"
 
-$BIND $MOD+$SHFT+equal $EXC "xrandr --setmonitor extended auto DP-1,DP-2,DP-3 \
+$BIND $MOD+$SHFT+equal $EXC "xrandr --setmonitor extended auto $D1,$D2,$D3 \
 && killall $BAR && $BAR main"
 $BIND $MOD+equal $EXC xrandr --delmonitor extended && killall $BAR \
 && sleep 0.1 && $BAR main | $BAR work1 | $BAR work3
@@ -205,7 +205,7 @@ $BIND $MOD+$SHFT+Mod2+KP_Insert $MVTO $WS10, $WS10, $WDUNST "$WS11"
 floating_modifier $MOD
 tiling_drag modifier titlebar
 set $CHILD i3-msg focus child
-$BIND $MOD+a $EXC i3-msg focus parent || \
+$BIND $MOD+a $EXC ( i3-msg focus parent & i3-msg focus parent ) || \
 ( $CHILD && $CHILD && $CHILD && $CHILD && $CHILD && $CHILD && $CHILD && $CHILD )
 $BIND $MOD+$SHFT+r layout toggle splitv splith tabbed
 $BIND $MOD+r layout toggle splith tabbed splitv
@@ -225,13 +225,13 @@ $EXCA setxkbmap -layout us,latam -option 'grp:alt_shift_toggle'
 $EXC tmpfs &
 $EXC getfetch &
 $EXC sleep 1 && xfce4-clipman &
-$EXC pipewire & pipewire-pulse &
-$EXC wireplumber &
+$EXC sleep 1 && pipewire & pipewire-pulse & wireplumber &
 $EXC $BAR main & $BAR work1 & $BAR work3 &
-$EXC xfce-polkit &
+$EXC xfce-polkit || notify-send -u critical "Error polkit"
+$EXC /usr/libexec/kdeconnectd || notify-send -u critical "Error kdeconnectd"
 $EXC kdemount &
 $EXC numlockx &
-#$EXCA i3-auto-tiling &
+$EXCA i3-auto-tiling &
 
 $FW [class="Deadbeef" title="^(?i)(?!Track Properties)(?!Spectrum options)\
 (?!Waveform Properties)(?!Converter)(?!Preferences).*"] $FLOAT, \
