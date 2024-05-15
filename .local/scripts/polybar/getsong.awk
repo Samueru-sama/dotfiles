@@ -7,24 +7,23 @@ BEGIN {
 		print "You need playerctl for this script to work"
 		exit 1
 	}
+	while (1) {
 	cmd = "sleep 1 && playerctl metadata --format \
 	'{{ status }}: {{ duration(position) }}/{{ duration(mpris:length) }} {{ title }}' 2>/dev/null"
-	while (1) {
 		while ((cmd | getline) > 0) {
 			if ($1 ~ /^Paused:|^Stopped:/) {
-				close(cmd)
 				output = "Paused"
 				break
 			}
 			if ($1 == "Playing:") {
-				close(cmd)
 				output = substr($0, length($1) + 2)
 				break
 			}
 		}
+		close(cmd)
 		if (output != prev_output) {
 			printf "%s\n", output
 			prev_output = output
-		} 
+		}
 	}
 }
