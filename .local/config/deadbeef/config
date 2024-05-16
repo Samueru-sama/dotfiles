@@ -97,14 +97,14 @@ gtkui.font.tabstrip_text Nimbus Sans Bold 7.5
 gtkui.hide_remove_from_disk 1
 gtkui.hide_tray_icon 1
 gtkui.italic_selected_tracks 1
-gtkui.layout.1.9.0 {"type":"vsplitter","legacy_params":" locked=2 ratio=0.901489 pos=762 size2=83","children":[{"type":"hsplitter","legacy_params":" locked=1 ratio=0.735624 pos=1049 size2=374","children":[{"type":"playlist","legacy_params":" hideheaders=0 width=1049"},{"type":"vsplitter","legacy_params":" locked=2 ratio=0.965693 pos=0 size2=24","children":[{"type":"filebrowser"},{"type":"tabstrip"}]}]},{"type":"hsplitter","legacy_params":" locked=1 ratio=0.062412 pos=89 size2=0","children":[{"type":"coverart","settings":{"mode":"selected"}},{"type":"vsplitter","legacy_params":" locked=2 ratio=0.301205 pos=0 size2=55","children":[{"type":"waveform_seekbar"},{"type":"musical_spectrum"}]}]}]}
+gtkui.layout.1.9.0 {"type":"vsplitter","legacy_params":" locked=2 ratio=0.754986 pos=762 size2=83","children":[{"type":"hsplitter","legacy_params":" locked=1 ratio=1.000000 pos=1049 size2=374","children":[{"type":"playlist","legacy_params":" hideheaders=0 width=1049"},{"type":"vsplitter","legacy_params":" locked=2 ratio=0.898113 pos=0 size2=24","children":[{"type":"filebrowser"},{"type":"tabstrip"}]}]},{"type":"hsplitter","legacy_params":" locked=1 ratio=0.126062 pos=89 size2=0","children":[{"type":"coverart","settings":{"mode":"selected"}},{"type":"vsplitter","legacy_params":" locked=2 ratio=0.301205 pos=0 size2=55","children":[{"type":"waveform_seekbar"},{"type":"musical_spectrum"}]}]}]}
 gtkui.override_bar_colors 1
 gtkui.override_listview_colors 1
 gtkui.override_tabstrip_colors 1
 gtkui.playlist.group_by_tf %album artist% - ['['$year(%date%)']' ]%album% - Disc %Disc%
 gtkui.refresh_rate 6
 gtkui.search.group_by_tf 
-gtkui.show_menu 0
+gtkui.show_menu 1
 gtkui.start_hidden 0
 gtkui.statusbar.visible 0
 gtkui.tabscroll 119
@@ -167,12 +167,12 @@ lastfm.scrobbler_url https://post.audioscrobbler.com
 lastfm.submit_tiny_tracks 0
 logwindow.geometry.h 351
 logwindow.geometry.w 706
-logwindow.geometry.x 239
-logwindow.geometry.y 293
-mainwin.geometry.h 351
-mainwin.geometry.maximized 0
-mainwin.geometry.w 706
-mainwin.geometry.x 2166
+logwindow.geometry.x 164
+logwindow.geometry.y 218
+mainwin.geometry.h 873
+mainwin.geometry.maximized 1
+mainwin.geometry.w 1426
+mainwin.geometry.x 6
 mainwin.geometry.y 19
 medialib.deadbeef.enabled 1
 medialib.deadbeef.paths ["/mnt/MEDIA/samuel/Music/Games OSTs","/mnt/MEDIA/samuel/Music/Regular Music"]
@@ -226,7 +226,7 @@ musical_spectrum.num_colors 1
 musical_spectrum.peak_delay 300
 musical_spectrum.peak_falloff 100
 musical_spectrum.pitch 440
-musical_spectrum.refresh_interval 20
+musical_spectrum.refresh_interval 16
 musical_spectrum.spacing 1
 musical_spectrum.transpose 0
 musical_spectrum.window 2
@@ -237,19 +237,19 @@ notify.enable 1
 notify.fix_kde_5_23_5 0
 notify.format_content_tf %artist% - %album%
 notify.format_title_tf %title%
-output_plugin alsa
+output_plugin pipewire
 pipewire_soundcard default
 playback.loop 2
 playback.order 1
-playback.volume.normalized 0.3162276
+playback.volume.normalized 1.0000000
 playlist.current 0
-playlist.cursor.0 161
+playlist.cursor.0 4513
 playlist.cursor.1 1
 playlist.cursor.2 200
 playlist.cursor.3 0
 playlist.cursor.4 0
 playlist.pin.groups 0
-playlist.scroll.0 -155
+playlist.scroll.0 82412
 playlist.scroll.1 0
 playlist.scroll.2 3897
 playlist.scroll.3 0
@@ -268,11 +268,11 @@ pulse.buffersize 6144
 pulse.serveraddr2 
 replaygain.preamp_with_rg 8.0000000
 replaygain.processing_flags 3
-replaygain.source_mode 2
+replaygain.source_mode 1
 resume.paused 0
-resume.playlist 0
-resume.position 0.0000000
-resume.track 5122
+resume.playlist -1
+resume.position -1.000000
+resume.track -1
 resume_last_session 0
 searchwin.geometry.h 351
 searchwin.geometry.w 706
@@ -285,10 +285,10 @@ streamer.samplerate 44100
 streamer.samplerate_mult_44 44100
 streamer.samplerate_mult_48 48000
 streamer.use_dependent_samplerate 0
-trkproperties.geometry.h 400
-trkproperties.geometry.w 400
-trkproperties.geometry.x 519
-trkproperties.geometry.y 255
+trkproperties.geometry.h 523
+trkproperties.geometry.w 404
+trkproperties.geometry.x 517
+trkproperties.geometry.y 194
 waveform.bg_alpha 65535
 waveform.bg_color_b 3598
 waveform.bg_color_g 2312
@@ -316,7 +316,7 @@ waveform.pb_alpha 39321
 waveform.pb_color_b 11822
 waveform.pb_color_g 7967
 waveform.pb_color_r 2313
-waveform.refresh_interval 33
+waveform.refresh_interval 22
 waveform.render_method 2
 waveform.rlr_alpha 65535
 waveform.rlr_color_b 65535
