@@ -28,7 +28,11 @@ BEGIN {
 				break
 			}
 		}
-		if (output == "") { exit 1 }
+		if (output == "") {
+		system("sleep 1 && echo NO")
+		close(cmd)
+		exit 1
+		}
 		if (output != prev_output) {
 			printf output
 			prev_output = output
