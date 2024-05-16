@@ -9,6 +9,10 @@ if ! command -v kdeconnect-cli >/dev/null 2>&1; then
 	echo "Can't find kdeconnect-cli, is it installed?"; exit 1
 fi
 
+if ! command -v sshfs >/dev/null 2>&1; then
+	echo "You need sshfs for this script to work"; exit 1
+fi
+
 # CHECK FOR QDBUS
 if command -v qdbus6 >/dev/null 2>&1; then
     QDBUS=qdbus6
