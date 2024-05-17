@@ -22,5 +22,5 @@ elif [ "$1" = TOGGLEPLAY ]; then
 	exit 0
 fi
 
-VOLPERCENT=$(playerctl volume | awk '{printf "%.0f%s\n", $0*100, "%"; exit}')
+VOLPERCENT=$(awk -v vol="$(playerctl volume)" 'BEGIN {printf "%.0f%%", vol * 100}')
 dunstify -r 11 -t 1000 "Player Volume: $VOLPERCENT"
