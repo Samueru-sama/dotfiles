@@ -6,7 +6,6 @@ if ! command -v brave 1>/dev/null || ! command -v xdotool 1>/dev/null; then
 	exit 1
 fi
 
-
 for args in "$@"; do
 	if [ "$args" = discord ]; then
 		i3-msg '[class="Brave" instance="discord.com__app"] focus' 2>/dev/null || brave --app=https://discord.com/app &
