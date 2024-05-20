@@ -1,21 +1,27 @@
 #!/usr/bin/env bash
+
+# MODIFIED VERSION OF THE ORIGINAL rofi-power-menu https://github.com/jluttine/rofi-power-menu
+
 set -e
 set -u
 
-all=(shutdown reboot logout lockscreen)
+all=(lockscreen logout shutdown reboot rebootbios)
 show=("${all[@]}")
 
 declare -A texts
-texts[lockscreen]="lock screen"
-texts[logout]="log out"
-texts[reboot]="reboot"
-texts[shutdown]="shut down"
+texts[lockscreen]="Lock Screen"
+texts[logout]="Log Out"
+texts[reboot]="Reboot"
+texts[rebootbios]="Reboot To BIOS"
+texts[shutdown]="Shut Down"
 
 declare -A actions
 actions[lockscreen]="xset dpms force off"
-actions[logout]="loginctl terminate-session ${XDG_SESSION_ID-}"
-actions[reboot]="systemctl reboot"
-actions[shutdown]="systemctl poweroff"
+#actions[logout]="loginctl terminate-session ${XDG_SESSION_ID-}" # DOESN'T WORK ON ARTIX
+actions[logout]="fixlogout"
+actions[reboot]="loginctl reboot"
+actions[rebootbios]="loginctl reboot --firmware-setup"
+actions[shutdown]="loginctl poweroff"
 
 # Parse command-line options
 parsed=$(getopt --options=h --longoptions=,choices:,choose: --name "$0" -- "$@")
