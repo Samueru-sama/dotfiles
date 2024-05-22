@@ -15,9 +15,6 @@ PROMPT='%F{226}%~/ '
 alias ls="ls -a --color=auto"
 alias yeet="sudo pacman -Rns"
 alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
-alias yay=paru
-
-fastfetch --physicaldisk-temp
 
 lfcd () {
     tmp="$(mktemp)"
@@ -31,3 +28,23 @@ lfcd () {
 
 alias lf="lfcd"
 bindkey -s '^o' 'lfcd\n'
+bindkey '^U' backward-kill-line
+
+function preexec() {
+  timer=$(($(date +%s%0N)/1000000))
+}
+
+function precmd() {
+  if [ $timer ]; then
+    now=$(($(date +%s%0N)/1000000))
+    elapsed=$(($now-$timer))
+    export RPROMPT="%F{cyan}${elapsed}ms %{$reset_color%}"
+    unset timer
+  fi
+}
+
+fastfetch --physicaldisk-temp
+
+autoload bashcompinit
+bashcompinit
+source /home/samuel/.local/config/zsh/.bash_completion
