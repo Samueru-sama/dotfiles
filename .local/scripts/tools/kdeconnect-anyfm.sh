@@ -5,26 +5,20 @@ PHONEDIR="${XDG_DATA_HOME:-$HOME/.local/share}/Phone" # Replace this with where 
 # CHECK IF PHONE IS ALREADY MOUNTED
 mount | grep kdeconnect && { echo "Phone is already mounted"; exit 0; }
 
-if ! pgrep kdeconnectd >/dev/null 2>&1; then # Try to start kdeconnectd if it isn't running
-	kdeconnectd >/dev/null 2>&1 &
-	/usr/lib/kdeconnectd >/dev/null 2>&1 &
-fi
-
-pgrep kdeconnectd 1>/dev/null || { echo "Could not start kdeconnectd, is it installed?"; notify-send "Missing dependency!"; exit 1; }
-
-if ! command -v kdeconnect-cli >/dev/null 2>&1; then
-	echo "Can't find kdeconnect-cli, is it installed?"
+# SAFETY CHECKS AND DETERMINE WHICH QDBUS TO USE
+if ! command -v kdeconnect-cli 1>/dev/null || ! command -v sshfs 1>/dev/null; then
+	echo "Can't find kdeconnect-cli and/or sshfs, is it installed?"
 	notify-send "Missing dependency!"
 	exit 1
 fi
 
-if ! command -v sshfs >/dev/null 2>&1; then
-	echo "You need sshfs for this script to work"
-	notify-send "Missing dependency!"
-	exit 1
+if ! pgrep kdeconnectd >/dev/null 2>&1; then # Tries to start kdeconnectd if it isn't running
+	kdeconnectd 2>/dev/null &
+	/usr/lib/kdeconnectd 2>/dev/null &
+	sleep 1 && pgrep kdeconnectd 1>/dev/null \
+	|| { echo "Could not start kdeconnectd, is it installed?"; notify-send "Missing dependency!"; exit 1; }
 fi
 
-# CHECK FOR QDBUS
 if command -v qdbus6 >/dev/null 2>&1; then
     QDBUS=qdbus6
 elif command -v qdbus-qt5 >/dev/null 2>&1; then
@@ -35,14 +29,18 @@ else
 	exit 1
 fi
 
-# Mount phone
-PHONEID=$(kdeconnect-cli -a --id-name-only 2>/dev/null | awk '{print $1}')
-if [ -z "$PHONEID" ]; then
-	echo "No phone connected"; exit 1
-fi
-
-"$QDBUS" org.kde.kdeconnect /modules/kdeconnect/devices/"$PHONEID"/sftp mountAndWait || { echo "Error mounting"; exit 1; }
-
+# MOUNT PHONE
+while true; do
+	PHONEID=$(kdeconnect-cli -a --id-name-only 2>/dev/null | awk '{print $1}')
+	if [ -z "$PHONEID" ]; then
+		echo "No phone connected"
+	else
+		"$QDBUS" org.kde.kdeconnect /modules/kdeconnect/devices/"$PHONEID"/sftp mountAndWait
+		mount | grep kdeconnect && { echo "Phone mounted"; break; }
+	fi
+	sleep 5
+done
+ 
 # Get paths
 PHONEPATHS=$("$QDBUS" org.kde.kdeconnect /modules/kdeconnect/devices/"$PHONEID"/sftp getDirectories 2>/dev/null)
 PHONEPATH1=$(echo "$PHONEPATHS" | awk -F ": " 'NR==1 {print $1}')
