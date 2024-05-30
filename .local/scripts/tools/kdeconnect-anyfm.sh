@@ -3,7 +3,7 @@
 PHONEDIR="${XDG_DATA_HOME:-$HOME/.local/share}/Phone" # Replace this with where you want it to be
 
 # CHECK IF PHONE IS ALREADY MOUNTED
-#mount | grep kdeconnect && { echo "Phone is already mounted"; exit 0; }
+mount | grep kdeconnect && { echo "Phone is already mounted"; exit 0; }
 
 if ! pgrep kdeconnectd >/dev/null 2>&1; then # Try to start kdeconnectd if it isn't running
 	kdeconnectd >/dev/null 2>&1 &
