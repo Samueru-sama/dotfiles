@@ -283,7 +283,7 @@ $MVC, move up 260 px, move right 360px
 set $RX1 i3-msg '[class="Brave" instance="^(?i)(?!web.telegram.org__k)(?!discord.com__app)(?!web.whatsapp.com).*"] focus'
 $BIND $MOD+F1 $EXC $RX1 && $ADUNST "Brave" || ( brave & $ADUNST "Launching Brave" )
 $BIND $MOD+$SHFT+F1 $EXC brave & $ADUNST "New Brave Window"
-$BIND $MOD+F2 $EXC thunar & kdemount &
+$BIND $MOD+F2 $EXC thunar &
 $BIND $MOD+$SHFT+F2 $EXC "xfce4-terminal --title=LFterminal -x zsh -ic 'lf;clear;zsh'"
 $BIND $MOD+F3 $EXC getbeef &
 $BIND $MOD+F4 $EXC braveapps discord whatsapp telegram &
