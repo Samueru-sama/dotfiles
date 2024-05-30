@@ -3,14 +3,25 @@
 PHONEDIR="${XDG_DATA_HOME:-$HOME/.local/share}/Phone" # Replace this with where you want it to be
 
 # CHECK IF PHONE IS ALREADY MOUNTED
-mount | grep kdeconnect && { echo "Phone is already mounted"; exit 0; }
+#mount | grep kdeconnect && { echo "Phone is already mounted"; exit 0; }
+
+if ! pgrep kdeconnectd >/dev/null 2>&1; then # Try to start kdeconnectd if it isn't running
+	kdeconnectd >/dev/null 2>&1 &
+	/usr/lib/kdeconnectd >/dev/null 2>&1 &
+fi
+
+pgrep kdeconnectd 1>/dev/null || { echo "Could not start kdeconnectd, is it installed?"; notify-send "Missing dependency!"; exit 1; }
 
 if ! command -v kdeconnect-cli >/dev/null 2>&1; then
-	echo "Can't find kdeconnect-cli, is it installed?"; exit 1
+	echo "Can't find kdeconnect-cli, is it installed?"
+	notify-send "Missing dependency!"
+	exit 1
 fi
 
 if ! command -v sshfs >/dev/null 2>&1; then
-	echo "You need sshfs for this script to work"; exit 1
+	echo "You need sshfs for this script to work"
+	notify-send "Missing dependency!"
+	exit 1
 fi
 
 # CHECK FOR QDBUS
@@ -19,7 +30,9 @@ if command -v qdbus6 >/dev/null 2>&1; then
 elif command -v qdbus-qt5 >/dev/null 2>&1; then
     QDBUS=qdbus-qt5
 else
-    echo "You need qdbus for this script to work"; exit 1
+    echo "You need qdbus for this script to work"
+	notify-send "Missing dependency!"
+	exit 1
 fi
 
 # Mount phone
