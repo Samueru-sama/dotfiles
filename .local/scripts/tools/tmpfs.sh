@@ -57,7 +57,7 @@ mkdir -p "$TMPDIRCACHE/wine" && ln -s "$TMPDIRCACHE/wine" "$CACHEDIR" 2>/dev/nul
 mkdir -p "$TMPDIRCACHE/debuginfod_client" && ln -s "$TMPDIRCACHE/debuginfod_client" "$CACHEDIR" 2>/dev/null # Wtf is this
 
 # INDICATE EVERYTHING IS READY
-[ ! -e /tmp/tmpfsOK ] && { echo "Syncing record for this session:\n" >> "$OKFILE" || exit 1; }
+[ ! -e "$OKFILE" ] && { echo "Syncing record for this session:\n" >> "$OKFILE" || exit 1; }
 echo "tmpfsOK"
 
 # SYNC EVERY TWO HOURS AND IGNORE SOME DIRS
