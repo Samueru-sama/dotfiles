@@ -1,7 +1,7 @@
 # dotfiles
 
-![image](https://github.com/Samueru-sama/dotfiles/assets/36420837/369930d9-b9e2-46fa-b609-0e5e519ac239)
+![Screenshot_2024-06-02_07-59-12](https://github.com/Samueru-sama/dotfiles/assets/36420837/693d3713-a9e5-49bf-84f8-9fa054ff937e)
 
-![image](https://github.com/Samueru-sama/dotfiles/assets/36420837/22a226ad-1bdf-475b-a812-7ea4d4eae2d2)
+![Screenshot_2024-06-02_08-02-19](https://github.com/Samueru-sama/dotfiles/assets/36420837/60b479e5-a869-492e-b6ad-904c92017e41)
 
-![image](https://github.com/Samueru-sama/dotfiles/assets/36420837/c68d8eb2-e6c7-42b2-86e9-5bace7a208e9)
+![Screenshot_2024-06-02_08-00-10](https://github.com/Samueru-sama/dotfiles/assets/36420837/e2ada213-151d-4611-9e77-69b9afd76987)
