@@ -1,24 +1,47 @@
 #!/bin/sh
 
-if ! command -v rsync; then
+if ! command -v rsync 1>/dev/null; then
 	echo "You need rsync for this script to work"
 	notify-send "Missing dependency!"
 	exit 1
 fi
 
 CURRENTUSER="${USER:-${USERNAME:-${LOGNAME}}}"
-TMPDIRCACHE="$HOME/.local/var/tmp" # /tmp is normally mounted on mem alerady. Make sure it is by checking /etc/fstab
+TMPDIRCACHE="$HOME/.local/var/tmp"
 CONFIGDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 CACHEDIR="${XDG_CACHE_HOME:-$HOME/.cache}"
+OKFILE=/tmp/tmpfsOK
 
-mkdir -p "/tmp/$CURRENTUSER" && chmod 700 "/tmp/$CURRENTUSER"
-[ ! -L "$TMPDIRCACHE" ] && ln -s "/tmp/$CURRENTUSER" "$TMPDIRCACHE"
+# Safety checks
+if ! cat /etc/fstab | grep /tmp 1>/dev/null; then
+	echo "You need /tmp on tmpfs for this script to work"
+	notify-send -u critical "You need /tmp to be on tmpfs for this script to work, bailing out"
+	exit 1
+fi
+
+mkdir -p "/tmp/$CURRENTUSER" && chmod 700 "/tmp/$CURRENTUSER" && [ ! -L "$TMPDIRCACHE" ] && ln -s "/tmp/$CURRENTUSER" "$TMPDIRCACHE"
+
+_sync_browser() {
+	rsync -av --delete \
+	--exclude='File System' \
+	--exclude='Service Worker/ScriptCache' \
+	--exclude='Service Worker/CacheStorage' \
+	--exclude='History' \
+	"$TMPDIRCACHE/BraveMain/BraveSoftware/Brave-Browser/Default/" \
+	"$CONFIGDIR/BraveDIR/Brave-Browser/Default/"
+}
+
+if [ "$1" = "--sync-now" ]; then
+	ls "$OKFILE" || exit 1
+	_sync_browser && echo "Manual synced on $(date)" >> "$OKFILE" || exit 1
+	echo "Browser sync completed" && notify-send "Browser sync completed!"
+	exit 0	
+fi
 
 mkdir -p "$TMPDIRCACHE/Volatile" && ln -s "$TMPDIRCACHE/Volatile" "$HOME/" 2>/dev/null # I USE THIS LOCATION FOR BUILDING PROGRAMS AND OTHER TESTS
 
 # MOVING CACHES
 mkdir -p "$TMPDIRCACHE/BraveCache/BraveSoftware" && ln -s "$TMPDIRCACHE/BraveCache/BraveSoftware" "$XDG_CACHE_HOME/" 2>/dev/null # Brave Browser cache dir
-
 sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' "$CONFIGDIR/BraveDIR/Brave-Browser/Default/Preferences" # PREVENTS "Restore session?" dialog
 mkdir -p "$TMPDIRCACHE/BraveMain/BraveSoftware" && cp -r "$CONFIGDIR/BraveDIR/Brave-Browser" "$TMPDIRCACHE/BraveMain/BraveSoftware" \
 && ln -s "$TMPDIRCACHE/BraveMain/BraveSoftware" "$CONFIGDIR" 2>/dev/null # Brave uses its config dir to store cache (Blatant violation of the xdg specs).
@@ -34,15 +57,12 @@ mkdir -p "$TMPDIRCACHE/wine" && ln -s "$TMPDIRCACHE/wine" "$CACHEDIR" 2>/dev/nul
 mkdir -p "$TMPDIRCACHE/debuginfod_client" && ln -s "$TMPDIRCACHE/debuginfod_client" "$CACHEDIR" 2>/dev/null # Wtf is this
 
 # INDICATE EVERYTHING IS READY
-touch /tmp/tmpfsOK && echo "tmpfsOK"
+[ ! -e /tmp/tmpfsOK ] && { echo "Syncing record for this session:\n" >> "$OKFILE" || exit 1; }
+echo "tmpfsOK"
 
-# SYNC EVERY HOUR AND IGNORE SOME DIRS
+# SYNC EVERY TWO HOURS AND IGNORE SOME DIRS
 while true; do
 	sleep 7200
-	rsync -av --exclude='File System' \
-		--exclude='Service Worker/ScriptCache' \
-		--exclude='Service Worker/CacheStorage' \
-		--exclude='History' \
-		"$TMPDIRCACHE/BraveMain/BraveSoftware/Brave-Browser/Default/" \
-		"$CONFIGDIR/BraveDIR/Brave-Browser/Default/"
+	_sync_browser
+	echo "Synced on $(date)" >> "$OKFILE"
 done
