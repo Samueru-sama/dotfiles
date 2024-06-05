@@ -21,6 +21,7 @@ fi
 
 mkdir -p "/tmp/$CURRENTUSER" && chmod 700 "/tmp/$CURRENTUSER" && [ ! -L "$TMPDIRCACHE" ] && ln -s "/tmp/$CURRENTUSER" "$TMPDIRCACHE"
 
+# Sync browser function, ignore some dirs
 _sync_browser() {
 	rsync -av --delete \
 	--exclude='File System' \
@@ -55,14 +56,14 @@ mkdir -p "$TMPDIRCACHE/go-build" && ln -s "$TMPDIRCACHE/go-build" "$CACHEDIR" 2>
 mkdir -p "$TMPDIRCACHE/electron" && ln -s "$TMPDIRCACHE/electron" "$CACHEDIR" 2>/dev/null # I have no idea how this directory was created
 mkdir -p "$TMPDIRCACHE/wine" && ln -s "$TMPDIRCACHE/wine" "$CACHEDIR" 2>/dev/null # Wine cache dir
 mkdir -p "$TMPDIRCACHE/debuginfod_client" && ln -s "$TMPDIRCACHE/debuginfod_client" "$CACHEDIR" 2>/dev/null # Wtf is this
+mkdir -p "$TMPDIRCACHE/kdenlive" && ln -s "$TMPDIRCACHE/kdenlive" "$CACHEDIR" 2>/dev/null # kdenlive cache
 
 # INDICATE EVERYTHING IS READY
 [ ! -e "$OKFILE" ] && { echo "Syncing record for this session:\n" >> "$OKFILE" || exit 1; }
 echo "tmpfsOK"
 
-# SYNC EVERY TWO HOURS AND IGNORE SOME DIRS
+# SYNC EVERY TWO HOURS
 while true; do
 	sleep 7200
-	_sync_browser
-	echo "Synced on $(date)" >> "$OKFILE"
+	_sync_browser && echo "Synced on $(date)" >> "$OKFILE"
 done
