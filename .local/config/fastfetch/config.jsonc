@@ -22,7 +22,7 @@
     {
      "key": "Weather",
      "type": "command",
-     "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/fastfetch/weatherinfo"
+     "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/weatherinfo"
     },
     {
      "key": "Date & Time",
