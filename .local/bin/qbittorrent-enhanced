@@ -1,0 +1,91 @@
+#!/bin/sh
+
+# aisap-am sandboxing script
+# Run this script with --disable-sandbox to do what the flag name implies
+
+# Dependency check
+if ! command -v aisap 1>/dev/null; then
+echo "You need aisap for this to work"
+notify-send -u critical "Sandbox error; Missing aisap dependency!"
+exit 1
+fi
+
+# Set variables and create sandboxed dir.
+APPEXEC=/home/samuel/.local/opt/qbittorrent-enhanced/qbittorrent-enhanced
+chmod a-x "$APPEXEC" # Prevents accidental launch of the app outside the sandbox
+APPNAME="$(echo "$APPEXEC" | awk -F "/" '{print $NF}')"
+SANDBOXDIR="${SANDBOXDIR:-$HOME/.local/am-sandboxes}"
+DATADIR="${XDG_DATA_HOME:-$HOME/.local/share}"
+CONFIGDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
+CACHEDIR="${XDG_CACHE_HOME:-$HOME/.cache}"
+DBUS="$(ls /tmp/dbus* 2>/dev/null | head -1)" # Prevents crash if there is multiple dbus
+
+XDG_DESKTOP_DIR="$(xdg-user-dir DESKTOP 2>/dev/null)"
+XDG_DOCUMENTS_DIR="$(xdg-user-dir DOCUMENTS 2>/dev/null)"
+XDG_DOWNLOAD_DIR="$(xdg-user-dir DOWNLOAD 2>/dev/null)"
+XDG_GAMES_DIR="$(xdg-user-dir GAMES 2>/dev/null)"
+XDG_MUSIC_DIR="$(xdg-user-dir MUSIC 2>/dev/null)"
+XDG_PICTURES_DIR="$(xdg-user-dir PICTURES 2>/dev/null)"
+XDG_VIDEOS_DIR="$(xdg-user-dir VIDEOS 2>/dev/null)"
+
+if [ "$XDG_DESKTOP_DIR" = "$HOME" ] || [ "$XDG_DESKTOP_DIR" = "$HOME/" ]; then XDG_DESKTOP_DIR=""; fi
+if [ "$XDG_DOCUMENTS_DIR" = "$HOME" ] || [ "$XDG_DOCUMENTS_DIR" = "$HOME/" ]; then XDG_DOCUMENTS_DIR=""; fi
+if [ "$XDG_DOWNLOAD_DIR" = "$HOME" ] || [ "$XDG_DOWNLOAD_DIR" = "$HOME/" ]; then XDG_DOWNLOAD_DIR=""; fi
+if [ "$XDG_GAMES_DIR" = "$HOME" ] || [ "$XDG_GAMES_DIR" = "$HOME/" ]; then XDG_GAMES_DIR=""; fi
+if [ "$XDG_MUSIC_DIR" = "$HOME" ] || [ "$XDG_MUSIC_DIR" = "$HOME/" ]; then XDG_MUSIC_DIR=""; fi
+if [ "$XDG_PICTURES_DIR" = "$HOME" ] || [ "$XDG_PICTURES_DIR" = "$HOME/" ]; then XDG_PICTURES_DIR=""; fi
+if [ "$XDG_VIDEOS_DIR" = "$HOME" ] || [ "$XDG_VIDEOS_DIR" = "$HOME/" ]; then XDG_VIDEOS_DIR=""; fi
+
+# Try to find the right name of the app xdg directories, as sometimes it is not the same as $APPNAME
+APPDATA=$( ls "$DATADIR" | grep -i "$APPNAME" | head -1 )
+APPCONF=$( ls "$CONFIGDIR" | grep -i "$APPNAME" | head -1 ) 
+
+mkdir -p "$SANDBOXDIR/$APPNAME"
+if [ "$1" = "--disable-sandbox" ]; then
+APPIMAGEPATH="$(echo ${APPEXEC%/*})"
+printf '\n%s' " Giving exec permissions back to $APPEXEC..."
+chmod a+x "$APPEXEC" || exit 1
+printf '\n%s' " Patching $APPIMAGEPATH/AM-updater to give permissions back..."
+sed -i 's|chmod a-x|chmod a+x|g' "$APPIMAGEPATH/AM-updater" || exit 1
+THISFILE="$(realpath "$0")"
+printf '\n%s\n' " Replacing $THISFILE with a link to the AppImage..."
+ ln -sf "$APPEXEC" "$THISFILE" || exit 1
+printf '\033[32m\n%s\n\n' " $APPEXEC successfully unsandboxed!"
+exit 0
+fi
+if [ -z "$APPNAME" ]; then exit 1; fi
+
+# Start at sandboxed home
+# Edit below this to add or remove access to parts of the system
+exec aisap --trust-once --level 2 \
+--data-dir "$SANDBOXDIR/$APPNAME" \
+--add-file "$DATADIR/${APPDATA:-$APPNAME}":rw \
+--add-file "$DATADIR"/themes \
+--add-file "$DATADIR"/icons \
+--add-file "$CONFIGDIR/${APPCONF:-$APPNAME}":rw \
+--add-file "$CONFIGDIR"/dconf \
+--add-file "$CONFIGDIR"/gtk3.0 \
+--add-file "$CONFIGDIR"/gtk4.0 \
+--add-file "$CONFIGDIR"/kdeglobals \
+--add-file "$CONFIGDIR"/qt5ct \
+--add-file "$CONFIGDIR"/qt6ct \
+--add-file "$CONFIGDIR"/Kvantum \
+--add-file "$HOME"/.local/lib \
+--add-file /usr/share \
+--rm-file /path/to/nothing \
+--rm-file "${XDG_DESKTOP_DIR:-~/Desktop}" \
+--rm-file "${XDG_DOCUMENTS_DIR:-~/Documents}" \
+--add-file "${XDG_DOWNLOAD_DIR:-~/Downloads}":rw \
+--rm-file "${XDG_GAMES_DIR:-~/Games}" \
+--rm-file "${XDG_MUSIC_DIR:-~/Music}" \
+--rm-file "${XDG_PICTURES_DIR:-~/Pictures}" \
+--rm-file "${XDG_VIDEOS_DIR:-~/Videos}" \
+--add-file /var/lib/dbus \
+--add-file "${DBUS:-/tmp/dbus}" \
+--add-socket pulseaudio \
+--add-socket dbus \
+--add-socket network \
+--add-socket x11 \
+--add-socket wayland \
+--add-device dri -- \
+"$APPEXEC" "$@"
