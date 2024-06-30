@@ -4,50 +4,45 @@
 # Deadbeef has to be configured to hide to tray when closed 
 # You can hide the systray icon and it will work still
 
-if ! command -v deadbeef 1>/dev/null || ! command -v i3-msg 1>/dev/null || ! command -v playerctl 1>/dev/null; then
-	awk 'BEGIN {print "You need deadbeef, i3 and playerctl for this script to work"}'
+if ! command -v deadbeef 1>/dev/null || ! command -v playerctl 1>/dev/null \
+|| ! command -v xdo 1>/dev/null || ! command -v xdotool 1>/dev/null; then
+	printf "You need deadbeef, xdo, xdotool and playerctl for this script to work"
 	notify-send "Missing dependency"
 	exit 1
 fi
 
+WCLASS=$(xdotool getactivewindow getwindowclassname)
+HACK="--appimage-extract-and-run" # Allows deadbeef launch other appimages when sandboxed by aisap
+
 if [ "$1" = "REPEAT" ]; then
 	if pgrep "deadbeef" 1>/dev/null; then
-		LOOP=$(playerctl loop)
+		LOOP="$(playerctl loop --appimage-extract-and-run)"
 		if [ "$LOOP" = "None" ]; then
-			playerctl loop Track && dunstify -r 33 -t 1500 "Repeat Track On"
+			playerctl loop Track "$HACK" && notify-send -t 700 "Repeat Track On"
 		else
-			playerctl loop None && dunstify -r 33 -t 1500 "Repeat Track Off"
+			playerctl loop None "$HACK" && notify-send -t 700 "Repeat Track Off"
 		fi
 	else
 		echo "DeaDBeeF is not running"
 		exit 1
 	fi
-	exit 0
 elif [ "$1" = "SHUFFLE" ]; then
 	if pgrep "deadbeef" 1>/dev/null; then
-		SHUFFLE=$(playerctl shuffle)
+		SHUFFLE=$(playerctl shuffle --appimage-extract-and-run)
 		if [ "$SHUFFLE" = "Off" ]; then
-			playerctl shuffle On && dunstify -r 33 -t 1500 "Shuffle On"
+			playerctl shuffle On "$HACK" && notify-send -t 700 "Shuffle On"
 		else
-			playerctl shuffle Off && dunstify -r 33 -t 1500 "Shuffle Off"
+			playerctl shuffle Off "$HACK" && notify-send -t 700 "Shuffle Off"
 		fi
 	else
 		echo "DeaDBeeF is not running"
 		exit 1
 	fi
-	exit 0
-fi
-
-WCLASS=$(i3-msg -t get_tree | gron.awk | awk -F "=|\"" '/window.properties.class.*Deadbeef/ {print $3}')
-
-if pgrep deadbeef 1>/dev/null; then
-    if [ "$WCLASS" = "Deadbeef" ]; then
-        i3-msg "[class=Deadbeef] kill"
-    else
-        i3-msg "[class=Deadbeef] focus" >/dev/null 2>&1 || deadbeef 2>/dev/null || exit 1
-        dunstify -r 33 -t 700 "DeaDBeef"
-    fi
+elif [ "$WCLASS" = "Deadbeef" ]; then
+	WID=$(xdo id)
+	xdo hide && echo "$WID" > /tmp/deadbeefid
 else
-    deadbeef 2>/dev/null || exit 1
-    dunstify -r 36 -t 1500 "Launching DeaDBeef"
+	WID=$(cat /tmp/deadbeefid)
+	[ -n "$WID" ] && xdo show "$WID" && xdo activate "$WID"
+	pgrep deadbeef 1>/dev/null || { notify-send "Launching DeaDBeef"; exec deadbeef; }
 fi

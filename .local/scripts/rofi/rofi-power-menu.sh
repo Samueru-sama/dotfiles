@@ -17,8 +17,7 @@ texts[shutdown]="Shut Down"
 
 declare -A actions
 actions[lockscreen]="xset dpms force off"
-#actions[logout]="loginctl terminate-session ${XDG_SESSION_ID-}" # DOESN'T WORK ON ARTIX
-actions[logout]="fixlogout"
+actions[logout]="loginctl terminate-session ${XDG_SESSION_ID-}"
 actions[reboot]="loginctl reboot"
 actions[rebootbios]="loginctl reboot --firmware-setup"
 actions[shutdown]="loginctl poweroff"

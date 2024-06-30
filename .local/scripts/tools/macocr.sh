@@ -3,11 +3,13 @@
 # Safety check
 if ! command -v tesseract >/dev/null 2>&1; then
 	echo "You need tesseract for this script to work"
-	notify-send "Missing dependency"
+	notify-send "Missing dependency!"
 	exit 1
 fi
 
-OCR="${XDG_CACHE_HOME:-$HOME/.cache}/OCR"
+OCRPATH="${XDG_CACHE_HOME:-$HOME/.cache}"/tesseract
+OCR="$OCRPATH"/OCR
+mkdir -p "$OCRPATH"
 
 notify-send "Processing image"
 

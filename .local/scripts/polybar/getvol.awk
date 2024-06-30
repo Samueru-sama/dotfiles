@@ -10,7 +10,7 @@ BEGIN {
 	count = 0
 	while (1) {
 		if (count > 20) {
-			cmd = "sleep 0.75 && pactl list sinks"
+			cmd = "sleep 0.6 && pactl list sinks"
 			# system("echo slow-loop")
 		} else {
 			cmd = "sleep 0.1 && pactl list sinks"

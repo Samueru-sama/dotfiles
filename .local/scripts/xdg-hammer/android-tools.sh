@@ -5,7 +5,7 @@ STATEDIR="${XDG_STATE_HOME:-$HOME/.local/state}"
 CONFIGDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 CACHEDIR="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-APPHOME="$XDG_DATA_HOME/android/HOME"
+APPHOME="$STATEDIR/android/HOME"
 APPEXEC="$HOME/.local/opt/android-tools/android-tools"
 
 # SAFETY CHECKS

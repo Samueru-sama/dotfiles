@@ -12,7 +12,7 @@ STATEDIR="${XDG_STATE_HOME:-$HOME/.local/state}"
 CONFIGDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 CACHEDIR="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-APPHOME="$DATADIR/Steam/HOME"
+APPHOME="$STATEDIR/Steam/HOME"
 APPEXEC="$HOME/.local/opt/steam/steam" # Replace this to the right path to steam if it is not in /usr/bin/steam
 APPDESKTOP="/usr/share/applications/steam.desktop" # Might be in a different location in some distros.
 STEAMPRELOAD="$HOME/.local/lib/steam"

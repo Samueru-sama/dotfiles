@@ -5,7 +5,7 @@ STATEDIR="${XDG_STATE_HOME:-$HOME/.local/state}"
 CONFIGDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 CACHEDIR="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-APPHOME="$DATADIR/Brave/HOME"
+APPHOME="$STATEDIR/Brave/HOME"
 APPEXEC="$HOME/.local/opt/brave-appimage/brave-appimage" # Replace this to the right path to app if it is not in /usr/bin/brave
 APPDESKTOP="/usr/share/applications/brave.desktop" # Might be in a different location in some distros
 
@@ -41,6 +41,6 @@ ln -s "$HOME"/* "$APPHOME" >/dev/null 2>&1 # Symlinks other files in $HOME to $A
 [ ! -e "$APPHOME/Desktop" ] && ln -s "$HOME" "$APPHOME/Desktop" # Just in case the app needs a non existent ~/Desktop
 
 # START APP AT APPHOME
-cat /tmp/tmpfsOK || { echo "tmpfs is not ready"; notify-send "wait a sec for tmpfs"; sleep 3; } # Check tmpfs is ready
-cat /tmp/tmpfsOK || { notify-send "tmpfs failure"; echo "Error tmpfs"; exit 1; }
+cat "$CACHEDIR"//BraveSoftware/tmpfsOK || { echo "tmpfs is not ready"; notify-send "wait a sec for tmpfs"; sleep 5; } # Check tmpfs is ready
+cat "$CACHEDIR"//BraveSoftware/tmpfsOK || { notify-send "tmpfs failure"; echo "Error tmpfs"; exit 1; }
 HOME="$APPHOME" "$APPEXEC" --class="Brave" "$@" || notify-send "App not found"

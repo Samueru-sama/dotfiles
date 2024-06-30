@@ -1,11 +1,13 @@
 #!/bin/sh
 
+# No longer used since I have librewolf sandboxed with aisap and that fixes the issue as well
+
 DATADIR="${XDG_DATA_HOME:-$HOME/.local/share}"
 STATEDIR="${XDG_STATE_HOME:-$HOME/.local/state}"
 CONFIGDIR="${XDG_CONFIG_HOME:-$HOME/.config}"
 CACHEDIR="${XDG_CACHE_HOME:-$HOME/.cache}"
 
-APPHOME="$DATADIR/librewolf/HOME"
+APPHOME="$STATEDIR/librewolf/HOME"
 APPEXEC="$HOME/.local/opt/librewolf/librewolf" # Replace this to the right path to app if it is not in /usr/bin/librewolf
 APPDESKTOP="/usr/share/applications/librewolf.desktop" # Might be in a different location in some distros
 
@@ -22,7 +24,7 @@ if ! ls "$DATADIR"/applications/*librewolf.desktop >/dev/null 2>&1; then
 	cp "$APPDESKTOP" "$DATADIR"/applications/librewolf.desktop || { echo "Couldn't copy $APPDESKTOP" & exit 1; }
 fi
 
-if ! grep "Exec=librewolf %U" "$DATADIR"/applications/*librewolf.desktop >/dev/null 2>&1; then
+if ! grep "Exec=librewolf %u" "$DATADIR"/applications/*librewolf.desktop >/dev/null 2>&1; then
 	sed -i "s#Exec=[^ ]*#Exec=librewolf#g" "$DATADIR"/applications/*librewolf.desktop && echo "patched librewolf.desktop"
 fi
 
@@ -41,4 +43,14 @@ ln -s "$HOME"/* "$APPHOME" >/dev/null 2>&1 # Symlinks other files in $HOME to $A
 [ ! -e "$APPHOME/Desktop" ] && ln -s "$HOME" "$APPHOME/Desktop" # Just in case the app needs a non existent ~/Desktop
 
 # START APP AT APPHOME
-HOME="$APPHOME" "$APPEXEC" "$@" || notify-send "App not found"
+#HOME="$APPHOME" "$APPEXEC" "$@" || notify-send "App not found"
+APPEXEC="$HOME/.local/opt/librewolf/librewolf"
+SANDBOXDIR="${SANDBOXDIR:-$HOME/.local/am-sandboxes}/$(echo "$APPEXEC" | awk -F "/" '{print $NF}')"
+exec aisap --trust-once \
+--data-dir $SANDBOXDIR \
+--add-file $DATADIR/Themes \
+--add-file $DATADIR/icons \
+--add-file $CONFIGDIR/gtk3.0 \
+--add-file $CONFIGDIR/gtk4.0 \
+--add-file $CONFIGDIR/kdeglobals \
+$APPEXEC

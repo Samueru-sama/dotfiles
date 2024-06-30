@@ -17,7 +17,7 @@ artwork.nocover_path
 artwork.save_to_music_folders 0
 artwork.save_to_music_folders_relative_path cover.jpg;cover.png
 cli_add_playlist_name Default
-close_send_to_tray 1
+close_send_to_tray 0
 converter.dsp_preset -1
 converter.encoder_preset 18
 converter.lastdir file:///media/MEDIA/Downloads/music
@@ -104,7 +104,7 @@ gtkui.override_tabstrip_colors 1
 gtkui.playlist.group_by_tf %album artist% - ['['$year(%date%)']' ]%album% - Disc %Disc%
 gtkui.refresh_rate 6
 gtkui.search.group_by_tf 
-gtkui.show_menu 1
+gtkui.show_menu 0
 gtkui.start_hidden 0
 gtkui.statusbar.visible 0
 gtkui.tabscroll 119
@@ -167,12 +167,12 @@ lastfm.scrobbler_url https://post.audioscrobbler.com
 lastfm.submit_tiny_tracks 0
 logwindow.geometry.h 351
 logwindow.geometry.w 706
-logwindow.geometry.x 164
-logwindow.geometry.y 218
-mainwin.geometry.h 873
-mainwin.geometry.maximized 1
-mainwin.geometry.w 1426
-mainwin.geometry.x 6
+logwindow.geometry.x 207
+logwindow.geometry.y 511
+mainwin.geometry.h 351
+mainwin.geometry.maximized 0
+mainwin.geometry.w 706
+mainwin.geometry.x 2166
 mainwin.geometry.y 19
 medialib.deadbeef.enabled 1
 medialib.deadbeef.paths ["/mnt/MEDIA/samuel/Music/Games OSTs","/mnt/MEDIA/samuel/Music/Regular Music"]
@@ -238,20 +238,20 @@ notify.fix_kde_5_23_5 0
 notify.format_content_tf %artist% - %album%
 notify.format_title_tf %title%
 output_plugin pipewire
-pipewire_soundcard default
+pipewire_soundcard alsa_output.usb-Apple__Inc._USB-C_to_3.5mm_Headphone_Jack_Adapter_DWH038405PVJKLTAY-00.pro-output-0
 playback.loop 2
 playback.order 1
 playback.volume.normalized 1.0000000
 playlist.current 0
-playlist.cursor.0 4513
-playlist.cursor.1 1
-playlist.cursor.2 200
+playlist.cursor.0 2298
+playlist.cursor.1 -1
+playlist.cursor.2 -1
 playlist.cursor.3 0
 playlist.cursor.4 0
 playlist.pin.groups 0
-playlist.scroll.0 82412
+playlist.scroll.0 41346
 playlist.scroll.1 0
-playlist.scroll.2 3897
+playlist.scroll.2 0
 playlist.scroll.3 0
 playlist.scroll.4 0
 playlist.scroll.cursorfollowplayback 1
@@ -270,9 +270,9 @@ replaygain.preamp_with_rg 8.0000000
 replaygain.processing_flags 3
 replaygain.source_mode 1
 resume.paused 0
-resume.playlist -1
-resume.position -1.000000
-resume.track -1
+resume.playlist 0
+resume.position 0.0928798
+resume.track 467
 resume_last_session 0
 searchwin.geometry.h 351
 searchwin.geometry.w 706
@@ -285,10 +285,10 @@ streamer.samplerate 44100
 streamer.samplerate_mult_44 44100
 streamer.samplerate_mult_48 48000
 streamer.use_dependent_samplerate 0
-trkproperties.geometry.h 523
-trkproperties.geometry.w 404
-trkproperties.geometry.x 517
-trkproperties.geometry.y 194
+trkproperties.geometry.h 481
+trkproperties.geometry.w 781
+trkproperties.geometry.x 329
+trkproperties.geometry.y 215
 waveform.bg_alpha 65535
 waveform.bg_color_b 3598
 waveform.bg_color_g 2312

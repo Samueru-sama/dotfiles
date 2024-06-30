@@ -33,7 +33,7 @@ _mount_and_link_phone() {
 	if ! mount | grep kdeconnect >/dev/null 2>&1; then
 		"$QDBUS" org.kde.kdeconnect /modules/kdeconnect/devices/"$PHONEID"/sftp mountAndWait \
 		|| { notify-send -u critical "Kdeconnect failed to mount phone"; exit 1; }
-		notify-send "Phone connected and mounted"
+		mount | grep kdeconnect && notify-send "Phone connected and mounted"
 	fi
 	
 	PHONEPATHS=$("$QDBUS" org.kde.kdeconnect /modules/kdeconnect/devices/"$PHONEID"/sftp getDirectories 2>/dev/null)

@@ -227,31 +227,33 @@ $EXC tmpfs &
 $EXC getfetch &
 $EXC playerctl daemon &
 $EXC xfce4-clipman start &
-$EXC pipewire & 
-$EXC pipewire-pulse & 
+$EXC pipewire &
+$EXC pipewire-pulse &
 $EXC wireplumber &
-$EXC xfce-polkit || $WARN "Error polkit"
-$EXC kdeconnect-anyfm || $WARN "Error kdeconnect"
 $EXC numlockx &
 $EXC doas-check &
-$EXC grep zram /proc/swaps || ( doas zramen make --size 200 || $WARN "Error zramen" )
+$EXC kdeconnect-anyfm &
+$EXC xfce-polkit || $WARN "Error polkit"
+$EXC doas zramen make --size 200 || $WARN "Error zramen"
 
 $FW [class="^.*"] border 1pixel
 $FW [class="^steam$"] $FLOAT, move to scratchpad
 $FW [class="Mate-calc" instance="mate-calc"] $FLOAT
 $FW [class="Catfish" instance="catfish"] $FLOAT
+$FW [class="Connman-gtk"] $FLOAT
 $FW [class="Baobab"] $FLOAT
-$FW [class="File-roller" instance="file-roller"] $FLOAT
 $FW [class="ark"] $FLOAT, $RSZ 600 420, $MVC
+$FW [class="SpeedCrunch"] $FLOAT, $RSZ 240 360, $MVC
+$FW [class="File-roller" instance="file-roller"] $FLOAT
 $FW [class="pavucontrol-qt"] $FLOAT, $RSZ 530 340, $MVC
 $FW [class="LibreWolf" instance="Places"] $FLOAT
-$FW [class="Nm-connection-editor" instance="nm-connection-editor"] $FLOAT
 $FW [class="Nitrogen" instance="nitrogen"] $FLOAT
 $FW [class="Lxappearance" instance="lxappearance"] $FLOAT
 $FW [class="Wrapper-2.0" instance="wrapper-2.0"] $FLOAT
 $FW [class="Xfce4-panel" instance="xfce4-panel"] $FLOAT
 $FW [class="Zenity" title="Calendar selection"] $FLOAT, \
-$MVC, move up 319 px, move right 594 px
+$RSZ 290 240, $MVC, move up 317 px, move right 569 px
+$FW [class="scrcpy"] $FLOAT, $RSZ 300 650
 $FW [instance="origin.exe"] $FLOAT
 $FW [instance="eadesktop.exe"] $FLOAT
 $FW [instance="eaappinstaller.exe"] $FLOAT
@@ -264,17 +266,13 @@ $FW [class="PPSSPPQt"] $MVTO $WS11, $WS11
 $FW [class="BeamNG.drive.x64"] $MVTO $WS11, $WS11
 $FW [title="File Operation Progress"] $FLOAT, $MVC
 #$FW [class="Chat"] $MVTO $WS12, $WS12
-
 $FW [class="Deadbeef" title="^(?i)(?!Track Properties)(?!Spectrum options)\
 (?!Waveform Properties)(?!Converter)(?!Preferences).*"] $FLOAT, \
 $RSZ 708 353, $MVC, move up 261 px, move right 360px
-
 $FW [class="Deadbeef" title="^(?i)(?=Preferences|Converter|Waveform Properties\
 |Track Properties|Spectrum options).*"] $FLOAT, $MVC
-
 $FW [class="Xfce4-terminal" title="Xterminal"] $FLOAT, $RSZ 708 353, \
 $MVC, move up 260 px, move left 360px
-
 $FW [class="Xfce4-terminal" title="LFterminal"] $FLOAT, $RSZ 708 353, \
 $MVC, move up 260 px, move right 360px
 
@@ -293,14 +291,14 @@ $BIND $MOD+F6 $EXC steam &
 $BIND $MOD+F7 $EXC $MSG "[class=suyu] focus" && $ADUNST "suyu" || ( suyu & $ADUNST "Launching suyu" )
 
 $BIND $MOD+v $EXC xfce4-clipman popup &
-$BIND $MOD+$SHFT+z $EXC killall xfce4-clipman && xfce4-clipman start & xfce4-screenshooter &
+$BIND $MOD+$SHFT+z $EXC xfce4-screenshooter &
 $BIND $ALT+Tab $EXC rofi-launch alt-tab &
 $BIND $MOD+Tab $EXC rofi-launch alt-tab &
 $BIND $MOD+Return $EXC rofi-launch menu &
 $BIND $MOD+grave $EXC rofi-launch menu &
 $BIND $MOD+o $EXC rofi-launch emoji &
 $BIND $MOD+n $EXC dunstctl history-pop &
-$BIND $MOD+c $EXC killall mate-calc || mate-calc &
+$BIND $MOD+c $EXC killall speedcrunch || speedcrunch &
 $BIND $MOD+b $EXC killall pavucontrol-qt || pavucontrol-qt &
 $BIND $CTRL+$ALT+t $EXC gettop &
 $BIND $MOD+KP_Enter $EXC xfce4-terminal --title="Xterminal"

@@ -9,8 +9,8 @@ if [ -z "${file}" ]; then
     exit 1
 fi
 
-# Imgur upload YOU HAVE TO GIVE YOUR OWN CLIENT_ID
-IMGUR_CLIENT_ID="REPLACETHIS"
+# Imgur upload
+IMGUR_CLIENT_ID="PUTYOUROWNHERE"
 response=$(curl -s -F "image=@${file}" -H "Authorization: Client-ID ${IMGUR_CLIENT_ID}" https://api.imgur.com/3/upload)
 
 # Extract URL
