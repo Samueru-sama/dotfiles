@@ -12,9 +12,15 @@ setopt appendhistory
 
 PROMPT='%F{226}%~/ '
 
+alias sudo=doas
+alias cat=bat
 alias ls="ls -a --color=auto"
-alias yeet="sudo pacman -Rns"
+alias yeet="doas pacman -Rns"
 alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
+alias iotop="doas iotop"
+alias ps_mem="doas ps_mem"
+alias zramen="doas zramen"
+alias debloat="pacman -Qdtq | doas pacman -Rsn -"
 
 lfcd () {
     tmp="$(mktemp)"
