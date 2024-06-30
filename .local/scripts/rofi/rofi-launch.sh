@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if ! command -v rofi 1>/dev/null; then
 	echo "You need rofi for this script to work"
