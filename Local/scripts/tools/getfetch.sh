@@ -16,9 +16,9 @@ fastfetch -s vulkan --pipe -l none | sed 's/Vulkan //g' \
 	> "$CACHEDIR/fastfetch/vulkaninfo"
 
 sleep 3 # Wait a bit for internet
-wget -q --spider "wttr.in/Maracaibo,VE?0TF" || { 
-	sleep 10 && wget --spider "wttr.in/Maracaibo,?0TF" \
-	|| notify-send -u critical "Cannot connect to weather server" }
+wget -q --spider "wttr.in/Maracaibo,VE?0TF" \
+	|| { sleep 10 && wget --spider "wttr.in/Maracaibo,?0TF" \
+	|| notify-send -u critical "Cannot connect to weather server"; }
  
 wget -q "wttr.in/Maracaibo?0TF" -O - | sed -E 's/^.{15}//g; /^$/d;' \
 	| awk 'NR<5 && NR>1 {$1=$1; printf "%s ", $0}' > "$CACHEDIR/weatherinfo"
@@ -32,4 +32,3 @@ while true; do
 	[ -n "$(cat "$CACHEDIR/weatherinfo")" ] && echo "(Maracaibo)" >> "$CACHEDIR/weatherinfo"
 	fastfetch -s vulkan --pipe -l none | sed 's/Vulkan //g' > "$CACHEDIR/fastfetch/vulkaninfo"
 done
-
