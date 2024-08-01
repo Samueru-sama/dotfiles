@@ -25,7 +25,7 @@ for arg in "$@"; do
 			;;
 
 		piped)
-			VID=$(echo "$@" | awk -F / '{print $NF}')
+			VID=$(echo "$@" | grep "http" | awk -F / '{print $NF}')
 			brave --app="https://piped.kavin.rocks/$VID" --window-name="Piped" &
 			exit 0
 			;;
