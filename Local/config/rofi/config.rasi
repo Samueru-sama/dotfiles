@@ -1,0 +1,7 @@
+@theme "/home/samuel/Local/share/rofi/themes/squared-nord.rasi"
+
+configuration {
+	kb-row-up: "Up,Alt+e,super+e,Shift+Tab";
+	kb-row-down: "Down,Alt+d,super+d";
+	kb-accept-entry: "Control+m,Return,KP_Enter";
+}
