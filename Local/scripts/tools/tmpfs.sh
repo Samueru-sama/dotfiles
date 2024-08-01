@@ -42,12 +42,13 @@ sed -i 's/"exit_type":"Crashed"/"exit_type":"Normal"/' \
 	"$CONFIGDIR"/Brave.tmpfs/Brave-Browser/Default/Preferences
 
 # Brave uses its config dir to store cache (Blatant violation of the xdg specs)
-mkdir -p "$CACHEDIR" && cp -r "$CONFIGDIR"/Brave.tmpfs/Brave-Browser "$CACHEDIR" \
-	&& ln -s "$CACHEDIR" "$CONFIGDIR" 2>/dev/null 
+mkdir -p "$CACHEDIR" \
+	&& cp -r "$CONFIGDIR"/Brave.tmpfs/Brave-Browser "$CACHEDIR" \
+	&& ln -s "$CACHEDIR" "$CONFIGDIR" 2>/dev/null
 
 # INDICATE EVERYTHING IS READY
 [ ! -e "$OKFILE" ] && { 
-	echo "Syncing record for this session:\n" >> "$OKFILE" || exit 1
+	printf '%s\n' "Syncing record for this session:" >> "$OKFILE" || exit 1
 }
 
 # SYNC EVERY TWO HOURS
@@ -57,4 +58,3 @@ while true; do
 	_sync_browser && echo "Synced on $(date)" >> "$OKFILE" \
 		|| notify-send -u critical "Browser sync error!"
 done
-
