@@ -1,5 +1,5 @@
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # DEFAULT KEYS / VARIABLES / WORKSPACES / DISPLAY / KEYBOARD / LOCKSCREEN # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # DEFAULT KEYS / VARIABLES / WORKSPACES / DISPLAY / KEYBOARD / LOCKSCREEN # #
 set $MOD Mod4
 set $ALT Mod1
 set $CTRL Control
@@ -23,8 +23,9 @@ set $TXTE lite-xl
 set $COMP fastcompmgr
 set $WARN notify-send -u critical
 
-$EXCA sleep 2 && which $BAR $MSG $TXTE $COMP i3lock dunstify rofi xss-lock feh xdotool \
-killall || $WARN 'i3 Config WARNING!' 'MISSING DEPENDENCY!' # Dependency check
+# Dependency check
+$EXCA sleep 2 && which $BAR $MSG $TXTE $COMP i3lock dunstify rofi xss-lock \
+feh xdotool killall || $WARN 'i3 Config WARNING!' 'MISSING DEPENDENCY!'
 
 set $WS1 WorkSpace "1"
 set $WS2 WorkSpace "2"
@@ -55,8 +56,8 @@ $WS9 output $D3
 $WS11 output $D2
 $WS12 output $D3
 
-$EXCA setxkbmap -layout us,latam -option 'grp:alt_shift_toggle' # Sets keyboard layouts
-$EXC aplay -c 2 -f S16_LE -r 2000 /dev/random & sleep 3 && killall aplay # Play welcome tune
+$EXCA setxkbmap -layout us,latam -option 'grp:alt_shift_toggle' # Set kb layout
+$EXC aplay -c 2 -f S16_LE -r 2000 /dev/random & sleep 3 && killall aplay
 $EXCA sleep 1 && xset dpms 0 0 250 &
 $EXCA screenlayout && fehbg &
 $EXCA $COMP &
@@ -70,8 +71,8 @@ $BIND $MOD+$SHFT+equal $EXC "xrandr --setmonitor extended auto $D1,$D2,$D3 \
 $BIND $MOD+equal $EXC xrandr --delmonitor extended && killall $BAR \
 && sleep 0.1 && $BAR main | $BAR work1 | $BAR work3
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # COLORS / FONT / GAPS / BORDERS /  # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # COLORS / FONT / GAPS / BORDERS /  # # # # # # # # # # # # #
 # class                     border  backgr   text  indicator child_border
 client.focused             #F0C674 #091f2e #F0C674  #A54242   #F0C674
 client.unfocused           #707880 #091f2e #d4d9d6  #707880   #091f2e
@@ -87,8 +88,9 @@ focus_follows_mouse no
 focus_on_window_activation focus
 $FW [urgent="latest"] focus
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # SWITCH TO WORKSPACES  # # # # # # # # # # # # # # # # # #
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # SWITCH TO WORKSPACES  # # # # # # # # # # # # # # #
 $BIND $MOD+1 $WS1, $WDUNST "$WS1"
 $BIND $MOD+2 $WS2, $WDUNST "$WS2"
 $BIND $MOD+3 $WS3, $WDUNST "$WS3"
@@ -128,8 +130,8 @@ $BIND $MOD+$SHFT+j move down 245 px
 $BIND $MOD+$SHFT+k move up 245 px
 $BIND $MOD+$SHFT+l move right 360 px
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # MOVE FOCUS KEYS # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # MOVE FOCUS KEYS # # # # # # # # # # # # # # # # # #
 $BIND $MOD+Left focus left
 $BIND $MOD+Down focus down
 $BIND $MOD+Up focus up
@@ -145,8 +147,8 @@ $BIND $MOD+j focus down
 $BIND $MOD+k focus up
 $BIND $MOD+l focus right
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # RESIZE WINDOW # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # RESIZE WINDOW # # # # # # # # # # # # # # # # # #
 $BIND $MOD+$CTRL+Left resize shrink width 100 px or 15 ppt
 $BIND $MOD+$CTRL+Down resize shrink height 100 px or 15 ppt
 $BIND $MOD+$CTRL+Up resize grow height 100 px or 15 ppt
@@ -162,8 +164,8 @@ $BIND $MOD+$CTRL+j resize shrink height 100 px or 15 ppt
 $BIND $MOD+$CTRL+k resize grow height 100 px or 15 ppt
 $BIND $MOD+$CTRL+l resize grow width 100 px or 15 ppt
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # MOVE WINDOW TO WORKSPACE/MONITOR  # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # MOVE WINDOW TO WORKSPACE/MONITOR  # # # # # # # # # # # #
 $BIND $MOD+$SHFT+1 $MVTO $WS1, $WS1, $WDUNST "$WS1"
 $BIND $MOD+$SHFT+2 $MVTO $WS2, $WS2, $WDUNST "$WS2"
 $BIND $MOD+$SHFT+3 $MVTO $WS3, $WS3, $WDUNST "$WS3"
@@ -200,13 +202,14 @@ $BIND $MOD+$SHFT+Mod2+KP_Prior $MVTO $WS9, $WS9, $WDUNST "$WS9"
 $BIND $MOD+$SHFT+Mod2+KP_Insert $MVTO $WS10, $WS10, $WDUNST "$WS11"
 #$BIND $MOD+$SHFT+Mod2+KP_Delete $MVTO $WS11, $WS11, $WDUNST "$WS12"
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # WINDOW MANAGER COMMAND KEYS # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # WINDOW MANAGER COMMAND KEYS # # # # # # # # # # # # #
 floating_modifier $MOD
 tiling_drag modifier titlebar
 set $CHILD i3-msg focus child
-$BIND $MOD+a $EXC i3-msg focus parent || ( $CHILD && $CHILD && $CHILD && $CHILD \
-&& $CHILD && $CHILD && $CHILD && $CHILD && $CHILD ) && i3-msg focus parent
+$BIND $MOD+a $EXC i3-msg focus parent \
+	|| ( $CHILD && $CHILD && $CHILD && $CHILD $CHILD && $CHILD \
+	&& $CHILD && $CHILD && $CHILD ) && i3-msg focus parent
 $BIND $MOD+$SHFT+r layout toggle splitv splith tabbed
 $BIND $MOD+r layout toggle splith tabbed splitv
 $BIND $MOD+q kill
@@ -218,8 +221,8 @@ $BIND $MOD+space focus mode_toggle
 $BIND $MOD+$SHFT+x $EXC scratchpad &
 $BIND $MOD+x $EXC $MSG "scratchpad show" && $ADUNST "Scratchpad Toggled" &
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # AUTOSTART APPLICATIONS / FLOATING WINDOWS # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # AUTOSTART APPLICATIONS / FLOATING WINDOWS # # # # # # # # # # #
 $EXCA dunst &
 $EXCA killall i3-auto-layout && i3-auto-layout || i3-auto-layout &
 $EXC $BAR main & $BAR work1 & $BAR work3
@@ -252,7 +255,7 @@ $FW [class="Lxappearance" instance="lxappearance"] $FLOAT
 $FW [class="Wrapper-2.0" instance="wrapper-2.0"] $FLOAT
 $FW [class="Xfce4-panel" instance="xfce4-panel"] $FLOAT
 $FW [class="Zenity" title="Calendar selection"] $FLOAT, \
-$RSZ 290 240, $MVC, move up 317 px, move right 569 px
+	$RSZ 290 240, $MVC, move up 317 px, move right 569 px
 $FW [class="scrcpy"] $FLOAT, $RSZ 300 650
 $FW [instance="origin.exe"] $FLOAT
 $FW [instance="eadesktop.exe"] $FLOAT
@@ -268,13 +271,13 @@ $FW [title="File Operation Progress"] $FLOAT, $MVC
 #$FW [class="Chat"] $MVTO $WS12, $WS12
 $FW [class="Deadbeef" title="^(?i)(?!Track Properties)(?!Spectrum options)\
 (?!Waveform Properties)(?!Converter)(?!Preferences).*"] $FLOAT, \
-$RSZ 708 353, $MVC, move up 261 px, move right 360px
+	$RSZ 708 353, $MVC, move up 261 px, move right 360px
 $FW [class="Deadbeef" title="^(?i)(?=Preferences|Converter|Waveform Properties\
-|Track Properties|Spectrum options).*"] $FLOAT, $MVC
+	|Track Properties|Spectrum options).*"] $FLOAT, $MVC
 $FW [class="Xfce4-terminal" title="Xterminal"] $FLOAT, $RSZ 708 353, \
-$MVC, move up 260 px, move left 360px
+	$MVC, move up 260 px, move left 360px
 $FW [class="Xfce4-terminal" title="LFterminal"] $FLOAT, $RSZ 708 353, \
-$MVC, move up 260 px, move right 360px
+	$MVC, move up 260 px, move right 360px
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # MAIN APPlICATIONS AND MEDIA KEYS  # # # # # # # # # # # # # # # # #
