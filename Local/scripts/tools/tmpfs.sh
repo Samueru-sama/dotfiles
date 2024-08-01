@@ -26,7 +26,7 @@ _sync_browser() {
 
 # Move config dir to a permanent location
 if [ -d "$CONFIGDIR/BraveSoftware" ] && [ ! -L "$CONFIGDIR/BraveSoftware" ]; then
-	mv "$XDG_CONFIG_HOME/BraveSoftware" "$XDG_CONFIG_HOME/Brave.tmpfs" || exit 1
+	mv "$CONFIGDIR/BraveSoftware" "$CONFIGDIR/Brave.tmpfs" || exit 1
 	echo "Moved BraveSoftware to Brave.tmpfs"
 fi
 
