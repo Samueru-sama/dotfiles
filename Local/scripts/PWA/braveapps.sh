@@ -13,15 +13,18 @@ fi
 for arg in "$@"; do
 	case "$arg" in
 		discord)
-			i3-msg '[class="Brave" instance="discord.com__app"] focus' 2>/dev/null || brave --app=https://discord.com/app &
+			i3-msg '[class="Brave" instance="discord.com__app"] focus' 2>/dev/null \
+			|| brave --app=https://discord.com/app &
 			;;
 			
 		whatsapp)
-			i3-msg '[class="Brave" instance="web.whatsapp.com"] focus' 2>/dev/null || brave --app=https://web.whatsapp.com &
+			i3-msg '[class="Brave" instance="web.whatsapp.com"] focus' 2>/dev/null \
+			|| brave --app=https://web.whatsapp.com &
 			;;
 
 		telegram)
-			i3-msg '[class="Brave" instance="web.telegram.org__k"] focus' 2>/dev/null || brave --app=https://web.telegram.org/k &
+			i3-msg '[class="Brave" instance="web.telegram.org__k"] focus' 2>/dev/null \
+			|| brave --app=https://web.telegram.org/k &
 			;;
 
 		piped)
@@ -32,10 +35,11 @@ for arg in "$@"; do
 	esac
 done
 
-if ! xdotool search --name "telegram" || ! xdotool search --name "discord" || ! xdotool search --name "whatsapp"; then
+if ! xdotool search --name "telegram" || ! xdotool search --name "discord" \
+	|| ! xdotool search --name "whatsapp"; then
 	notify-send "Opening chat applications"
 	COUNT=0
-	while [ $COUNT -ne 100 ]; do		# THIS IS A HACK BECAUSE OF THIS https://github.com/i3/i3/issues/5916
+	while [ $COUNT -ne 100 ]; do # THIS IS A HACK BECAUSE OF THIS https://github.com/i3/i3/issues/5916
 		i3-msg '[class="Brave" instance="web.telegram.org__k"] focus' >/dev/null 2>&1 \
 			&& i3-msg layout tabbed >/dev/null 2>&1 \
 			&& break
