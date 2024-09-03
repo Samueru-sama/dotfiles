@@ -14,6 +14,7 @@ fi
 
 # Force XDG Base Dir Compliance
 export XDG_BIN_HOME="$HOME/Local/bin"
+export XDG_SBIN_HOME="$HOME/Local/sbin"
 export XDG_DATA_HOME="$HOME/Local/share"
 export XDG_STATE_HOME="$HOME/Local/state"
 export XDG_CONFIG_HOME="$HOME/Local/config"
@@ -32,16 +33,16 @@ export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
 export ZDOTDIR="$HOME/Local/config/zsh"
 
 # Others
-export PATH="$XDG_BIN_HOME:$PATH"
+export PATH="$XDG_BIN_HOME:$XDG_SBIN_HOME:$PATH"
 export MESA_SHADER_CACHE_DIR="$XDG_STATE_HOME/mesa_shader_cache"
 export TERMINAL=xfce4-terminal 
 export QT_QPA_PLATFORMTHEME=qt6ct
 export EDITOR="nano"
 export NO_STRIP=true
+export DBIN_INSTALL_DIR="$XDG_SBIN_HOME"
 #export APPIMAGE_EXTRACT_AND_RUN=1
 
 # Start i3wm
 if [ "$(tty)" = "/dev/tty1" ]; then
 	pgrep i3 || clear && exec startx "$XDG_CONFIG_HOME/X11/xinitrc" >/dev/null 2>&1
 fi
-
