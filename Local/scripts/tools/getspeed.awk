@@ -6,7 +6,7 @@ BEGIN {
 		exit 1
 	}
 	CACHEDIR = ENVIRON["XDG_CACHE_HOME"]
-	if (CACHEDIR == "") { cache_dir = ENVIRON["HOME"] "/.cache" }
+	if (CACHEDIR == "") { CACHEDIR = ENVIRON["HOME"] "/.cache" }
 	test = "sleep 3 && speedtest-go 2>/dev/null"
 	while (1) {
 		while ((test | getline) > 0) {
@@ -20,4 +20,3 @@ BEGIN {
 		system("sleep 14400")
 	}
 }
-
