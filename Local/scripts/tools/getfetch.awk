@@ -14,7 +14,7 @@ BEGIN {
 	vulkan = "fastfetch -s vulkan --pipe -l none 2>/dev/null"
 	while (1) {
 		while ((gpu | getline gpu_info) > 0) {
-			gsub("GPU", "", gpu_info)
+			gsub("GPU ", "", gpu_info)
 			gsub("RADV ", "", gpu_info)
 			gsub("\[Discrete\]", "", gpu_info)
 			printf("%s\n", gpu_info) > CACHEDIR "/gpuinfo"
