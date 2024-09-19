@@ -1,3 +1,4 @@
+#!/bin/sh
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # DEFAULT KEYS / VARIABLES / WORKSPACES / DISPLAY / KEYBOARD / LOCKSCREEN # #
 set $MOD Mod4
@@ -228,7 +229,9 @@ $EXCA killall i3-auto-layout && i3-auto-layout || i3-auto-layout &
 $EXC $BAR main & $BAR work1 & $BAR work3
 $EXC tmpfs &
 $EXC getfetch &
-$EXC playerctl daemon &
+$EXC getspeed &
+$EXC getweather &
+$EXC playerctld &
 $EXC xfce4-clipman start &
 $EXC pipewire &
 $EXC pipewire-pulse &
@@ -237,10 +240,10 @@ $EXC numlockx &
 $EXC doas-check &
 $EXC kdeconnect-anyfm &
 $EXC xfce-polkit || $WARN "Error polkit"
-$EXC doas zramen make --size 200 || $WARN "Error zramen"
+$EXC doas zramen make -s 200 -a zstd || $WARN "Error zramen"
 
 $FW [class="^.*"] border 1pixel
-$FW [class="^steam$"] $FLOAT, move to scratchpad
+$FW [class="^steam$"] $FLOAT
 $FW [class="Mate-calc" instance="mate-calc"] $FLOAT
 $FW [class="Catfish" instance="catfish"] $FLOAT
 $FW [class="Connman-gtk"] $FLOAT
@@ -279,19 +282,24 @@ $FW [class="Xfce4-terminal" title="Xterminal"] $FLOAT, $RSZ 708 353, \
 $FW [class="Xfce4-terminal" title="LFterminal"] $FLOAT, $RSZ 708 353, \
 	$MVC, move up 260 px, move right 360px
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # MAIN APPlICATIONS AND MEDIA KEYS  # # # # # # # # # # # # # # # # #
-set $RX1 i3-msg '[class="Brave" instance="^(?i)(?!web.telegram.org__k)(?!discord.com__app)(?!web.whatsapp.com).*"] focus'
-$BIND $MOD+F1 $EXC $RX1 && $ADUNST "Brave" || ( brave & $ADUNST "Launching Brave" )
-$BIND $MOD+$SHFT+F1 $EXC brave & $ADUNST "New Brave Window"
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # MAIN APPlICATIONS AND MEDIA KEYS  # # # # # # # # # # # # #
+#set $RX1 i3-msg '[class="Brave" instance="^(?i)(?!web.telegram.org__k)(?!discord.com__app)(?!web.whatsapp.com).*"] focus'
+#$BIND $MOD+F1 $EXC $RX1 && $ADUNST "Brave" || ( brave & $ADUNST "Launching Brave" )
+set $RX1 i3-msg '[class="zen-alpha" instance="^(?i)(?!web.telegram.org__k)(?!discord.com__app)(?!web.whatsapp.com).*"] focus'
+$BIND $MOD+F1 $EXC $RX1 && $ADUNST "Zen Browser" \
+	|| ( zen-browser & $ADUNST "Launching Zen" )
+$BIND $MOD+$SHFT+F1 $EXC zen-browser & $ADUNST "New Zen Window"
 $BIND $MOD+F2 $EXC thunar &
 $BIND $MOD+$SHFT+F2 $EXC "xfce4-terminal --title=LFterminal -x zsh -ic 'lf;clear;zsh'"
 $BIND $MOD+F3 $EXC getbeef &
 $BIND $MOD+F4 $EXC braveapps discord whatsapp telegram &
 set $RX2 i3-msg '[class="Brave" instance="piped.kavin.rocks__piped"] focus'
-$BIND $MOD+F5 $EXC $RX2 && $ADUNST "Piped" || ( braveapps piped & $ADUNST "Launching Piped" )
+$BIND $MOD+F5 $EXC $RX2 && $ADUNST "Piped" \
+	|| ( braveapps piped & $ADUNST "Launching Piped" )
 $BIND $MOD+F6 $EXC steam &
-$BIND $MOD+F7 $EXC $MSG "[class=suyu] focus" && $ADUNST "suyu" || ( suyu & $ADUNST "Launching suyu" )
+$BIND $MOD+F7 $EXC $MSG "[class=suyu] focus" && $ADUNST "suyu" \
+	|| ( suyu & $ADUNST "Launching suyu" )
 
 $BIND $MOD+v $EXC xfce4-clipman popup &
 $BIND $MOD+$SHFT+z $EXC xfce4-screenshooter &
@@ -336,8 +344,8 @@ $BIND --whole-window $MOD+button9 $EXC playerctl next &
 $BIND --whole-window $MOD+button8 $EXC playerctl previous &
 $BIND --whole-window $MOD+$SHFT+button8 $EXC getplayer TOGGLEPLAY &
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # EDIT I3 / POLYBAR # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# # # # # # # # # # # # # EDIT I3 / POLYBAR # # # # # # # # # # # # # # # # # #
 $BIND $MOD+$ALT+r $EXC $MSG restart &
 $BIND $MOD+$ALT+p $EXC $TXTE $CONFIG/$BAR/config.ini &
 $BIND $MOD+$ALT+i $EXC $TXTE $CONFIG/i3/config &
