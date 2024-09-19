@@ -10,10 +10,10 @@ BEGIN {
 	weather = "wget -q 'wttr.in/Maracaibo?format=%C %t %w (%l)\n' -O -"
 	while (1) {
 		while ((weather | getline weather_info) > 0) {
-			printf("%s\n", weather_info) >> CACHEDIR "/weatherinfo"
+			printf("%s\n", weather_info) > CACHEDIR "/weatherinfo"
 		}
+		close(CACHEDIR "/weatherinfo")
 		close(weather)
 		system("sleep 1000")
 	}
 }
-
