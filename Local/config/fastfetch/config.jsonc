@@ -69,12 +69,12 @@
     {
       "key": "GPU",
       "type": "command",
-      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/fastfetch/gpuinfo"
+      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/gpuinfo"
     },
     {
       "key": "Vulkan",
       "type": "command",
-      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/fastfetch/vulkaninfo"
+      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/vulkaninfo"
     },
     {
       "type": "display",
@@ -86,6 +86,11 @@
      "key": "Physical Disk Total IO",
      "type": "diskio",
      "detectTotal": true
+    },
+    {
+     "key": "Internet",
+     "type": "command",
+     "text": "tail -1 ${XDG_CACHE_HOME:-$HOME/.cache}/speedinfo"
     },
     "break",
     "colors"
