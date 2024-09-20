@@ -27,33 +27,36 @@
     {
      "key": "Date & Time",
      "type": "command",
-     "text": "( fastfetch -s datetime --pipe -l none; fastfetch -s uptime --pipe -l none ) | sed 's/Date & Time //g; s/Uptime/- Up:/g' | tr '\n' ' '",
+     "text": "SEPARATOR=' - Up: ' getoneline datetime uptime",
     },
     "separator",
     {
      "key": "System",
      "type": "command",
-     "text": "( fastfetch -s os --pipe -l none; fastfetch -s kernel --pipe -l none ) | sed 's/Kernel/- Kernel/g; s/OS //g' | tr '\n' ' '",
+     "text": "SEPARATOR=' - Kernel: ' getoneline os kernel",
     },
     {
      "key": "Packages",
      "type": "command",
-     "text": "( fastfetch -s packages --pipe -l none; echo \"-\"; am -f --less && echo \"(AppMan)\" ) | sed 's/Packages //g' | tr '\n' ' '",
+     "text": "{ getoneline packages; echo '-'; am -f --less && printf \"(AppMan)\"; } | tr -s '\n' ' '",
     },
     {
      "key": "WM & Theme",
      "type": "command",
-     "text": "( fastfetch -s wm --pipe -l none; fastfetch -s theme --pipe -l none ) | sed 's/WM //g; s/Theme/-/g' | tr '\n' ' '"
+     "text": "getoneline wm theme"
     },
     {
-      "key": "Icon & Font",
-      "type": "command",
-      "text": "( fastfetch -s icons --pipe -l none; fastfetch -s font --pipe -l none ) | awk -F\", \" '{print $NF}' | sed 's/Icons //; s/Font//; :a;N;$!ba;s/\\n/ - /g'"
+      "key": "Icons",
+      "type": "icons",
     },
     {
-      "key": "Terminal & Font",
+      "key": "Terminal",
+      "type": "terminal",
+    },
+	{
+      "key": "System Shell",
       "type": "command",
-      "text": "( fastfetch -s terminal --pipe -l none; fastfetch -s terminalfont --pipe -l none ) | sed 's/Terminal //g; s/Font/-/g' | tr '\n' ' '"
+      "text": "realpath \"$(which sh)\""
     },
     {
      "key": "Interactive Shell",
