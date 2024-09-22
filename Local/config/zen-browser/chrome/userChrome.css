@@ -1,0 +1,55 @@
+:root .tab-content {
+    font-size: 11px !important;
+    font-weight: bold !important;
+    font-family: 'Nimbus Sans Narrow' !important;
+}
+
+:root  {
+    --zen-colors-secondary:  #2d5b69 !important;
+    --zen-colors-tertiary: #091f2e !important;
+    --zen-colors-border: #2d5b69 !important;
+    --zen-dialog-background: #002b36 !important;
+}
+
+.tab-background {
+    border-radius: 0px !important; /* corners */
+}
+
+.tab-label-container {
+    --comptitle-width: 7ch;
+    overflow: hidden;
+    position: absolute;
+    text-overflow: ellipsis;
+    width: var(--comptitle-width); !important;
+    right: 0px;
+    white-space: nowrap;
+    background: color-mix(
+        in srgb,
+        var(--background-color-box) 75%,
+        transparent
+    );
+    height: 1rem !important;
+    opacity: 1;
+    top: 0;
+    border-radius: 0px;
+    display: flex !important;
+    mask-image: none !important;
+    color: initial !important;
+}
+
+.tab-secondary-label {
+    display: none !important;
+}
+
+.tabbrowser-tab .tab-background::after {
+  content:'';
+  position: relative;
+  width: 2px !important;
+  height: 100% !important;
+  background-color: var(--zen-primary-color) !important;
+}
+
+.tabbrowser-tab .tab-background:not([selected])::after{
+  height: 0% !important;
+}
+
