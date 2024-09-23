@@ -56,10 +56,28 @@ if [[ -o interactive ]]; then
 	promptinit
 	bashcompinit
 	zstyle ':completion::complete:*' gain-privileges 1
+	autoload -U url-quote-magic bracketed-paste-magic
+	zle -N self-insert url-quote-magic
+	zle -N bracketed-paste bracketed-paste-magic
 	. /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 	. /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 	. /home/samuel/Local/share/bash-completion/completions/am
 	. /home/samuel/Local/share/bash-completion/completions/appman
+
+	ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+
+	pasteinit() {
+		OLD_SELF_INSERT=${${(s.:.)widgets[self-insert]}[2,3]}
+		zle -N self-insert url-quote-magic
+	}
+
+	pastefinish() {
+		zle -N self-insert $OLD_SELF_INSERT
+	}
+
+	zstyle :bracketed-paste-magic paste-init pasteinit
+	zstyle :bracketed-paste-magic paste-finish pastefinish
+	ZSH_AUTOSUGGEST_CLEAR_WIDGETS+=(bracketed-paste)
 
 	preexec() {
 		preexec_timestart=$(($(date +%s%0N)/1000000))
