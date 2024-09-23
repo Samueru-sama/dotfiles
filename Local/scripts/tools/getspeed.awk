@@ -1,5 +1,7 @@
 #!/usr/bin/env -S awk -f
 
+# This gets the internet speed for fastfetch
+
 BEGIN {
 	if (system("command -v speedtest-go 1>/dev/null") != 0) {
 		print "You need speedtest-go for this script to work"
@@ -20,7 +22,7 @@ BEGIN {
 		close(test)
 		printf("↓↑ %.0f/%.0f Mbps - %.0f ms\n",
 			DOWN, UP, PING) >> CACHEDIR "/speedinfo"
-		
+
 		if (DOWN < 500) {
 			system("notify-send -u critical \
 			  'Download Speed too low! " DOWN " Mbps'")
@@ -33,6 +35,7 @@ BEGIN {
 			system("notify-send -u critical \
 			  'Ping too high! " PING " ms'")
 		}
-		system("sleep 14400")
+		# update every 3 hours
+		system("sleep 10800")
 	}
 }
