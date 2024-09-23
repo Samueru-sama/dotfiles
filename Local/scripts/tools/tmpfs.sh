@@ -22,16 +22,19 @@ _sync_browser() {
 	  --exclude='Brave-Browser/Default/Cache/Cache_Data' \
 	  --exclude='Brave-Browser/Default/History' \
 	  --exclude='Brave-Browser/component_crx_cache' \
+	  --exclude='Brave-Browser/extensions_crx_cache' \
 	  --exclude='Brave-Browser/GrShaderCache' \
 	  --exclude='Brave-Browser/DeferredBrowserMetrics' \
 	  --exclude='Brave-Browser/Greaselion' \
-	  --exclude='OnDeviceHeadSuggestModel' \
-	  --exclude='aoojcmojmmcbpfgoecoadbdpnagfchel' \
-	  --exclude='gccbbckogglekeggclmmekihdgdpdgoe' \
+	  --exclude='Brave-Browser/Safe Browsing' \
+	  --exclude='Brave-Browser/OnDeviceHeadSuggestModel' \
+	  --exclude='Brave-Browser/aoojcmojmmcbpfgoecoadbdpnagfchel' \
+	  --exclude='Brave-Browser/gccbbckogglekeggclmmekihdgdpdgoe' \
 	  "$CACHEDIR/BraveSoftware/" \
 	  "$CONFIGDIR/Brave.tmpfs/"
 
 	rsync -av --delete \
+	  --exclude='.zen/*Profile/storage/default/https*/cache' \
 	  "$CACHEDIR"/zen-browser/ \
 	  "$CONFIGDIR"/zen-browser.tmpfs/
 }
