@@ -7,7 +7,7 @@ local red        = { common.color "#cb4c51" }
 local gray_blue  = { common.color "#707282" }
 local light_gray = { common.color "#b2c8df" }
 local white      = { common.color "#d4d9d6" }
-local yellow     = { common.color "#F0C674" }
+local yellow     = { common.color "#fdbc4b" }
 
 -- App --
 style.background     = { common.color "#04090e" }
