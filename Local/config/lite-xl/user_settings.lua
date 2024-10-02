@@ -8,6 +8,14 @@ return {
         [1] = {
           ["name"] = "Droid Sans Mono Regular",
           ["path"] = "/usr/share/fonts/droid/DroidSansMono.ttf"
+        },
+        [2] = {
+          ["name"] = "Nimbus Sans Bold",
+          ["path"] = "/usr/share/fonts/gsfonts/NimbusSans-Bold.otf"
+        },
+        [3] = {
+          ["name"] = "Font Awesome 6 Free Solid",
+          ["path"] = "/usr/share/fonts/TTF/fa-solid-900.ttf"
         }
       },
       ["options"] = {
@@ -48,9 +56,19 @@ return {
         [1] = "shift+return",
         [2] = "shift+keypad enter"
       },
+      ["doc:select-to-end-of-line"] = {
+        [1] = "shift+end",
+        [2] = "shift+alt+right"
+      },
+      ["doc:select-to-start-of-line"] = {
+        [1] = "shift+alt+left"
+      },
       ["line-wrapping:toggle"] = {
         [1] = "f10",
         [2] = "alt+r"
+      },
+      ["lineguide:toggle"] = {
+        [1] = "shift+alt+r"
       },
       ["root:switch-to-tab-1"] = {
         [1] = "ctrl+1"
@@ -130,17 +148,28 @@ return {
     ["force_scrollbar_status"] = false,
     ["fps"] = 79,
     ["indent_size"] = 4,
-    ["line_limit"] = 80,
+    ["line_height"] = 1.2,
+    ["line_limit"] = 79,
     ["max_project_files"] = 1000,
-    ["max_tabs"] = 10,
+    ["max_tabs"] = 8,
     ["max_undos"] = 2000,
     ["message_timeout"] = 5,
     ["plugins"] = {
       ["drawwhitespace"] = {
-        ["show_trailing"] = true
+        ["enabled"] = true,
+        ["show_middle"] = false,
+        ["show_trailing"] = true,
+        ["show_trailing_error"] = true
       },
       ["language_php"] = {
         ["sql_strings"] = false
+      },
+      ["lineguide"] = {
+        ["enabled"] = true,
+        ["rulers"] = {
+          [1] = 80
+        },
+        ["width"] = 1
       },
       ["linewrapping"] = {
         ["enable_by_default"] = true,
@@ -181,9 +210,14 @@ return {
       ["treeview"] = {
         ["size"] = 200.0,
         ["visible"] = true
+      },
+      ["trimwhitespace"] = {
+        ["enabled"] = true,
+        ["trim_empty_end_lines"] = false
       }
     },
+    ["skip_plugins_version"] = true,
     ["tab_type"] = "hard",
-    ["theme"] = "betelgeuse2"
+    ["theme"] = "samueru"
   }
 }
