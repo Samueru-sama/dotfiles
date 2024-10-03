@@ -1,0 +1,79 @@
+:root {
+   --toolbarbutton-outer-padding: 2px !important;
+   --toolbarbutton-inner-padding: 2px !important;
+   --toolbar-start-end-padding: 2px !important;
+   --urlbar-margin-inline: 2px !important;
+   --tab-min-height: 10px !important;
+   --toolbar-field-background-color: #091f2e !important;
+	--uc-active-tab-width:   clamp(85px, 30vw, 150px);
+	--uc-inactive-tab-width: clamp(85px, 25vw, 120px);
+	--uc-urlbar-min-width: 400px;
+	--uc-urlbar-max-width: 420px;
+	--uc-toolbar-position: 4;
+	--uc-urlbar-position: 1;
+	--uc-page-action-margin: 3px;
+}
+
+* { border-radius: 0 !important; }
+
+/* URL Bar*/
+.urlbarView-row { min-height: 20px !important; }
+.urlbarView-row-inner { padding-block: 0 !important; }
+#navigator-toolbox { background: #04090e !important; border: none !important; }
+#urlbar-container{
+  padding-block: 0 !important;
+}
+#nav-bar { background: #04090e !important; height: 20px; }
+#nav-bar { margin-top: 2px !important; margin-bottom: 2px !important; }
+#urlbar-container { width: auto !important; }
+#urlbar[focused] > #urlbar-background { background: #091f2e !important; }
+#back-button { display: none !important; }
+#forward-button { display: none !important; }
+#urlbar-go-button{ display: none !important; }
+#tracking-protection-icon-container { display: none !important; }
+#page-action-buttons { display: none !important; }
+#unified-extensions-view {
+	--uei-icon-size: 16px;
+	--menu-panel-width-wide: 240px !important;
+	.panel-header { display: none !important; margin-block: 0 !important; }
+	.unified-extensions-item { margin-block: 0 !important; }
+	.unified-extensions-item-message-deck { display: none; }
+	.unified-extensions-item-menu-button { padding: 0 0 0 0 !important; }
+}
+
+/* BOOKMARKS BAR */
+#PersonalToolbar { background: #04090e !important; margin-top: 0px; max-height: 14px !important; }
+#PersonalToolbar { border: 1px !important; }
+#PlacesToolbarItems { display: flex !important; justify-content: safe center !important;}
+#PlacesToolbar menu.bookmark-item,
+#PlacesToolbar menuitem.bookmark-item{ padding-block: 0px !important; }
+
+/* TAB BAR */
+.tab-close-button { display: none !important }
+.tabbrowser-tab { max-height: 20px !important; box-shadow: none !important; }
+.tabbrowser-tab { margin-top: 2px !important; margin-bottom: 2px !important; }
+.tabbrowser-tab[selected="true"] .tab-content { background-color: #091f2e; color: #fdbc4b; }
+.tabbrowser-tab:hover:not([selected="true"]) .tab-content { background: #091f2e !important; }
+.tab-content { padding-bottom: 7px !important; }
+.tabbrowser-tab img { margin-bottom: 2px !important; }
+.tabbrowser-tab[selected][fadein]:not([pinned]) { max-width: var(--uc-active-tab-width) !important; }
+.tabbrowser-tab[fadein]:not([selected]):not([pinned]) { max-width: var(--uc-inactive-tab-width) !important; }
+#alltabs-button { display: none !important; }
+#identity-permission-box { display: none !important; }
+#identity-box { color: white }
+
+/* Disable titlebar */
+.titlebar-buttonbox {display: none !important;}
+.titlebar-spacer { display: none; }
+.urlbar-spacer { display: none; }
+
+/* ONE-LINE */
+@media (min-width: 600px) {
+	#navigator-toolbox { display: flex; flex-wrap: wrap; flex-direction: row; }
+	#nav-bar { order: var(--uc-urlbar-position); width: var(--uc-urlbar-min-width); }
+	#nav-bar #urlbar-container { min-width: 0px !important; width: auto !important; }
+	#titlebar { order: 2; width: calc(100vw - var(--uc-urlbar-min-width) - 1px); }
+	#PersonalToolbar { order: var(--uc-toolbar-position); width: 100%; }
+	#navigator-toolbox:focus-within #nav-bar { width: var(--uc-urlbar-max-width); }
+	#navigator-toolbox:focus-within #titlebar { width: calc(100vw - var(--uc-urlbar-max-width) - 1px); }
+}
