@@ -4,6 +4,7 @@
    --toolbar-start-end-padding: 2px !important;
    --urlbar-margin-inline: 2px !important;
    --tab-min-height: 10px !important;
+   --tab-block-margin: 0 !important;
    --toolbar-field-background-color: #091f2e !important;
 	--uc-active-tab-width:   clamp(85px, 30vw, 150px);
 	--uc-inactive-tab-width: clamp(85px, 25vw, 120px);
@@ -20,9 +21,6 @@
 .urlbarView-row { min-height: 20px !important; }
 .urlbarView-row-inner { padding-block: 0 !important; }
 #navigator-toolbox { background: #04090e !important; border: none !important; }
-#urlbar-container{
-  padding-block: 0 !important;
-}
 #nav-bar { background: #04090e !important; height: 20px; }
 #nav-bar { margin-top: 2px !important; margin-bottom: 2px !important; }
 #urlbar-container { width: auto !important; }
@@ -54,7 +52,7 @@
 .tabbrowser-tab { margin-top: 2px !important; margin-bottom: 2px !important; }
 .tabbrowser-tab[selected="true"] .tab-content { background-color: #091f2e; color: #fdbc4b; }
 .tabbrowser-tab:hover:not([selected="true"]) .tab-content { background: #091f2e !important; }
-.tab-content { padding-bottom: 7px !important; }
+.tab-content { padding-bottom: 0px !important; }
 .tabbrowser-tab img { margin-bottom: 2px !important; }
 .tabbrowser-tab[selected][fadein]:not([pinned]) { max-width: var(--uc-active-tab-width) !important; }
 .tabbrowser-tab[fadein]:not([selected]):not([pinned]) { max-width: var(--uc-inactive-tab-width) !important; }
