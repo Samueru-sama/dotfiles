@@ -6,7 +6,7 @@
    --tab-min-height: 10px !important;
    --tab-block-margin: 0 !important;
    --toolbar-field-background-color: #091f2e !important;
-	--uc-active-tab-width:   clamp(85px, 30vw, 150px);
+	--uc-active-tab-width:   clamp(85px, 30vw, 140px);
 	--uc-inactive-tab-width: clamp(85px, 25vw, 120px);
 	--uc-urlbar-min-width: 400px;
 	--uc-urlbar-max-width: 420px;
@@ -38,7 +38,9 @@
 	.unified-extensions-item-message-deck { display: none; }
 	.unified-extensions-item-menu-button { padding: 0 0 0 0 !important; }
 }
-
+#identity-box, #urlbar-input, .urlbar-input-box, #urlbar-input-container {
+   font-weight: 600 !important;
+}
 /* BOOKMARKS BAR */
 #PersonalToolbar { background: #04090e !important; margin-top: 0px; max-height: 14px !important; }
 #PersonalToolbar { border: 1px !important; }
@@ -56,9 +58,23 @@
 .tabbrowser-tab img { margin-bottom: 2px !important; }
 .tabbrowser-tab[selected][fadein]:not([pinned]) { max-width: var(--uc-active-tab-width) !important; }
 .tabbrowser-tab[fadein]:not([selected]):not([pinned]) { max-width: var(--uc-inactive-tab-width) !important; }
+.tab-label-container[textoverflow]:not([pinned]) { mask-image: unset !important; }
+.tab-label{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+.tab-label-container{
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+}
 #alltabs-button { display: none !important; }
 #identity-permission-box { display: none !important; }
 #identity-box { color: white }
+#TabsToolbar .tabbrowser-tab .tab-content {
+   font-weight: 800 !important;
+}
 
 /* Disable titlebar */
 .titlebar-buttonbox {display: none !important;}
