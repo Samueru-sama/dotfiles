@@ -17,9 +17,9 @@ _increase_vol() {
 		[ "$vol" -lt 10 ] && pactl set-sink-volume @DEFAULT_SINK@ +5%
 	else
 		[ "$vol" -lt 0 ] || [ "$vol" = "-inf" ] \
-			&& pactl set-sink-volume @DEFAULT_SINK@ +5%
+		  && pactl set-sink-volume @DEFAULT_SINK@ +5%
 		# sometimes the volume ends up being +1dB so we fix it
-		[ "$vol" -gt 0 ] && pactl set-sink-volume @DEFAULT_SINK@ 100%
+		[ "$vol" -gt 0 ] && pactl set-sink-volume @DEFAULT_SINK@ 100% || true
 	fi
 }
 
@@ -31,16 +31,16 @@ _toggle_mute() {
 	pactl set-sink-mute @DEFAULT_SINK@ toggle || exit 1
 	mute="$(pactl get-sink-mute @DEFAULT_SINK@ | grep -o 'yes\|no')"
 	if [ "$mute" = "yes" ]; then
-        dunstify -r 11 -t 1000 "Sound: Muted"
-    else
-        dunstify -r 11 -t 1000 "Sound: Unmuted"
-    fi
+			dunstify -r 11 -t 1000 "Sound: Muted"
+	else
+			dunstify -r 11 -t 1000 "Sound: Unmuted"
+	fi
 }
 
 _notify_vol() {
 	vol="$(pactl list sinks | awk '/Volume:/ {printf("%.0f", $7); exit; }')"
 	if [ "$vol" -gt 0 ]; then
-		dunstify -r 111 -t 1000 "WARNING VOLUME IS OVER $vol dBFS"
+		dunstify -r 111 -t 1000 -u critical "WARNING VOLUME IS OVER $vol dBFS"
 		echo "WARNING VOLUME IS OVER $vol dBFS"
 	else
 		dunstify -r 11 -t 1000 "Main Vol: $vol dBFS"
