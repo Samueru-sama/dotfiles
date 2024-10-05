@@ -10,14 +10,16 @@ if ! command -v pactl 1>/dev/null || ! command -v dunstify 1>/dev/null; then
 fi
 
 vol="$(pactl list sinks | awk '/Volume:/ {printf("%.0f", $7); exit; }')"
-[ "$vol" -gt 10 ] && pactl set-sink-volume @DEFAULT_SINK@ 65% # just in case
-
+if [ "$vol" = "-inf" ]; then
+	vol=-80
+elif [ "$vol" -gt 10 ]; then
+	pactl set-sink-volume @DEFAULT_SINK@ 65% # just in case
+fi
 _increase_vol() {
 	if [ "$2" = --NOLIMIT ]; then # ALLOWS VOLUME BEYOND 0dBFS (CLIPPING)
 		[ "$vol" -lt 10 ] && pactl set-sink-volume @DEFAULT_SINK@ +5%
 	else
-		[ "$vol" -lt 0 ] || [ "$vol" = "-inf" ] \
-		  && pactl set-sink-volume @DEFAULT_SINK@ +5%
+		[ "$vol" -lt 0 ] && pactl set-sink-volume @DEFAULT_SINK@ +5%
 		# sometimes the volume ends up being +1dB so we fix it
 		[ "$vol" -gt 0 ] && pactl set-sink-volume @DEFAULT_SINK@ 100% || true
 	fi
