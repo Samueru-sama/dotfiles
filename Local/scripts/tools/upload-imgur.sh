@@ -1,22 +1,53 @@
 #!/bin/sh
 
-notify-send -t 2000 "Uploading to Imgur" &
+STATEDIR="${XDG_STATE_HOME:-$HOME/.local/state}/getimgur"
+TIME="$(date +"%H:%M:%S_%d-%m-%Y")"
 
-# Check if file is specified
-file="$1"
-if [ -z "${file}" ]; then
-    notify-send "Error - no file specified" >&2
-    exit 1
+if ! command -v curl >/dev/null 2>&1; then
+	echo "ERROR: You need curl for this script to work"
+	notify-send "Missing dependency!"
+	exit 1
+elif ! command -v zenity >/dev/null 2>&1; then
+	echo "ERROR: You need zenity for this script to work"
+	notify-send "Missing dependency!"
+	exit 1
+elif [ -z "$1" ]; then
+	echo "ERROR: No image specified!"
+	notify-send "ERROR: No image specified!"
+	exit 1
 fi
 
+mkdir -p "$STATEDIR" || exit 1
+notify-send -t 2000 "Uploading to Imgur" &
+image="$1"
+
 # Imgur upload
-IMGUR_CLIENT_ID="YOURIDHERE"
-response=$(curl -s -F "image=@${file}" -H "Authorization: Client-ID ${IMGUR_CLIENT_ID}" https://api.imgur.com/3/upload)
+ID="66ab680b597e293" # Stolen from xfce4 lol
+UPLOAD="$(curl -sF "image=@$image" -H "Authorization: Client-ID $ID" \
+  https://api.imgur.com/3/upload 2>/dev/null)"
 
 # Extract URL
-url=$(echo "${response}" | grep -Po '"link":"\K[^"]+' | sed 's/\\//g')
+URL="$(echo "$UPLOAD" | grep -Po '"link":"\K[^"]+' | sed 's/\\//g')"
+DELETE="https://imgur.com/delete/$(echo "$UPLOAD" | grep -Po '"deletehash":"\K[^"]+')"
+
+if [ -z "$URL" ]; then
+	echo "ERROR: Something went wrong uploading the image"
+	notify-send "ERROR: Something went wrong uploading the image"
+	exit 1
+fi
+
+# log everything
+echo "
+IMAGE: $URL
+Delete: $DELETE
+DEBUG: $UPLOAD" > "$STATEDIR/$TIME"
 
 # Copy to clipboard and notify
-echo -n "${url}" | xclip -selection clipboard
-notify-send -t 2000 "Image URL Copied to Clipboard: ${url}"
+printf "$URL" | xclip -selection clipboard
+zenity --info --title="Screenshot uploaded" --text="Successfully uploaded!
 
+Link: <a href='$URL'>$URL</a>
+Delete: <a href='$DELETE'>$DELETE</a>
+
+Link copied to clipboard, logs stored in:
+$STATEDIR"
