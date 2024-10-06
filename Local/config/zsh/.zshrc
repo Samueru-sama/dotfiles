@@ -3,14 +3,13 @@ if [[ -o login ]]; then
 	# Make user owned tmp dir
 	export USER="${LOGNAME:-${USER:-${USERNAME}}}"
 	if [ ! -e /tmp/"$USER" ]; then
-		mkdir -p /tmp/"$USER"/Volatile && chmod 700 /tmp/"$USER" || exit 1
+		mkdir -p /tmp/"$USER"/Volatile && chmod -R 700 /tmp/"$USER" || exit 1
 		ln -s /tmp/"$USER"/Volatile "$HOME" >/dev/null 2>&1
 		ln -s /tmp/"$USER" "$HOME"/Local/tmp >/dev/null 2>&1
 	fi
 
 	# Force XDG Base Dir Compliance
 	export XDG_BIN_HOME="$HOME"/Local/bin \
-		XDG_SBIN_HOME="$HOME"/Local/sbin \
 		XDG_DATA_HOME="$HOME"/Local/share \
 		XDG_STATE_HOME="$HOME"/Local/state \
 		XDG_CONFIG_HOME="$HOME"/Local/config \
@@ -26,12 +25,12 @@ if [[ -o login ]]; then
 		GNUPGHOME="$XDG_DATA_HOME"/gnupg \
 		ICEAUTHORITY="$XDG_CACHE_HOME"/ICEauthority \
 		GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc \
-		ANDROID_HOME="$XDG_STATE_HOME"/android
+		ANDROID_HOME="$XDG_STATE_HOME"/android \
+		GOPATH="$XDG_CACHE_HOME"/go
 
 	# Others
 	export ARCH="$(uname -m)" \
-		PATH="$XDG_BIN_HOME:$XDG_SBIN_HOME:$PATH" \
-		DBIN_INSTALL_DIR="$XDG_SBIN_HOME" \
+		PATH="$XDG_BIN_HOME:$PATH" \
 		EDITOR="nano" \
 		FUSERMOUNT_PROG="$(which fusermount3 2>/dev/null)" \
 		HISTSIZE=6000 \
@@ -84,17 +83,22 @@ if [[ -o interactive ]]; then
 	}
 
 	precmd() {
-		PROMPT="%F{226}$(printf "$PWD" | sed "s|$HOME/|~/|; s|$HOME|~/|") "
+		PROMPT="%F{178}$(printf "$PWD" | sed "s|$HOME/|~/|; s|$HOME|~/|") "
 		[ -z "$preexec_timestart" ] && return 1
 		now=$(($(date +%s%0N)/1000000))
 		elapsed=$(($now-$preexec_timestart))
-		RPROMPT="%F{226}${elapsed}ms %{$reset_color%}"
+		RPROMPT="%F{178}${elapsed}ms %{$reset_color%}"
 		export PROMPT RPROMPT
 		unset preexec_timestart
 	}
 
 	lfcd() {
 		cd "$(command lf -print-last-dir)"
+	}
+
+	diff(){
+		printf '%.30s%65s\n' "$1" "$2" "================" "==================="
+		command diff --color -y "$1" "$2"
 	}
 
 	bindkey -s '^o' 'lfcd\n'
@@ -111,6 +115,7 @@ if [[ -o interactive ]]; then
 	alias ps_mem="doas ps_mem"
 	alias zramen="doas zramen"
 	alias debloat="pacman -Qdtq | doas pacman -Rsn -"
+	alias dbin="dbin-wrapper"
 
 	# commands to run on terminal window
 	fastfetch --physicaldisk-temp
