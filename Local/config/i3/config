@@ -59,12 +59,12 @@ $WS12 output $D3
 
 $EXCA setxkbmap -layout us,latam -option 'grp:alt_shift_toggle' # Set kb layout
 $EXC aplay -c 2 -f S16_LE -r 2000 /dev/random & sleep 3 && killall aplay
-$EXCA sleep 1 && xset dpms 0 0 250 &
+$EXCA sleep 1 && xset dpms 0 0 300 &
 $EXCA screenlayout && fehbg &
 $EXCA $COMP &
-$EXC sleep 2 && pulsemixer --set-volume 65 &
+$EXC sleep 2 && pactl set-sink-volume @DEFAULT_SINK@ 65%
 $EXC xss-lock --transfer-sleep-lock -- i3lock -c 04090e --nofork --clock \
---time-color='#F0C674' --date-color='#FFFFFF' --inside-color='#0e1f30' \
+--time-color='#fdbc4b' --date-color='#FFFFFF' --inside-color='#0e1f30' \
 --time-str="%l:%M %p" --date-str="%A %d/%m/%y"
 
 $BIND $MOD+$SHFT+equal $EXC "xrandr --setmonitor extended auto $D1,$D2,$D3 \
@@ -75,7 +75,7 @@ $BIND $MOD+equal $EXC xrandr --delmonitor extended && killall $BAR \
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # COLORS / FONT / GAPS / BORDERS /  # # # # # # # # # # # # #
 # class                     border  backgr   text  indicator child_border
-client.focused             #F0C674 #091f2e #F0C674  #A54242   #F0C674
+client.focused             #fdbc4b #091f2e #fdbc4b  #A54242   #fdbc4b
 client.unfocused           #707880 #091f2e #d4d9d6  #707880   #091f2e
 client.focused_inactive    #707880 #091f2e #d4d9d6  #707880   #091f2e
 font pango:Nimbus Sans Bold 8.5
@@ -231,7 +231,7 @@ $EXC tmpfs &
 $EXC getfetch &
 $EXC getspeed &
 $EXC getweather &
-$EXC playerctld &
+$EXCA playerctld &
 $EXC xfce4-clipman start &
 $EXC pipewire &
 $EXC pipewire-pulse &
@@ -284,17 +284,15 @@ $FW [class="Xfce4-terminal" title="LFterminal"] $FLOAT, $RSZ 708 353, \
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # MAIN APPlICATIONS AND MEDIA KEYS  # # # # # # # # # # # # #
-#set $RX1 i3-msg '[class="Brave" instance="^(?i)(?!web.telegram.org__k)(?!discord.com__app)(?!web.whatsapp.com).*"] focus'
-#$BIND $MOD+F1 $EXC $RX1 && $ADUNST "Brave" || ( brave & $ADUNST "Launching Brave" )
-set $RX1 i3-msg '[class="zen-alpha" instance="^(?i)(?!web.telegram.org__k)(?!discord.com__app)(?!web.whatsapp.com).*"] focus'
-$BIND $MOD+F1 $EXC $RX1 && $ADUNST "Zen Browser" \
-	|| ( zen-browser & $ADUNST "Launching Zen" )
-$BIND $MOD+$SHFT+F1 $EXC zen-browser & $ADUNST "New Zen Window"
+set $RX1 i3-msg '[class="firedragon" title="^(?i)(?!.*\bTelegram Web\b)(?!.* Discord)(?!.*\bWhatsApp\b).*"] focus'
+$BIND $MOD+F1 $EXC $RX1 && $ADUNST "FireDragon" \
+	|| ( firedragon & $ADUNST "Launching FireDragon" )
+$BIND $MOD+$SHFT+F1 $EXC firedragon & $ADUNST "New FireDragon Window"
 $BIND $MOD+F2 $EXC thunar &
 $BIND $MOD+$SHFT+F2 $EXC "xfce4-terminal --title=LFterminal -x zsh -ic 'lf;clear;zsh'"
 $BIND $MOD+F3 $EXC getbeef &
 $BIND $MOD+F4 $EXC braveapps discord whatsapp telegram &
-set $RX2 i3-msg '[class="Brave" instance="piped.kavin.rocks__piped"] focus'
+set $RX2 i3-msg '[class="firedragon" title="piped.kavin.rocks__piped"] focus'
 $BIND $MOD+F5 $EXC $RX2 && $ADUNST "Piped" \
 	|| ( braveapps piped & $ADUNST "Launching Piped" )
 $BIND $MOD+F6 $EXC steam &
