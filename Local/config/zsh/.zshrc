@@ -49,6 +49,7 @@ fi
 
 # Interactive stuff here
 if [[ -o interactive ]]; then
+	setopt correct_all
 	setopt appendhistory
 	autoload -Uz compinit promptinit bashcompinit
 	compinit -d "$XDG_STATE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
