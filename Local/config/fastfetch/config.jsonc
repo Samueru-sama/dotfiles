@@ -36,9 +36,7 @@
      "text": "SEPARATOR=' - Kernel: ' getoneline os kernel",
     },
     {
-     "key": "Packages",
-     "type": "command",
-     "text": "{ getoneline packages; echo '-'; am -f --less && printf \"(AppMan)\"; } | tr -s '\n' ' '",
+      "type": "Packages",
     },
     {
      "key": "WM & Theme",
