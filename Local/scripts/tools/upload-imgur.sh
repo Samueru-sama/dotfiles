@@ -22,7 +22,7 @@ notify-send -t 2000 "Uploading to Imgur" &
 image="$1"
 
 # Imgur upload
-ID="66ab680b597e293" # Stolen from xfce4 lol
+ID="313baf0c7b4d3ff" # Stolen from flameshot lol
 UPLOAD="$(curl -sF "image=@$image" -H "Authorization: Client-ID $ID" \
   https://api.imgur.com/3/upload 2>/dev/null)"
 
