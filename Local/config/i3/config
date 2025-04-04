@@ -39,7 +39,8 @@ set $WS8 WorkSpace "8"
 set $WS9 WorkSpace "9"
 set $WS10 WorkSpace "10"
 set $WS11 WorkSpace "11:GAME"
-set $WS12 WorkSpace "12:CHAT"
+set $WS12 WorkSpace "12:*"
+
 
 set $D1 DisplayPort-0
 set $D2 DisplayPort-1
@@ -228,7 +229,6 @@ $EXCA dunst &
 $EXCA killall i3-auto-layout && i3-auto-layout || i3-auto-layout &
 $EXC $BAR main & $BAR work1 & $BAR work3
 $EXC tmpfs &
-$EXC getfetch &
 $EXC getspeed &
 $EXC getweather &
 $EXCA playerctld &
@@ -266,12 +266,12 @@ $FW [instance="eaappinstaller.exe"] $FLOAT
 $FW [class="steam"] $MVTO $WS11, $WS11
 $FW [class="yuzu"] $MVTO $WS11, $WS11
 $FW [class="suyu"] $MVTO $WS11, $WS11
+$FW [class="citron"] $MVTO $WS11, $WS11
 $FW [class="dolphin-emu"] $MVTO $WS11, $WS11
 $FW [class="PPSSPPSDL"] $MVTO $WS11, $WS11
 $FW [class="PPSSPPQt"] $MVTO $WS11, $WS11
 $FW [class="BeamNG.drive.x64"] $MVTO $WS11, $WS11
 $FW [title="File Operation Progress"] $FLOAT, $MVC
-#$FW [class="Chat"] $MVTO $WS12, $WS12
 $FW [class="Deadbeef" title="^(?i)(?!Track Properties)(?!Spectrum options)\
 (?!Waveform Properties)(?!Converter)(?!Preferences).*"] $FLOAT, \
 	$RSZ 708 353, $MVC, move up 261 px, move right 360px
@@ -307,7 +307,7 @@ $BIND $MOD+Return $EXC rofi-launch menu &
 $BIND $MOD+grave $EXC rofi-launch menu &
 $BIND $MOD+o $EXC rofi-launch emoji &
 $BIND $MOD+n $EXC dunstctl history-pop &
-$BIND $MOD+c $EXC killall speedcrunch || speedcrunch &
+$BIND $MOD+c $EXC killall speedcrunch || speedcrunch
 $BIND $MOD+b $EXC killall pavucontrol-qt || pavucontrol-qt &
 $BIND $CTRL+$ALT+t $EXC gettop &
 $BIND $MOD+KP_Enter $EXC xfce4-terminal --title="Xterminal"
