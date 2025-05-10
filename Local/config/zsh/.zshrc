@@ -2,10 +2,12 @@
 if [[ -o login ]]; then
 	# Make user owned tmp dir
 	export USER="${LOGNAME:-${USER:-${USERNAME}}}"
-	if [ ! -e /tmp/"$USER" ]; then
-		mkdir -p /tmp/"$USER"/Volatile && chmod -R 700 /tmp/"$USER" || exit 1
-		ln -s /tmp/"$USER"/Volatile "$HOME" >/dev/null 2>&1
-		ln -s /tmp/"$USER" "$HOME"/Local/tmp >/dev/null 2>&1
+	export TMPDIR="/tmp/$USER"
+
+	if [ ! -e "$TMPDIR" ]; then
+		mkdir -p "$TMPDIR"/Volatile && chmod -R 700 "$TMPDIR" || exit 1
+		ln -s "$TMPDIR"/Volatile "$HOME" >/dev/null 2>&1
+		ln -s "$TMPDIR" "$HOME"/Local/tmp >/dev/null 2>&1
 	fi
 
 	# Force XDG Base Dir Compliance
@@ -13,14 +15,14 @@ if [[ -o login ]]; then
 		XDG_DATA_HOME="$HOME"/Local/share \
 		XDG_STATE_HOME="$HOME"/Local/state \
 		XDG_CONFIG_HOME="$HOME"/Local/config \
-		XDG_CACHE_HOME=/tmp/"$USER"/cache
+		XDG_CACHE_HOME="$TMPDIR"/cache
 
 	export ZDOTDIR="$HOME"/Local/config/zsh \
 		XCURSOR_PATH="$XDG_DATA_HOME/icons:$XCURSOR_PATH" \
 		WINEPREFIX="$XDG_DATA_HOME"/wineprefixes/default \
 		SANDBOXDIR="$HOME"/Local/am-sandboxes \
 		HISTFILE="$XDG_STATE_HOME"/zsh/zsh_history \
-		WGETRC="$XDG_CONFIG_HOME"/wgetrc \
+		WGETRC="$XDG_CONFIG_HOME"/wget/wgetrc \
 		XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority \
 		GNUPGHOME="$XDG_DATA_HOME"/gnupg \
 		ICEAUTHORITY="$XDG_CACHE_HOME"/ICEauthority \
@@ -32,13 +34,13 @@ if [[ -o login ]]; then
 	export ARCH="$(uname -m)" \
 		PATH="$XDG_BIN_HOME:$PATH" \
 		EDITOR="nano" \
-		FUSERMOUNT_PROG="$(which fusermount3 2>/dev/null)" \
-		HISTSIZE=6000 \
-		SAVEHIST=6000 \
+		HISTSIZE=5000 \
+		SAVEHIST=5000 \
 		MESA_SHADER_CACHE_DIR="$XDG_STATE_HOME/mesa_shader_cache" \
-		TMPDIR=/tmp/"$USER" \
 		TERMINAL=xfce4-terminal \
-		QT_QPA_PLATFORMTHEME=qt6ct
+		QT_QPA_PLATFORMTHEME=qt5ct \
+		LITE_SCALE=0.85 \
+		APPIMAGE_GTK_THEME="Adwaita:dark"
 
 	# Start i3wm
 	if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
@@ -49,7 +51,6 @@ fi
 
 # Interactive stuff here
 if [[ -o interactive ]]; then
-	setopt correct_all
 	setopt appendhistory
 	autoload -Uz compinit promptinit bashcompinit
 	compinit -d "$XDG_STATE_HOME"/zsh/zcompdump-"$ZSH_VERSION"
@@ -113,7 +114,7 @@ if [[ -o interactive ]]; then
 	alias yeetfr="doas pacman -Rnsdd"
 	alias wget=wget --hsts-file="$XDG_STATE_HOME/wget-hsts"
 	alias iotop="doas iotop"
-	alias ps_mem="doas ps_mem"
+	alias ps_mem="doas $XDG_BIN_HOME/ps_mem"
 	alias zramen="doas zramen"
 	alias debloat="pacman -Qdtq | doas pacman -Rsn -"
 	alias dbin="dbin-wrapper"
@@ -121,3 +122,7 @@ if [[ -o interactive ]]; then
 	# commands to run on terminal window
 	fastfetch --physicaldisk-temp
 fi
+
+autoload bashcompinit
+bashcompinit
+source "/home/samuel/Local/share/bash-completion/completions/am"
