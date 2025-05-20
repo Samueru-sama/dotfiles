@@ -1,0 +1,47 @@
+[general]
+live_config_reload = true
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[window]
+opacity = 0.8
+
+[font]
+size = 9
+
+[font.normal]
+family = "Liberation Mono"
+style = "Bold"
+
+[font.offset]
+x = -1
+y = -1
+
+[font.glyph_offset]
+x = 0
+y = 0
+
+[colors.primary]
+background = "#04090e"
+foreground = "#ffffff"
+
+[colors.normal]
+black = "#1d1f21"
+red = "#c36363"
+green = "#adb565"
+yellow = "#e5be70"
+blue = "#7b9cb6"
+magenta = "#aa8eb3"
+cyan = "#84b6b0"
+white = "#bcc0be"
+
+[colors.bright]
+black = "#626363"
+red = "#cb4c51"
+green = "#b1c248"
+yellow = "#dcbd45"
+blue = "#75a0d1"
+magenta = "#ba91cf"
+cyan = "#6bb8aa"
+white = "#dfe0e0"
