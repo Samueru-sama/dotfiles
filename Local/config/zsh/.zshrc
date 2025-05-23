@@ -38,7 +38,7 @@ if [[ -o login ]]; then
 		SAVEHIST=5000 \
 		MESA_SHADER_CACHE_DIR="$XDG_STATE_HOME/mesa_shader_cache" \
 		TERMINAL=xfce4-terminal \
-		QT_QPA_PLATFORMTHEME=qt5ct \
+		QT_QPA_PLATFORMTHEME=gtk3 \
 		LITE_SCALE=0.85 \
 		APPIMAGE_GTK_THEME="Adwaita:dark"
 
