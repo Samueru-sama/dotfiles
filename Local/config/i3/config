@@ -236,7 +236,6 @@ $EXC xfce4-clipman start &
 $EXC pipewire &
 $EXC pipewire-pulse &
 $EXC wireplumber &
-$EXC numlockx &
 $EXC doas-check &
 $EXC kdeconnect-anyfm &
 $EXC xfce-polkit || $WARN "Error polkit"
@@ -244,6 +243,7 @@ $EXC doas zramen make -s 200 -a zstd || $WARN "Error zramen"
 
 $FW [class="^.*"] border 1pixel
 $FW [class="^steam$"] $FLOAT
+$FW [class="Alacritty" title="Xterminal"] $FLOAT, $RSZ 708 385, $MVC
 $FW [class="Mate-calc" instance="mate-calc"] $FLOAT
 $FW [class="Catfish" instance="catfish"] $FLOAT
 $FW [class="Connman-gtk"] $FLOAT
@@ -277,10 +277,7 @@ $FW [class="Deadbeef" title="^(?i)(?!Track Properties)(?!Spectrum options)\
 	$RSZ 708 353, $MVC, move up 261 px, move right 360px
 $FW [class="Deadbeef" title="^(?i)(?=Preferences|Converter|Waveform Properties\
 	|Track Properties|Spectrum options).*"] $FLOAT, $MVC
-$FW [class="Xfce4-terminal" title="Xterminal"] $FLOAT, $RSZ 708 353, \
-	$MVC, move up 260 px, move left 360px
-$FW [class="Xfce4-terminal" title="LFterminal"] $FLOAT, $RSZ 708 353, \
-	$MVC, move up 260 px, move right 360px
+
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # MAIN APPlICATIONS AND MEDIA KEYS  # # # # # # # # # # # # #
@@ -289,15 +286,12 @@ $BIND $MOD+F1 $EXC $RX1 && $ADUNST "FireDragon" \
 	|| ( firedragon & $ADUNST "Launching FireDragon" )
 $BIND $MOD+$SHFT+F1 $EXC firedragon & $ADUNST "New FireDragon Window"
 $BIND $MOD+F2 $EXC thunar &
-$BIND $MOD+$SHFT+F2 $EXC "xfce4-terminal --title=LFterminal -x zsh -ic 'lf;clear;zsh'"
 $BIND $MOD+F3 $EXC getbeef &
 $BIND $MOD+F4 $EXC braveapps discord whatsapp telegram &
 set $RX2 i3-msg '[class="firedragon" title="piped.kavin.rocks__piped"] focus'
 $BIND $MOD+F5 $EXC $RX2 && $ADUNST "Piped" \
 	|| ( braveapps piped & $ADUNST "Launching Piped" )
 $BIND $MOD+F6 $EXC steam &
-$BIND $MOD+F7 $EXC $MSG "[class=suyu] focus" && $ADUNST "suyu" \
-	|| ( suyu & $ADUNST "Launching suyu" )
 
 $BIND $MOD+v $EXC xfce4-clipman popup &
 $BIND $MOD+$SHFT+z $EXC xfce4-screenshooter &
@@ -310,8 +304,8 @@ $BIND $MOD+n $EXC dunstctl history-pop &
 $BIND $MOD+c $EXC killall speedcrunch || speedcrunch
 $BIND $MOD+b $EXC killall pavucontrol-qt || pavucontrol-qt &
 $BIND $CTRL+$ALT+t $EXC gettop &
-$BIND $MOD+KP_Enter $EXC xfce4-terminal --title="Xterminal"
-$BIND $MOD+t $EXC xfce4-terminal &
+$BIND $MOD+KP_Enter $EXC alacritty --title="Xterminal"
+$BIND $MOD+t $EXC alacritty &
 $BIND $MOD+$SHFT+q $EXC rofi-launch power-menu
 $BIND $CTRL+$ALT+k $EXC xkill &
 $BIND $MOD+$ALT+s $EXC getscheduler &
