@@ -51,6 +51,10 @@
       "key": "Terminal",
       "type": "terminal",
     },
+    {
+      "key": "Terminal Font",
+      "type": "terminalfont",
+    },
 	{
       "key": "System Shell",
       "type": "command",
@@ -69,29 +73,34 @@
     },
     {
       "key": "GPU",
-      "type": "command",
-      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/gpuinfo"
+      "type": "gpu",
+      "detectionMethod": "vulkan"
     },
     {
       "key": "Vulkan",
-      "type": "command",
-      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/vulkaninfo"
+      "type": "vulkan"
     },
     {
       "type": "display",
       "compactType": "original-with-refresh-rate"
     },
-    "disk",
-    "physicaldisk",
+	{
+      "type": "disk",
+	  "hideFS": "fuse.sshfs"
+	},
+	{
+      "type": "physicaldisk",
+	  "physicaldisk-temp": "true"	
+	},
     {
-     "key": "Physical Disk Total IO",
-     "type": "diskio",
-     "detectTotal": true
+      "key": "Physical Disk Total IO",
+      "type": "diskio",
+      "detectTotal": true
     },
     {
-     "key": "Internet",
-     "type": "command",
-     "text": "tail -1 ${XDG_CACHE_HOME:-$HOME/.cache}/speedinfo"
+      "key": "Internet",
+      "type": "command",
+      "text": "tail -1 ${XDG_CACHE_HOME:-$HOME/.cache}/speedinfo"
     },
     "break",
     "colors"
