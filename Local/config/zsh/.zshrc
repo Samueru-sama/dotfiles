@@ -40,7 +40,7 @@ if [[ -o login ]]; then
 		TERMINAL=xfce4-terminal \
 		QT_QPA_PLATFORMTHEME=gtk3 \
 		LITE_SCALE=0.85 \
-		APPIMAGE_GTK_THEME="Adwaita:dark"
+		GDK_BACKEND=x11
 
 	# Start i3wm
 	if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
@@ -106,7 +106,6 @@ if [[ -o interactive ]]; then
 	bindkey -s '^o' 'lfcd\n'
 	bindkey '^U' backward-kill-line
 	alias lf="lfcd"
-	alias sudo=doas
 	alias chx='chmod +x'
 	alias cat=bat
 	alias ls="ls -a --color=auto"
@@ -120,7 +119,7 @@ if [[ -o interactive ]]; then
 	alias dbin="dbin-wrapper"
 
 	# commands to run on terminal window
-	fastfetch --physicaldisk-temp
+	fastfetch
 fi
 
 autoload bashcompinit
