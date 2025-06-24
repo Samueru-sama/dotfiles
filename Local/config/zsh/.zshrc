@@ -40,7 +40,7 @@ if [[ -o login ]]; then
 		TERMINAL=xfce4-terminal \
 		QT_QPA_PLATFORMTHEME=gtk3 \
 		LITE_SCALE=0.85 \
-		RENDERER=eg \
+		RENDERER=egl \
 		GDK_BACKEND=x11
 
 	# Start i3wm
