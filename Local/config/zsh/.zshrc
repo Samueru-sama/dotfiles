@@ -40,6 +40,7 @@ if [[ -o login ]]; then
 		TERMINAL=xfce4-terminal \
 		QT_QPA_PLATFORMTHEME=gtk3 \
 		LITE_SCALE=0.85 \
+		RENDERER=eg \
 		GDK_BACKEND=x11
 
 	# Start i3wm
@@ -113,7 +114,6 @@ if [[ -o interactive ]]; then
 	alias yeetfr="doas pacman -Rnsdd"
 	alias wget=wget --hsts-file="$XDG_STATE_HOME/wget-hsts"
 	alias iotop="doas iotop"
-	alias ps_mem="doas $XDG_BIN_HOME/ps_mem"
 	alias zramen="doas zramen"
 	alias debloat="pacman -Qdtq | doas pacman -Rsn -"
 	alias dbin="dbin-wrapper"
