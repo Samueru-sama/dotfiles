@@ -59,7 +59,6 @@ $WS11 output $D2
 $WS12 output $D3
 
 $EXCA setxkbmap -layout us,latam -option 'grp:alt_shift_toggle' # Set kb layout
-$EXC aplay -c 2 -f S16_LE -r 2000 /dev/random & sleep 3 && killall aplay
 $EXCA sleep 1 && xset dpms 0 0 300 &
 $EXCA screenlayout && fehbg &
 $EXCA $COMP &
@@ -67,6 +66,7 @@ $EXC sleep 2 && pactl set-sink-volume @DEFAULT_SINK@ 65%
 $EXC xss-lock --transfer-sleep-lock -- i3lock -c 04090e --nofork --clock \
 --time-color='#fdbc4b' --date-color='#FFFFFF' --inside-color='#0e1f30' \
 --time-str="%l:%M %p" --date-str="%A %d/%m/%y"
+$EXC xdotool key Num_Lock &
 
 $BIND $MOD+$SHFT+equal $EXC "xrandr --setmonitor extended auto $D1,$D2,$D3 \
 && killall $BAR && $BAR main"
@@ -281,16 +281,12 @@ $FW [class="Deadbeef" title="^(?i)(?=Preferences|Converter|Waveform Properties\
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # MAIN APPlICATIONS AND MEDIA KEYS  # # # # # # # # # # # # #
-set $RX1 i3-msg '[class="firedragon" title="^(?i)(?!.*\bTelegram Web\b)(?!.* Discord)(?!.*\bWhatsApp\b).*"] focus'
+set $RX1 i3-msg '[class="Hellium" title="^(?i)(?!.*\bTelegram Web\b)(?!.* Discord)(?!.*\bWhatsApp\b).*"] focus'
 $BIND $MOD+F1 $EXC $RX1 && $ADUNST "FireDragon" \
-	|| ( firedragon & $ADUNST "Launching FireDragon" )
-$BIND $MOD+$SHFT+F1 $EXC firedragon & $ADUNST "New FireDragon Window"
+	|| ( helium & $ADUNST "Launching Hellium" )
+$BIND $MOD+$SHFT+F1 $EXC helium & $ADUNST "New helium Window"
 $BIND $MOD+F2 $EXC thunar &
 $BIND $MOD+F3 $EXC getbeef &
-$BIND $MOD+F4 $EXC braveapps discord whatsapp telegram &
-set $RX2 i3-msg '[class="firedragon" title="piped.kavin.rocks__piped"] focus'
-$BIND $MOD+F5 $EXC $RX2 && $ADUNST "Piped" \
-	|| ( braveapps piped & $ADUNST "Launching Piped" )
 $BIND $MOD+F6 $EXC steam &
 
 $BIND $MOD+v $EXC xfce4-clipman popup &
