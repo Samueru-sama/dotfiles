@@ -45,3 +45,20 @@ blue = "#75a0d1"
 magenta = "#ba91cf"
 cyan = "#6bb8aa"
 white = "#dfe0e0"
+
+[[keyboard.bindings]]
+key = "d"
+mods = "Shift"
+action = "ScrollToBottom"
+[[keyboard.bindings]]
+key = "e"
+mods = "Shift"
+action = "ScrollToTop"
+[[keyboard.bindings]]
+key = "d"
+mods = "Alt"
+action = "ScrollPageDown"
+[[keyboard.bindings]]
+key = "e"
+mods = "Alt"
+action = "ScrollPageUp"
