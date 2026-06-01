@@ -46,7 +46,8 @@ if [[ -o login ]]; then
 	export QT_QPA_PLATFORMTHEME=gtk3
 	export LITE_SCALE=0.85
 	export RENDERER=egl
-	export GDK_BACKEND=x11
+	#export GDK_BACKEND=x11
+	export PULSE_LATENCY_MSEC=60
 
 	# Start i3wm
 	if [ -z "$DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
@@ -126,6 +127,3 @@ if [[ -o interactive ]]; then
 	fastfetch
 fi
 
-autoload bashcompinit
-bashcompinit
-source "/home/samuel/Local/share/bash-completion/completions/am"

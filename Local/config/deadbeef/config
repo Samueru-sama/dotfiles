@@ -13,7 +13,6 @@ artwork.filemask front.png;front.jpg;front.jpeg;folder.png;folder.jpg;folder.jpe
 artwork.folders art;scans;covers;artwork;artworks
 artwork.image_size 320.000000
 artwork.missing_artwork 1
-artwork.nocover_path 
 artwork.save_to_music_folders 0
 artwork.save_to_music_folders_relative_path cover.jpg;cover.png
 cli_add_playlist_name Default
@@ -25,7 +24,7 @@ converter.output_folder /media/MEDIA/Downloads/music
 converter.output_format 0
 converter.overwrite_action 0
 converter.preserve_folder_structure 1
-deadbeef_version devel
+deadbeef_version 1.10.2
 discord_presence.enable 0
 discord_presence.end_timestamp 0
 discord_presence.hide_on_pause 1
@@ -88,7 +87,6 @@ gtkui.color.tabstrip_light 1151 10707 17222
 gtkui.color.tabstrip_playing_text 61680 50885 29811
 gtkui.columns.playlist [{"title":"      Title","id":"9","format":"%filename%[ - %playback_time%/%length%]","sort_format":"%path%","size":"321","align":"0","color_override":"0","color":"#ff000000"},{"title":"                              Artist - Album","id":"-1","format":"$if(%artist%,%artist%,Unknown Artist)[ - %album%]","sort_format":"","size":"393","align":"2","color_override":"0","color":"#fffcfcfc"},{"title":"Year","id":"-1","format":"%year%","sort_format":"","size":"38","align":"0","color_override":"0","color":"#ffeeeeec"},{"title":"","id":"8","format":"","sort_format":"","size":"282","align":"2","color_override":"0","color":"#ffeeeeec"}]
 gtkui.columns.search [{"title":"Track No","id":"-1","format":"%tracknumber%","sort_format":"","size":"50","align":"1","color_override":"0","color":"#ff000000"},{"title":"Title","id":"-1","format":"%title%","sort_format":"","size":"266","align":"0","color_override":"0","color":"#ff000000"},{"title":"Artist / Album","id":"-1","format":"$if(%artist%,%artist%,Unknown Artist)[ - %album%]","sort_format":"","size":"253","align":"0","color_override":"0","color":"#ff000000"},{"title":"Duration","id":"-1","format":"%length%","sort_format":"","size":"50","align":"0","color_override":"0","color":"#ff000000"}]
-gtkui.conf_dsp_preset 
 gtkui.embolden_current_track 1
 gtkui.font.listview_column_text Nimbus Mono PS Bold 6.5
 gtkui.font.listview_group_text Nimbus Sans Bold 8
@@ -97,7 +95,8 @@ gtkui.font.tabstrip_text Nimbus Sans Bold 7.5
 gtkui.hide_remove_from_disk 1
 gtkui.hide_tray_icon 1
 gtkui.italic_selected_tracks 1
-gtkui.layout.1.9.0 {"type":"vsplitter","legacy_params":" locked=2 ratio=0.754986 pos=762 size2=83","children":[{"type":"hsplitter","legacy_params":" locked=1 ratio=1.000000 pos=1049 size2=374","children":[{"type":"playlist","legacy_params":" hideheaders=0 width=1049"},{"type":"vsplitter","legacy_params":" locked=2 ratio=0.898113 pos=0 size2=24","children":[{"type":"filebrowser"},{"type":"tabstrip"}]}]},{"type":"hsplitter","legacy_params":" locked=1 ratio=0.126062 pos=89 size2=0","children":[{"type":"coverart","settings":{"mode":"selected"}},{"type":"vsplitter","legacy_params":" locked=2 ratio=0.301205 pos=0 size2=55","children":[{"type":"waveform_seekbar"},{"type":"musical_spectrum"}]}]}]}
+gtkui.layout.1.9.0 {"type":"vsplitter","legacy_params":" locked=2 ratio=0.897252 pos=762 size2=83","children":[{"type":"hsplitter","legacy_params":" locked=1 ratio=0.741867 pos=1049 size2=374","children":[{"type":"playlist","legacy_params":" hideheaders=0 width=1049"},{"type":"vsplitter","legacy_params":" locked=2 ratio=0.964048 pos=0 size2=24","children":[{"type":"filebrowser"},{"type":"tabstrip"}]}]},{"type":"hsplitter","legacy_params":" locked=1 ratio=0.062942 pos=89 size2=0","children":[{"type":"coverart","settings":{"mode":"selected"}},{"type":"vsplitter","legacy_params":" locked=2 ratio=0.301205 pos=0 size2=55","children":[{"type":"waveform_seekbar"},{"type":"scope","settings":{"renderMode":"multichannel","scaleMode":"auto","fragmentDuration":"300"}}]}]}]}
+gtkui.log.autoopen 1
 gtkui.override_bar_colors 1
 gtkui.override_listview_colors 1
 gtkui.override_tabstrip_colors 1
@@ -115,7 +114,7 @@ gtkui.tabstrip_italic_selected 0
 gtkui.titlebar_playing_tf %artist% - %title%
 gtkui.titlebar_stopped_tf DeaDBeeF
 gtkui.vis.custom_background_color 1028 2311 3598
-gtkui.vis.custom_base_color 65535 65535 65535
+gtkui.vis.custom_base_color 65021 48316 19275
 gtkui.vis.use_custom_background_color 1
 gtkui.vis.use_custom_base_color 1
 gui_plugin GTK3
@@ -165,26 +164,26 @@ lastfm.scrobbler_url https://post.audioscrobbler.com
 lastfm.submit_tiny_tracks 0
 logwindow.geometry.h 351
 logwindow.geometry.w 706
-logwindow.geometry.x 597
-logwindow.geometry.y 450
+logwindow.geometry.x 238
+logwindow.geometry.y 122
 mainwin.geometry.h 351
 mainwin.geometry.maximized 0
 mainwin.geometry.w 706
-mainwin.geometry.x 726
+mainwin.geometry.x 3606
 mainwin.geometry.y 19
 medialib.deadbeef.enabled 1
 medialib.deadbeef.paths ["/mnt/MEDIA/samuel/Music/Games OSTs","/mnt/MEDIA/samuel/Music/Regular Music"]
 medialib.tfqueries {"queries":[{"name":"Folders","items":["%folder_tree%","[%tracknumber%. ]%title%"]},{"name":"Albums","items":["$if2(%album artist%,\\<?\\>) - [\\[Disc %disc%\\] ]$if2(%album%,\\<?\\>)","[%tracknumber%. ]%title%"]},{"name":"Artists","items":["$if2(%album artist%,\\<?\\>)","$if2(%album artist%,\\<?\\>) - [\\[Disc %disc%\\] ]$if2(%album%,\\<?\\>)","[%tracknumber%. ]%title%"]},{"name":"Genres","items":["$if2(%genre%,\\<?\\>)","$if2(%album artist%,\\<?\\>) - [\\[Disc %disc%\\] ]$if2(%album%,\\<?\\>)","[%tracknumber%. ]%title%"]}]}
 musical_spectrum.alignment 2
 musical_spectrum.amp_max 0
-musical_spectrum.amp_min -50
+musical_spectrum.amp_min -40
 musical_spectrum.bar_delay 100
 musical_spectrum.bar_falloff 100
 musical_spectrum.bar_w 0
 musical_spectrum.channel 3
 musical_spectrum.color.background 1028 2312 3598
 musical_spectrum.color.black_keys 1028 2312 3598
-musical_spectrum.color.gradient_00 61680 50885 29811
+musical_spectrum.color.gradient_00 65021 48316 19275
 musical_spectrum.color.gradient_01 61166 61166 60652
 musical_spectrum.color.gradient_02 65535 65535 65535
 musical_spectrum.color.gradient_03 0 0 0
@@ -192,7 +191,7 @@ musical_spectrum.color.gradient_04 0 0 0
 musical_spectrum.color.gradient_05 0 0 0
 musical_spectrum.color.hgrid 28784 30840 32896
 musical_spectrum.color.ogrid 42148 0 0
-musical_spectrum.color.peaks 61680 50885 29811
+musical_spectrum.color.peaks 65021 48316 19275
 musical_spectrum.color.text 65535 65535 65535
 musical_spectrum.color.vgrid 21845 21845 21845
 musical_spectrum.color.white_keys 1028 2312 3598
@@ -218,8 +217,8 @@ musical_spectrum.font_tooltip Noto Sans Medium 9
 musical_spectrum.gaps 1
 musical_spectrum.gradient_orientation 0
 musical_spectrum.interpolate 0
-musical_spectrum.note_max 122
-musical_spectrum.note_min 2
+musical_spectrum.note_max 120
+musical_spectrum.note_min 21
 musical_spectrum.num_colors 1
 musical_spectrum.peak_delay 300
 musical_spectrum.peak_falloff 100
@@ -235,19 +234,19 @@ notify.enable 1
 notify.fix_kde_5_23_5 0
 notify.format_content_tf %artist% - %album%
 notify.format_title_tf %title%
-output_plugin pipewire
+output_plugin pulseaudio
 pipewire_soundcard alsa_output.usb-Apple__Inc._USB-C_to_3.5mm_Headphone_Jack_Adapter_DWH038405PVJKLTAY-00.analog-stereo
 playback.loop 2
 playback.order 1
 playback.volume.normalized 1.0000000
 playlist.current 0
-playlist.cursor.0 690
+playlist.cursor.0 2545
 playlist.cursor.1 -1
 playlist.cursor.2 -1
 playlist.cursor.3 0
 playlist.cursor.4 0
 playlist.pin.groups 0
-playlist.scroll.0 -690
+playlist.scroll.0 -2545
 playlist.scroll.1 0
 playlist.scroll.2 0
 playlist.scroll.3 0
@@ -263,14 +262,13 @@ prefwin.geometry.w 740
 prefwin.geometry.x 349
 prefwin.geometry.y 169
 pulse.buffersize 6144
-pulse.serveraddr2 
 replaygain.preamp_with_rg 8.0000000
 replaygain.processing_flags 3
 replaygain.source_mode 1
 resume.paused 0
 resume.playlist 0
-resume.position 3.4365523
-resume.track 690
+resume.position 15.325201
+resume.track 6486
 resume_last_session 0
 searchwin.geometry.h 351
 searchwin.geometry.w 706
@@ -297,13 +295,13 @@ waveform.cursor_width 3
 waveform.display_rms 0
 waveform.display_ruler 0
 waveform.fg_alpha 65535
-waveform.fg_color_b 29811
-waveform.fg_color_g 50885
-waveform.fg_color_r 61680
+waveform.fg_color_b 19275
+waveform.fg_color_g 48316
+waveform.fg_color_r 65021
 waveform.fg_rms_alpha 65535
-waveform.fg_rms_color_b 29811
-waveform.fg_rms_color_g 50885
-waveform.fg_rms_color_r 61680
+waveform.fg_rms_color_b 19275
+waveform.fg_rms_color_g 48316
+waveform.fg_rms_color_r 65021
 waveform.fill_waveform 1
 waveform.font_size 18
 waveform.log_enabled 0
