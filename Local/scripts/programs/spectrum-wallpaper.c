@@ -51,9 +51,7 @@ struct state {
     GLXPixmap glxp[2];
     int       cur;
 
-    pa_simple   *pa;
-    int          have_monitor;
-
+pa_simple   *pa;
     int   nbars;
     float *bars, *peaks;
     float *re, *im, *buf;
@@ -72,32 +70,11 @@ static void sampling(struct state *s)
 {
     int new_n = N / 8;
     if (s->first) {
-        if (s->pa)
-            pa_simple_read(s->pa, s->raw, sizeof(s->raw), NULL);
-        else {
-            static float ph = 0;
-            for (int i = 0; i < N; i++) {
-                s->raw[i] = 32768 * (sinf(ph)*.4f + sinf(ph*2.3f)*.25f
-                       + sinf(ph*5.1f)*.15f + sinf(ph*9.7f)*.1f);
-                ph += M_PI * 440.0f / RATE;
-                if (ph > M_PI * 2) ph -= M_PI * 2;
-            }
-        }
+        pa_simple_read(s->pa, s->raw, sizeof(s->raw), NULL);
         s->first = 0;
     } else {
         memmove(s->raw, s->raw + new_n, (N - new_n) * sizeof(int16_t));
-        if (s->pa)
-            pa_simple_read(s->pa, s->raw + N - new_n, new_n * sizeof(int16_t), NULL);
-        else {
-            static float ph = 0;
-            for (int i = 0; i < new_n; i++) {
-                s->raw[N - new_n + i] = 32768 * (sinf(ph)*.4f
-                    + sinf(ph*2.3f)*.25f + sinf(ph*5.1f)*.15f
-                    + sinf(ph*9.7f)*.1f);
-                ph += M_PI * 440.0f / RATE;
-                if (ph > M_PI * 2) ph -= M_PI * 2;
-            }
-        }
+        pa_simple_read(s->pa, s->raw + N - new_n, new_n * sizeof(int16_t), NULL);
     }
     for (int i = 0; i < N; i++)
         s->buf[i] = s->raw[i] / 32768.0f;
@@ -179,15 +156,13 @@ static void calculate(struct state *s)
     int nb = s->nbars, N2 = N / 2;
 
     int silent = 0;
-    if (s->have_monitor) {
-        int new_n = N / 8;
-        float e = 0;
-        for (int i = 0; i < new_n; i++)
-            e += fabsf(s->buf[N - new_n + i]);
-        e /= new_n;
-        if (e < 0.001f)
-            silent = 1;
-    }
+    int new_n = N / 8;
+    float e = 0;
+    for (int i = 0; i < new_n; i++)
+        e += fabsf(s->buf[N - new_n + i]);
+    e /= new_n;
+    if (e < 0.001f)
+        silent = 1;
 
     if (silent) {
         for (int b = 0; b < nb; b++)
@@ -310,13 +285,14 @@ int main(int argc, char *argv[])
     S.eroot = XInternAtom(S.dpy, "ESETROOT_PMAP_ID", False);
 
     char *mon = pactl_monitor();
-    if (mon) {
+    if (!mon) { fprintf(stderr, "No PulseAudio monitor\n"); return 1; }
+    {
         pa_sample_spec ss = {PA_SAMPLE_S16NE, RATE, 1};
         int err;
         S.pa = pa_simple_new(NULL, "spectrum", PA_STREAM_RECORD, mon,
                              "analyzer", &ss, NULL, NULL, &err);
-        if (S.pa) S.have_monitor = 1;
         free(mon);
+        if (!S.pa) { fprintf(stderr, "pa_simple_new failed\n"); return 1; }
     }
 
     {
@@ -429,7 +405,7 @@ int main(int argc, char *argv[])
     XFlush(S.dpy);
     XCloseDisplay(S.dpy);
 
-    if (S.pa) pa_simple_free(S.pa);
+    pa_simple_free(S.pa);
     free(S.buf); free(S.bars); free(S.peaks); free(S.re); free(S.im);
     free(S.mag); free(S.hann); free(S.bar_ilo); free(S.bar_ihi); free(S.bar_fc);
     free(S.tw_re); free(S.tw_im);
