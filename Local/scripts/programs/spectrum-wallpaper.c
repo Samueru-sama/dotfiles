@@ -11,9 +11,10 @@
 #include <math.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <time.h>
+#include <fcntl.h>
 #include <Imlib2.h>
 
-// CPU usage is lower with 8192 than with 4096, compiler bug most likely
 #define N 8192
 #define RATE 44100
 
@@ -53,6 +54,7 @@ struct state {
 
 pa_simple   *pa;
     int   nbars;
+    time_t last_audio;
     float *bars, *peaks;
     float *re, *im, *buf;
     float *mag;
@@ -73,6 +75,24 @@ static void sampling(struct state *s)
         pa_simple_read(s->pa, s->raw, sizeof(s->raw), NULL);
         s->first = 0;
     } else {
+        if (time(NULL) - s->last_audio > 300) {
+            pa_simple_free(s->pa);
+            s->pa = NULL;
+            char *mon = pactl_monitor();
+            if (mon) {
+                pa_sample_spec ss = {PA_SAMPLE_S16NE, RATE, 1};
+                s->pa = pa_simple_new(NULL, "spectrum", PA_STREAM_RECORD, mon,
+                                     "analyzer", &ss, NULL, NULL, NULL);
+                free(mon);
+            }
+            if (!s->pa) {
+                fprintf(stderr, "PA reconnect failed, retrying in 60s\n");
+                s->last_audio = time(NULL) - 240;
+                return;
+            }
+            s->last_audio = time(NULL);
+            s->first = 1;
+        }
         memmove(s->raw, s->raw + new_n, (N - new_n) * sizeof(int16_t));
         pa_simple_read(s->pa, s->raw + N - new_n, new_n * sizeof(int16_t), NULL);
     }
@@ -161,8 +181,10 @@ static void calculate(struct state *s)
     for (int i = 0; i < new_n; i++)
         e += fabsf(s->buf[N - new_n + i]);
     e /= new_n;
-    if (e < 0.001f)
-        silent = 1;
+if (e < 0.001f)
+            silent = 1;
+        else
+            s->last_audio = time(NULL);
 
     if (silent) {
         for (int b = 0; b < nb; b++)
@@ -267,11 +289,23 @@ static void render(struct state *s)
 
 int main(int argc, char *argv[])
 {
+    char lock[256];
+    snprintf(lock, sizeof(lock), "%s/.%d-spectrum-wallpaper",
+             getenv("TMPDIR") ? getenv("TMPDIR") : "/tmp", getuid());
+    int lockfd = open(lock, O_CREAT | O_EXCL | O_WRONLY, 0644);
+    if (lockfd < 0) {
+        fprintf(stderr, "Already running (lock: %s)\n", lock);
+        return 1;
+    }
+    { char pid[16]; snprintf(pid, sizeof(pid), "%d\n", getpid()); write(lockfd, pid, strlen(pid)); }
+    close(lockfd);
+
     signal(SIGINT, sigint);
     signal(SIGTERM, sigint);
 
     struct state S = {0};
     S.first = 1;
+    S.last_audio = time(NULL);
 
     S.dpy = XOpenDisplay(NULL);
     if (!S.dpy) return 1;
@@ -411,5 +445,6 @@ int main(int argc, char *argv[])
     free(S.tw_re); free(S.tw_im);
     free(S.bar_norm); free(S.bar_pre);
     free(S.barv); free(S.peakv);
+    unlink(lock);
     return 0;
 }
