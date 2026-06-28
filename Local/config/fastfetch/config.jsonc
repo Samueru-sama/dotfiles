@@ -24,28 +24,17 @@
      "type": "command",
      "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/weatherinfo"
     },
-    {
-     "key": "Date & Time",
-     "type": "command",
-     "text": "SEPARATOR=' - Up: ' getoneline datetime uptime",
-    },
+    "datetime",
+    "uptime",
     "separator",
-    {
-     "key": "System",
-     "type": "command",
-     "text": "SEPARATOR=' - Kernel: ' getoneline os kernel",
-    },
+    "os",
+    "kernel",
     {
       "type": "Packages",
     },
     {
-     "key": "WM & Theme",
-     "type": "command",
-     "text": "getoneline wm theme"
-    },
-    {
-      "key": "Icons",
-      "type": "icons",
+      "key": "WM",
+      "type": "wm",
     },
     {
       "key": "Terminal",
@@ -54,15 +43,6 @@
     {
       "key": "Terminal Font",
       "type": "terminalfont",
-    },
-	{
-      "key": "System Shell",
-      "type": "command",
-      "text": "realpath \"$(which sh)\""
-    },
-    {
-     "key": "Interactive Shell",
-     "type": "shell",
     },
     "cpu",
     "memory",
@@ -96,11 +76,6 @@
       "key": "Physical Disk Total IO",
       "type": "diskio",
       "detectTotal": true
-    },
-    {
-      "key": "Internet",
-      "type": "command",
-      "text": "tail -1 ${XDG_CACHE_HOME:-$HOME/.cache}/speedinfo"
     },
     "break",
     "colors"
