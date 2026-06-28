@@ -44,3 +44,4 @@ style.lint["info"]    = white
 style.lint["hint"]    = yellow
 style.lint["warning"] = red
 style.lint["error"]   = red
+
