@@ -1,0 +1,12 @@
+{
+  "soar_path": "$HOME/Local/soar",
+  "repositories": [
+    {
+      "name": "ajam",
+      "url": "https://pkg.ajam.dev",
+      "registry": "METADATA.AIO.json"
+    }
+  ],
+  "parallel": true,
+  "parallel_limit": 5
+}

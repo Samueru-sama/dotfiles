@@ -1,0 +1,83 @@
+{
+  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+  "logo": {
+    "color": {
+      "1": "36",
+      "2": "36"
+    },
+    "padding": {
+      "left": 1,
+      "right": 2,
+      "top": 1
+    }
+  },
+  "display": {
+    "separator": " ",
+    "color": {
+      "keys": "36"
+    }
+  },
+  "modules": [
+    "separator",
+    {
+     "key": "Weather",
+     "type": "command",
+     "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/weatherinfo"
+    },
+    "datetime",
+    "uptime",
+    "separator",
+    "os",
+    "kernel",
+    {
+      "type": "Packages",
+    },
+    {
+      "key": "WM",
+      "type": "wm",
+    },
+    {
+      "key": "Terminal",
+      "type": "terminal",
+    },
+    {
+      "key": "Terminal Font",
+      "type": "terminalfont",
+    },
+    "cpu",
+    "memory",
+    {
+      "key": "Swap",
+      "type": "command",
+      "text": "zramctl --raw | awk 'NR==2{print $5\"iB (\"$4\"iB / \"$3 \"iB) - ZRAM (\"$2\")\"}' | sed 's/\\([GMK]\\)iB/ \\1iB/g; s/BiB/ B/g'"
+    },
+    {
+      "key": "GPU",
+      "type": "gpu",
+      "detectionMethod": "vulkan"
+    },
+    {
+      "key": "Vulkan",
+      "type": "vulkan"
+    },
+    {
+      "type": "display",
+      "compactType": "original-with-refresh-rate"
+    },
+	{
+      "type": "disk",
+	  "hideFS": "fuse.sshfs"
+	},
+	{
+      "type": "physicaldisk",
+	  "physicaldisk-temp": "true"	
+	},
+    {
+      "key": "Physical Disk Total IO",
+      "type": "diskio",
+      "detectTotal": true
+    },
+    "break",
+    "colors"
+  ]
+}
