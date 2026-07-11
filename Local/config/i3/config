@@ -1,3 +1,4 @@
+#!/bin/sh
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # DEFAULT KEYS / VARIABLES / WORKSPACES / DISPLAY / KEYBOARD / LOCKSCREEN # #
 set $MOD Mod4
@@ -19,8 +20,10 @@ set $BIND bindsym
 set $WDUNST exec --no-startup-id dunstify -r 33 -t 600
 set $ADUNST dunstify -r 33 -t 1500
 set $CONFIG "${XDG_CONFIG_HOME:-$HOME/.config}"
+set $DATA "${XDG_DATA_HOME:-$HOME/.local/share}"
 set $TXTE lite-xl
 set $COMP fastcompmgr
+set $TERMINAL alacritty
 set $WARN notify-send -u critical
 
 # Dependency check
@@ -40,13 +43,13 @@ set $WS10 WorkSpace "10"
 set $WS11 WorkSpace "11:GAME"
 set $WS12 WorkSpace "12:*"
 
-#set $D1 DisplayPort-0
-#set $D2 DisplayPort-1
-#set $D3 DisplayPort-2
+set $D1 DisplayPort-0
+set $D2 DisplayPort-1
+set $D3 DisplayPort-2
 
-set $D1 DP-1
-set $D2 DP-2
-set $D3 DP-3
+#set $D1 DP-1
+#set $D2 DP-2
+#set $D3 DP-3
 
 $WS1 output $D1
 $WS2 output $D2
@@ -62,7 +65,7 @@ $WS12 output $D3
 
 $EXCA setxkbmap -layout us,latam -option 'grp:alt_shift_toggle' # Set kb layout
 $EXCA sleep 1 && xset dpms 0 0 300 &
-$EXCA screenlayout && fehbg &
+$EXCA screenlayout && spectrum-wallpaper $DATA/wallpapers/wallpaper.png
 $EXCA $COMP &
 $EXC sleep 2 && pactl set-sink-volume @DEFAULT_SINK@ 65%
 $EXC xss-lock --transfer-sleep-lock -- i3lock -c 04090e --nofork --clock \
@@ -82,7 +85,7 @@ client.focused             #fdbc4b #091f2e #fdbc4b  #A54242   #fdbc4b
 client.unfocused           #707880 #091f2e #d4d9d6  #707880   #091f2e
 client.focused_inactive    #707880 #091f2e #d4d9d6  #707880   #091f2e
 font pango:Nimbus Sans Bold 8.5
-gaps inner 6
+gaps inner 12
 gaps outer 0
 smart_gaps off
 default_border pixel 1
@@ -222,27 +225,21 @@ $BIND $MOD+g fullscreen toggle
 $BIND $MOD+$SHFT+space floating toggle, $RSZ 708 385, $MVC
 $BIND $MOD+$ALT+space floating toggle
 $BIND $MOD+space focus mode_toggle
-$BIND $MOD+$SHFT+x $EXC scratchpad &
-$BIND $MOD+x $EXC $MSG "scratchpad show" && $ADUNST "Scratchpad Toggled" &
+$BIND $MOD+$SHFT+x $EXC $MSG "move scratchpad" && $ADUNST "Window Moved to Scratchpad"
+$BIND $MOD+x $EXC $MSG "scratchpad show" && $ADUNST "Scratchpad Toggled"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # AUTOSTART APPLICATIONS / FLOATING WINDOWS # # # # # # # # # # #
-$EXCA dunst &
-$EXCA killall i3-auto-layout && i3-auto-layout || i3-auto-layout &
+$EXCA dunst
 $EXC $BAR main & $BAR work1 & $BAR work3
-$EXC tmpfs &
-$EXC getspeed &
-$EXC getweather &
-$EXCA playerctld &
-$EXC xfce4-clipman start &
-$EXC pipewire &
-$EXC pipewire-pulse &
-$EXC wireplumber &
-$EXC doas-check &
-$EXC kdeconnect-anyfm &
+$EXCA playerctld
+$EXC xfce4-clipman start
+$EXC kdeconnect-anyfm
 $EXC xfce-polkit || $WARN "Error polkit"
-$EXC doas zramen make -s 200 -a zstd || $WARN "Error zramen"
+$EXC doas /usr/bin/zramen make -s 100 -a zstd || $WARN "Error zramen"
 
+for_window [tiling] split toggle
+for_window [class="SDL-demo"] floating enable, border none, no_focus
 $FW [class="^.*"] border 1pixel
 $FW [class="^steam$"] $FLOAT
 $FW [class="Alacritty" title="Xterminal"] $FLOAT, $RSZ 708 385, $MVC
@@ -259,7 +256,7 @@ $FW [class="Lxappearance" instance="lxappearance"] $FLOAT
 $FW [class="Wrapper-2.0" instance="wrapper-2.0"] $FLOAT
 $FW [class="Xfce4-panel" instance="xfce4-panel"] $FLOAT
 $FW [class="Zenity" title="Calendar selection"] $FLOAT, \
-	$RSZ 290 240, $MVC, move up 317 px, move right 569 px
+	$RSZ 290 240, $MVC, move up 241 px, move right 571 px
 $FW [class="scrcpy"] $FLOAT, $RSZ 300 650
 $FW [class="steam"] $MVTO $WS11, $WS11
 $FW [class="yuzu"] $MVTO $WS11, $WS11
@@ -267,72 +264,68 @@ $FW [class="suyu"] $MVTO $WS11, $WS11
 $FW [class="citron"] $MVTO $WS11, $WS11
 $FW [class="dolphin-emu"] $MVTO $WS11, $WS11
 $FW [class="PPSSPPSDL"] $MVTO $WS11, $WS11
-$FW [class="PPSSPPQt"] $MVTO $WS11, $WS11
-$FW [class="BeamNG.drive.x64"] $MVTO $WS11, $WS11
 $FW [title="File Operation Progress"] $FLOAT, $MVC
 $FW [class="Deadbeef" title="^(?i)(?!Track Properties)(?!Spectrum options)\
 (?!Waveform Properties)(?!Converter)(?!Preferences).*"] $FLOAT, \
-	$RSZ 708 353, $MVC, move up 261 px, move right 360px
+	$RSZ 708 353, $MVC, move up 257 px
 $FW [class="Deadbeef" title="^(?i)(?=Preferences|Converter|Waveform Properties\
 	|Track Properties|Spectrum options).*"] $FLOAT, $MVC
 
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # MAIN APPlICATIONS AND MEDIA KEYS  # # # # # # # # # # # # #
-set $RX1 i3-msg '[class="Hellium" title="^(?i)(?!.*\bTelegram Web\b)(?!.* Discord)(?!.*\bWhatsApp\b).*"] focus'
-$BIND $MOD+F1 $EXC $RX1 && $ADUNST "FireDragon" \
-	|| ( helium & $ADUNST "Launching Hellium" )
-$BIND $MOD+$SHFT+F1 $EXC helium & $ADUNST "New helium Window"
-$BIND $MOD+F2 $EXC thunar &
-$BIND $MOD+F3 $EXC getbeef &
-$BIND $MOD+F6 $EXC steam &
+set $RX1 i3-msg '[class="Brave" title="^(?i)(?!.*\bTelegram Web\b)(?!.* Discord)(?!.*\bWhatsApp\b).*"] focus'
+$BIND $MOD+F1 $EXC $RX1 && $ADUNST "Brave" \
+	|| ( brave-origin & $ADUNST "Launching Brave" )
+$BIND $MOD+$SHFT+F1 $EXC brave-origin & $ADUNST "New Brave Window"
+$BIND $MOD+F2 $EXC thunar
+$BIND $MOD+F3 $EXC deadbeef
 
-$BIND $MOD+v $EXC xfce4-clipman popup &
-$BIND $MOD+$SHFT+z $EXC xfce4-screenshooter &
-$BIND $ALT+Tab $EXC rofi-launch alt-tab &
-$BIND $MOD+Tab $EXC rofi-launch alt-tab &
-$BIND $MOD+Return $EXC rofi-launch menu &
-$BIND $MOD+grave $EXC rofi-launch menu &
-$BIND $MOD+o $EXC rofi-launch emoji &
-$BIND $MOD+n $EXC dunstctl history-pop &
+$BIND $MOD+v $EXC xfce4-popup-clipman
+$BIND $MOD+$SHFT+z $EXC xfce4-screenshooter
+$BIND $ALT+Tab $EXC rofi -disable-history -monitor -1 -show-icons -show window
+$BIND $MOD+Tab $EXC rofi -disable-history -monitor -1 -show-icons -show window
+$BIND $MOD+Return $EXC "rofi -disable-history -monitor -1 -show-icons -show combi -display-drun '' -display-window '' -display-combi '' -combi-modes window,drun -terminal $TERMINAL"
+$BIND $MOD+grave $EXC "rofi -disable-history -monitor -1 -show-icons -show combi -display-drun '' -display-window '' -display-combi '' -combi-modes window,drun -terminal $TERMINAL"
+$BIND $MOD+o $EXC bemoji -t
+$BIND $MOD+n $EXC dunstctl history-pop
 $BIND $MOD+c $EXC killall speedcrunch || speedcrunch
-$BIND $MOD+b $EXC killall pavucontrol-qt || pavucontrol-qt &
-$BIND $CTRL+$ALT+t $EXC gettop &
+$BIND $MOD+b $EXC killall pavucontrol-qt || pavucontrol-qt
 $BIND $MOD+KP_Enter $EXC alacritty --title="Xterminal"
-$BIND $MOD+t $EXC alacritty &
-$BIND $MOD+$SHFT+q $EXC rofi-launch power-menu
-$BIND $CTRL+$ALT+k $EXC xkill &
-$BIND $MOD+$ALT+s $EXC getscheduler &
+$BIND $MOD+t $EXC alacritty
+$BIND $MOD+$SHFT+q $EXC rofi -disable-history -monitor -1 -show-icons -show p -modi "p:rofi-power-menu"
+$BIND XF86PowerOff $EXC rofi -disable-history -monitor -1 -show-icons -show p -modi "p:rofi-power-menu"
+$BIND $CTRL+$ALT+k $EXC xkill
 
-$BIND XF86AudioRaiseVolume $EXC getsound VOL+ &
-$BIND XF86AudioLowerVolume $EXC getsound VOL- &
-$BIND $SHFT+XF86AudioRaiseVolume $EXC getsound VOL+ --NOLIMIT &
-$BIND $SHFT+XF86AudioLowerVolume $EXC getsound VOL- --NOLIMIT &
-$BIND XF86AudioMute $EXC getsound TOGGLEMUTE &
-$BIND XF86AudioPlay $EXC playerctl play-pause &
-$BIND XF86AudioPause $EXC playerctl play-pause &
-$BIND XF86AudioNext $EXC playerctl next &
-$BIND XF86AudioPrev $EXC playerctl previous &
-$BIND XF86AudioStop $EXC playerctl stop &
+$BIND XF86AudioRaiseVolume $EXC getsound VOL+
+$BIND XF86AudioLowerVolume $EXC getsound VOL-
+$BIND $SHFT+XF86AudioRaiseVolume $EXC getsound VOL+ --NOLIMIT
+$BIND $SHFT+XF86AudioLowerVolume $EXC getsound VOL- --NOLIMIT
+$BIND XF86AudioMute $EXC getsound TOGGLEMUTE
+$BIND XF86AudioPlay $EXC playerctl play-pause
+$BIND XF86AudioPause $EXC playerctl play-pause
+$BIND XF86AudioNext $EXC playerctl next
+$BIND XF86AudioPrev $EXC playerctl previous
+$BIND XF86AudioStop $EXC playerctl stop
 
-$BIND $MOD+comma $EXC playerctl previous &
-$BIND $MOD+period $EXC playerctl next &
-$BIND $MOD+m $EXC getplayer TOGGLEPLAY &
-$BIND $MOD+$SHFT+comma $EXC getplayer VOL- &
-$BIND $MOD+$SHFT+period $EXC getplayer VOL+ &
-$BIND $MOD+$ALT+comma $EXC playerctl position 5- &
-$BIND $MOD+$ALT+period $EXC playerctl position 5+ &
-$BIND $MOD+$CTRL+comma $EXC getsound VOL- &
-$BIND $MOD+$CTRL+period $EXC getsound VOL+ &
+$BIND $MOD+comma $EXC playerctl previous
+$BIND $MOD+period $EXC playerctl next
+$BIND $MOD+m $EXC getplayer TOGGLEPLAY
+$BIND $MOD+$SHFT+comma $EXC getplayer VOL-
+$BIND $MOD+$SHFT+period $EXC getplayer VOL+
+$BIND $MOD+$ALT+comma $EXC playerctl position 5-
+$BIND $MOD+$ALT+period $EXC playerctl position 5+
+$BIND $MOD+$CTRL+comma $EXC getsound VOL-
+$BIND $MOD+$CTRL+period $EXC getsound VOL+
 
 $BIND --whole-window $MOD+button2 floating toggle, $RSZ 708 385, $MVC
-$BIND --whole-window $MOD+button9 $EXC playerctl next &
-$BIND --whole-window $MOD+button8 $EXC playerctl previous &
-$BIND --whole-window $MOD+$SHFT+button8 $EXC getplayer TOGGLEPLAY &
+$BIND --whole-window $MOD+button9 $EXC playerctl next
+$BIND --whole-window $MOD+button8 $EXC playerctl previous
+$BIND --whole-window $MOD+$SHFT+button8 $EXC getplayer TOGGLEPLAY
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # # # # # # # # # # # # # EDIT I3 / POLYBAR # # # # # # # # # # # # # # # # # #
-$BIND $MOD+$ALT+r $EXC $MSG restart &
-$BIND $MOD+$ALT+p $EXC $TXTE $CONFIG/$BAR/config.ini &
-$BIND $MOD+$ALT+i $EXC $TXTE $CONFIG/i3/config &
-$BIND $MOD+$ALT+d $EXC $TXTE $CONFIG/dunst/dunstrc &
+$BIND $MOD+$ALT+r $EXC $MSG restart
+$BIND $MOD+$ALT+p $EXC $TXTE $CONFIG/$BAR/config.ini
+$BIND $MOD+$ALT+i $EXC $TXTE $CONFIG/i3/config
+

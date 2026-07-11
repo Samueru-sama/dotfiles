@@ -33,6 +33,7 @@ if [[ -o login ]]; then
 	export GTK2_RC_FILES="$XDG_CONFIG_HOME"/gtk-2.0/gtkrc
 	export ANDROID_HOME="$XDG_STATE_HOME"/android
 	export GOPATH="$XDG_CACHE_HOME"/go
+	export RUSTUP_HOME="$XDG_CACHE_HOME"/rustup
 	export KIVY_HOME="$XDG_DATA_HOME"/kivy
 
 	# Others
@@ -107,6 +108,99 @@ if [[ -o interactive ]]; then
 	diff(){
 		printf '%.30s%65s\n' "$1" "$2" "================" "==================="
 		command diff --color -y "$1" "$2"
+	}
+
+	pacmanhog(){
+		# Similar to xhog in voidlinux
+		pacman -Qi | awk -F': ' '/Name/ {name=$2}
+					/Installed Size/ {size=$2}
+					name && size {print name, size; name=size=""}' \
+					| column -t | grep MiB | sort -nk 2
+	}
+
+	why_lib() {
+		LIB=${1##*/}
+		for f in $(find "$PWD" -type f -executable); do
+			if found=$(patchelf --print-needed "$f" 2>/dev/null | grep "$LIB"); then
+				echo "--------------------------------------------------"
+				echo "$LIB is needed by $f"
+				echo "--------------------------------------------------"
+			fi
+		done
+	}
+
+	# quick and easy way to download a snap to inspect its contents
+	getsnap() {
+		url=http://api.snapcraft.io/v2/snaps/info/$1
+		snap=$(wget --header='Snap-Device-Series: 16' "$url" -O - 2>/dev/null | \
+			gron.awk | awk -F= '/channel\.architecture="amd64"/{f=1} f&&/download\.url=/{gsub(/"/,"",$2);print $2;exit}')
+		wget "$snap"
+	}
+
+
+	bench-cpu-usage() {
+		case "$1" in
+			*[!0-9]*)
+				"$@" &
+				PID=$!
+				echo "pid is $PID"
+				;;
+			*)
+				PID=$1
+				;;
+		esac
+
+		echo "Measuring..."
+		sleep 1 # Wait a bit for things to settle
+
+		# Get the average CPU usage of the process
+		top -b -n 20 -d 0.5 -p "$PID" | awk -v PID=$PID '
+						($1 == PID) {
+							++TIMES
+							if (TIMES > 1) {
+								sum += $9
+								count++
+							}
+						}
+						END {
+							print sum / count
+						}'
+	}
+
+	bench-startup() {
+		if [ ! -x "$(command -v "$1")" ]; then
+			>&2 echo "$1 is missing or does not have exec perms!"
+			exit 1
+		elif [ -z "$CLASS" ]; then
+			>&2 echo "CLASS is not set"
+			exit 1
+		fi
+
+		# Start the application and time
+		$@ >/dev/null 2>&1 &
+		START=$(date +%s%N)
+
+		# Loop until the window is found by xdotool
+		while true; do
+			window_class=$(xdotool getactivewindow getwindowclassname 2>/dev/null)
+			if echo "$window_class" | grep -qi "$CLASS"; then
+				break
+			fi
+			sleep 0.001
+		done
+
+		# END TIME
+		END=$(date +%s%N)
+		TIME=$((($END - $START) / 1000000))
+
+		echo "Time taken: $TIME miliseconds"
+		sleep 0.5
+		killall "$1" 2>/dev/null
+	}
+
+	cpuhog() {
+		ps -e -o %cpu,comm,cmd --sort=%cpu | cut -c 1-110 | tail -n 50 \
+		  | awk '{print "\x1b[33m" $1 " %  " "\x1b[36m " substr($0, index($0, $2))}'
 	}
 
 	bindkey -s '^o' 'lfcd\n'

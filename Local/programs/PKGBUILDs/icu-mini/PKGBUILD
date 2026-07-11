@@ -1,0 +1,53 @@
+pkgname=icu-mini
+pkgver=78.3
+pkgrel=1
+pkgdesc="International Components for Unicode library (mini, reduced libicudata.so <3 MiB)"
+arch=(x86_64)
+url="https://icu.unicode.org"
+license=('LicenseRef-Unicode-3.0'
+         'BSD-2-Clause'
+         'BSD-3-Clause'
+         'NAIST-2003')
+depends=('glibc' 'libstdc++' 'libgcc' 'sh')
+makedepends=('python' 'wget' 'unzip')
+provides=("icu=${pkgver}-${pkgrel}"
+          libicu{data,i18n,io,test,tu,uc}.so)
+conflicts=('icu')
+source=(https://github.com/unicode-org/icu/releases/download/release-${pkgver}/icu4c-${pkgver}-sources.tgz{,.asc}
+        filter.json)
+# https://github.com/unicode-org/icu/releases/download/release-78.3/SHASUM512.txt
+sha512sums=('04a49455e1489030c520a4bfd2664fa2171e7938d08f2acdbbcb1fda976639fd8b1f0704f2eec89ba59a7b6d118ceaab6ec5a096e40d9085a0895d91ce225245'
+            'SKIP'
+            '08f60a27aefb297c8036126b14563fedbbf405574d74bbe24b5be7131e4465a5e87b460f02b2640434f7cf13aaa7fee95c38defaa4f4655b4b7f28af19f3b120')
+validpgpkeys=('E52F07877A5805F9AF4AB0ACD46C5610D06E7001') # ICU Release Robot <icu-robot@unicode.org>
+
+prepare() {
+  local data_url="https://github.com/unicode-org/icu/releases/download/release-${pkgver}/icu4c-${pkgver}-data.zip"
+  wget "$data_url"
+  unzip "./icu4c-${pkgver}-data.zip"
+  rm -rf ./icu/source/data
+  cp -rv ./data ./icu/source
+
+  cd icu/source
+}
+
+build() {
+  cd icu/source
+  export ICU_DATA_FILTER_FILE="$(readlink -f "$srcdir/filter.json")"
+  ./configure --prefix=/usr \
+    --sysconfdir=/etc \
+    --mandir=/usr/share/man \
+    --sbindir=/usr/bin
+  make
+}
+
+check() {
+  true
+}
+
+package() {
+  cd icu/source
+  make DESTDIR="${pkgdir}" install
+
+  install -Dm644 "${srcdir}"/icu/LICENSE "${pkgdir}"/usr/share/licenses/${pkgname}/LICENSE
+}

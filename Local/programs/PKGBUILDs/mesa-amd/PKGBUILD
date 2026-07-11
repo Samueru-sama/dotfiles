@@ -1,0 +1,146 @@
+pkgname=mesa-amd
+pkgver=26.1.4
+_pkgver=${pkgver/[a-z]/-&}
+pkgrel=1
+epoch=1
+pkgdesc="Custom Mesa: radeonsi + softpipe + zink + vulkan-radeon, no LLVM dep"
+url="https://www.mesa3d.org/"
+arch=(x86_64)
+license=("MIT AND BSD-3-Clause AND SGI-B-2.0")
+depends=(
+  expat
+  glibc
+  libdrm
+  libelf
+  libgcc
+  libglvnd
+  libstdc++
+  libx11
+  libxcb
+  libxext
+  libxshmfence
+  libxxf86vm
+  lm_sensors
+  spirv-tools
+  wayland
+  zlib
+  zstd
+)
+makedepends=(
+  clang
+  expat
+  glibc
+  libdrm
+  libelf
+  libgcc
+  libglvnd
+  libstdc++
+  libva
+  libx11
+  libxcb
+  libxext
+  libxml2
+  libxrandr
+  libxshmfence
+  libxxf86vm
+  lm_sensors
+  rust
+  spirv-tools
+  systemd-libs
+  vulkan-icd-loader
+  wayland
+  xcb-util-keysyms
+  zlib
+  zstd
+  cbindgen
+  cmake
+  elfutils
+  glslang
+  meson
+  python-mako
+  python-packaging
+  python-ply
+  python-pycparser
+  python-yaml
+  rust-bindgen
+  wayland-protocols
+  xorgproto
+)
+optdepends=("vulkan-mesa-layers: additional vulkan layers")
+provides=(
+  "mesa=$epoch:$pkgver-$pkgrel"
+  "vulkan-radeon=$epoch:$pkgver-$pkgrel"
+  "libva-mesa-driver=$epoch:$pkgver-$pkgrel"
+  "mesa-libgl=$epoch:$pkgver-$pkgrel"
+  libva-driver
+  opengl-driver
+  vulkan-driver
+)
+conflicts=(
+  mesa
+  vulkan-radeon
+  vulkan-mesa-implicit-layers
+  'libva-mesa-driver'
+  'mesa-libgl'
+)
+replaces=(
+  'libva-mesa-driver'
+  'mesa-libgl'
+)
+options=(!lto)
+source=("https://archive.mesa3d.org/mesa-$_pkgver.tar.xz")
+validpgpkeys=()
+sha256sums=('072705caa9adf4740f1489194b13e278ad959166863b5271fe423a86353c9ab6')
+
+prepare() {
+  cd mesa-$_pkgver
+  echo "$_pkgver-arch$epoch.$pkgrel" >VERSION
+}
+
+build() {
+  local meson_options=(
+    --optimization 2
+    -D llvm=disabled
+    -D amdgpu-virtio=false
+    -D android-libbacktrace=disabled
+    -D b_ndebug=true
+    -D gallium-drivers=radeonsi,softpipe,zink
+    -D gallium-extra-hud=true
+    -D gallium-mediafoundation=disabled
+    -D gallium-rusticl=false
+    -D gles1=disabled
+    -D libunwind=disabled
+    -D microsoft-clc=disabled
+    -D valgrind=disabled
+    -D video-codecs=[]
+    -D vulkan-drivers=amd
+    -D vulkan-layers=device-select,intel-nullhw,overlay,screenshot,anti-lag,vram-report-limit
+    -D vulkan-manifest-per-architecture=false
+  )
+
+  CFLAGS="$CFLAGS -fno-strict-aliasing" meson setup mesa-$_pkgver build "${meson_options[@]}" --prefix /usr
+  meson compile -C build
+}
+
+package() {
+  meson install -C build --destdir "$pkgdir" --no-rebuild
+
+  # Remove useless ARM/embedded DRI drivers
+  cd "$pkgdir"
+  for f in \
+    apple_dri.so armada-drm_dri.so exynos_dri.so gm12u320_dri.so \
+    hdlcd_dri.so hx8357d_dri.so ili9163_dri.so ili9225_dri.so \
+    ili9341_dri.so ili9486_dri.so imx-drm_dri.so imx-dcss_dri.so \
+    imx-lcdif_dri.so ingenic-drm_dri.so kirin_dri.so komeda_dri.so \
+    mali-dp_dri.so mcde_dri.so mediatek_dri.so meson_dri.so \
+    mi0283qt_dri.so mxsfb-drm_dri.so panel-mipi-dbi_dri.so \
+    pl111_dri.so rcar-du_dri.so repaper_dri.so rockchip_dri.so \
+    rzg2l-du_dri.so ssd130x_dri.so st7586_dri.so st7735r_dri.so \
+    sti_dri.so stm_dri.so sun4i-drm_dri.so udl_dri.so \
+    vkms_dri.so zynqmp-dpsub_dri.so
+  do
+    rm -f usr/lib/dri/$f
+  done
+
+  install -Dm644 "$srcdir/mesa-$_pkgver/docs/license.rst" -t "$pkgdir/usr/share/licenses/$pkgname"
+}
