@@ -4,7 +4,7 @@
 	monitor = 0
 	follow = mouse
 	width = (0, 350)
-	height = 350
+	height = (0, 350)
 	origin = top-right
 	offset = 6x19
 	scale = 0
@@ -99,7 +99,6 @@ markup = full
 [experimental]
 	per_monitor_dpi = false
 
-
 [urgency_low]
 	# IMPORTANT: colors have to be defined in quotation marks.
 	# Otherwise the "#" and following would be interpreted as a comment.
@@ -118,7 +117,7 @@ markup = full
 	override_dbus_timeout = 2
 	timeout = 2
 	# Icon for notifications with normal urgency, uncomment to enable
-	#default_icon = /path/to/icon
+	#default_icon = dialog-information
 
 [urgency_critical]
 	background = "#900000"
@@ -126,4 +125,4 @@ markup = full
 	frame_color = "#ff0000"
 	timeout = 60
 	# Icon for notifications with critical urgency, uncomment to enable
-	#default_icon = /path/to/icon
+	default_icon = dialog-warning

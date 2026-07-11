@@ -1,0 +1,99 @@
+pkgname=git-perless
+pkgver=2.55.0
+pkgrel=1
+pkgdesc='the fast distributed version control system (without perl)'
+arch=('x86_64')
+url='https://git-scm.com/'
+license=('GPL-2.0-only')
+depends=('curl' 'expat' 'openssl' 'pcre2' 'grep' 'shadow' 'zlib-ng')
+makedepends=('python' 'xmlto' 'asciidoc' 'git' 'rust' 'perl')
+checkdepends=('openssh')
+conflicts=('git')
+provides=('git=2.55.0')
+install=git.install
+validpgpkeys=('96E07AF25771955980DAD10020D04E5A713660A7')
+source=("git+https://github.com/git/git?signed#tag=v${pkgver}"
+        'git-daemon@.service'
+        'git-daemon.socket'
+        'git-sysusers.conf')
+sha256sums=('f6b4c275d4a53714c3d50becd90e8f67f4cff2e02dd08c0f63a6039ff236fb08'
+            '14c0b67cfe116b430645c19d8c4759419657e6809dfa28f438c33a005245ad91'
+            'ac4c90d62c44926e6d30d18d97767efc901076d4e0283ed812a349aece72f203'
+            '7630e8245526ad80f703fac9900a1328588c503ce32b37b9f8811674fcda4a45')
+
+_make() {
+  local make_options=(
+    prefix='/usr'
+    gitexecdir='/usr/lib/git-core'
+
+    CFLAGS="$CFLAGS"
+    LDFLAGS="$LDFLAGS"
+    INSTALL_SYMLINKS=1
+    MAN_BOLD_LITERAL=1
+    USE_LIBPCRE2=1
+    ZLIB_NG=1
+    WITH_RUST=1
+    NO_PERL=1
+    NO_PERL_CPAN_FALLBACKS=1
+  )
+
+  make "${make_options[@]}" "$@"
+}
+
+build() {
+  cd git
+
+  _make all man
+}
+
+check() {
+  cd git
+
+  local jobs
+  jobs=$(expr "$MAKEFLAGS" : '.*\(-j[0-9]*\).*') || true
+  mkdir -p /dev/shm/git-test
+  SHELL=/bin/sh \
+  _make \
+    NO_SVN_TESTS=y \
+    NO_PERL=1 \
+    DEFAULT_TEST_TARGET=prove \
+    GIT_PROVE_OPTS="$jobs -Q" \
+    GIT_TEST_OPTS="--root=/dev/shm/git-test" \
+    test
+}
+
+package() {
+  optdepends=(
+    'git-zsh-completion: upstream zsh completion'
+    'openssh: ssh transport and crypto'
+    'man: show help with `git command --help`'
+    'python: git svn & git p4'
+    'subversion: git svn'
+    'org.freedesktop.secrets: keyring credential helper'
+    'libsecret: libsecret credential helper'
+    'less: the default pager for git'
+  )
+
+  cd git
+
+  _make \
+    DESTDIR="$pkgdir" \
+    install install-man
+
+  # bash completion
+  mkdir -p "$pkgdir"/usr/share/bash-completion/completions/
+  install -m 0644 ./contrib/completion/git-completion.bash "$pkgdir"/usr/share/bash-completion/completions/git
+  # fancy git prompt
+  mkdir -p "$pkgdir"/usr/share/git/
+  install -m 0644 ./contrib/completion/git-prompt.sh "$pkgdir"/usr/share/git/git-prompt.sh
+  # the rest of the contrib stuff
+  find contrib/ -name '.gitignore' -delete
+  cp -a ./contrib/* "$pkgdir"/usr/share/git/
+
+  # git-daemon via systemd socket activation
+  install -D -m 0644 "$srcdir"/git-daemon@.service "$pkgdir"/usr/lib/systemd/system/git-daemon@.service
+  install -D -m 0644 "$srcdir"/git-daemon.socket "$pkgdir"/usr/lib/systemd/system/git-daemon.socket
+
+  # sysusers file
+  install -D -m 0644 "$srcdir"/git-sysusers.conf "$pkgdir"/usr/lib/sysusers.d/git.conf
+}
