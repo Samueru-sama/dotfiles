@@ -16,6 +16,8 @@ typedef struct {
 	GCancellable *cancellable;
 	gulong cancel_id;
 	char *identity_name;
+	char *action_message;
+	char *command_line;
 } RofiListener;
 
 typedef struct {
@@ -27,6 +29,26 @@ static void rofi_listener_class_init(RofiListenerClass *klass);
 static void rofi_listener_finalize(GObject *obj);
 
 G_DEFINE_TYPE(RofiListener, rofi_listener, POLKIT_AGENT_TYPE_LISTENER)
+
+static char *shell_escape_sq(const char *str) {
+	size_t count = 0;
+	for (const char *p = str; *p; p++)
+		if (*p == '\'') count++;
+	char *out = g_malloc(strlen(str) + count * 3 + 1);
+	char *dst = out;
+	for (const char *p = str; *p; p++) {
+		if (*p == '\'') {
+			*dst++ = '\'';
+			*dst++ = '\\';
+			*dst++ = '\'';
+			*dst++ = '\'';
+		} else {
+			*dst++ = *p;
+		}
+	}
+	*dst = '\0';
+	return out;
+}
 
 static char *get_identity_name(PolkitIdentity *identity) {
 	if (POLKIT_IS_UNIX_USER(identity)) {
@@ -55,11 +77,32 @@ static void on_completed(PolkitAgentSession *session, gboolean gained, gpointer 
 static void on_request(PolkitAgentSession *session, const char *request,
 		gboolean echo, gpointer data) {
 	RofiListener *self = data;
-	char prompt[1024];
-	snprintf(prompt, sizeof(prompt),
-		"rofi -dmenu -password -p 'Password for %s:' -lines 0",
-		self->identity_name);
+
+	char *mesg_content = NULL;
+	if (self->command_line)
+		mesg_content = g_strdup_printf("Command: %s", self->command_line);
+	else if (self->action_message)
+		mesg_content = g_strdup(self->action_message);
+
+	char *esc_mesg = mesg_content ? shell_escape_sq(mesg_content) : NULL;
+	char *esc_identity = shell_escape_sq(self->identity_name);
+
+	char *prompt;
+	if (esc_mesg)
+		prompt = g_strdup_printf(
+			"rofi -dmenu -password -p 'Password for %s:' -mesg '%s' -lines 0",
+			esc_identity, esc_mesg);
+	else
+		prompt = g_strdup_printf(
+			"rofi -dmenu -password -p 'Password for %s:' -lines 0",
+			esc_identity);
+
+	g_free(esc_mesg);
+	g_free(esc_identity);
+	g_free(mesg_content);
+
 	FILE *fp = popen(prompt, "r");
+	g_free(prompt);
 	char passwd[256] = {0};
 	if (fp) {
 		if (fgets(passwd, sizeof(passwd), fp)) {
@@ -107,6 +150,13 @@ static void initiate_authentication(PolkitAgentListener *listener,
 	g_free(self->identity_name);
 	self->identity_name = get_identity_name(identity);
 
+	g_free(self->action_message);
+	self->action_message = g_strdup(message ? message : action_id);
+
+	g_free(self->command_line);
+	const char *cmd = polkit_details_lookup(details, "command-line");
+	self->command_line = cmd ? g_strdup(cmd) : NULL;
+
 	self->session = polkit_agent_session_new(identity, cookie);
 	g_signal_connect(self->session, "completed",
 		G_CALLBACK(on_completed), self);
@@ -133,11 +183,15 @@ static gboolean initiate_authentication_finish(PolkitAgentListener *listener,
 
 static void rofi_listener_init(RofiListener *self) {
 	self->identity_name = g_strdup("Administrator");
+	self->action_message = NULL;
+	self->command_line = NULL;
 }
 
 static void rofi_listener_finalize(GObject *obj) {
 	RofiListener *self = (RofiListener *)obj;
 	g_free(self->identity_name);
+	g_free(self->action_message);
+	g_free(self->command_line);
 	G_OBJECT_CLASS(rofi_listener_parent_class)->finalize(obj);
 }
 
