@@ -1,0 +1,24 @@
+pkgname=polkit-rofi-agent
+pkgver=0.1.0
+pkgrel=1
+pkgdesc="Polkit authentication agent that uses rofi for the password prompt"
+arch=('x86_64')
+url="https://example.com/polkit-rofi-agent"
+license=('GPL-3.0-or-later')
+depends=('polkit')
+makedepends=('pkgconf')
+source=("polkit-rofi-agent.c"
+        "Makefile"
+        "polkit-rofi-agent.desktop")
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP')
+
+build() {
+	make PREFIX=/usr polkit-rofi-agent
+}
+
+package() {
+	make DESTDIR="$pkgdir" PREFIX=/usr install
+	install -Dm644 polkit-rofi-agent.desktop "$pkgdir/etc/xdg/autostart/polkit-rofi-agent.desktop"
+}
