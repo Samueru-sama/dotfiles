@@ -51,6 +51,9 @@ set $D3 DisplayPort-2
 #set $D2 DP-2
 #set $D3 DP-3
 
+# laptop
+# set $D1 eDP
+
 $WS1 output $D1
 $WS2 output $D2
 $WS3 output $D3
@@ -235,7 +238,7 @@ $EXC $BAR main & $BAR work1 & $BAR work3
 $EXCA playerctld
 $EXC xfce4-clipman start
 $EXC kdeconnect-anyfm
-$EXC xfce-polkit || $WARN "Error polkit"
+$EXC polkit-rofi-agent || $WARN "Error polkit"
 $EXC doas /usr/bin/zramen make -s 100 -a zstd || $WARN "Error zramen"
 
 for_window [tiling] split toggle
