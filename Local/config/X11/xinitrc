@@ -4,4 +4,8 @@ ALTUSERXSESSION=$XDG_CACHE_HOME/X11/Xsession
 ERRFILE=$XDG_CACHE_HOME/X11/xsession-errors
 XDG_SESSION_TYPE=X11
 
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/Xresources" ]; then
+	xrdb -merge "${XDG_CONFIG_HOME:-$HOME/.config}/Xresources"
+fi
+
 exec dbus-run-session i3

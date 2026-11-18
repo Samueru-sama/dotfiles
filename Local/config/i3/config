@@ -23,7 +23,7 @@ set $CONFIG "${XDG_CONFIG_HOME:-$HOME/.config}"
 set $DATA "${XDG_DATA_HOME:-$HOME/.local/share}"
 set $TXTE lite-xl
 set $COMP fastcompmgr
-set $TERMINAL alacritty
+set $TERMINAL rtty
 set $WARN notify-send -u critical
 
 # Dependency check
@@ -43,13 +43,13 @@ set $WS10 WorkSpace "10"
 set $WS11 WorkSpace "11:GAME"
 set $WS12 WorkSpace "12:*"
 
-set $D1 DisplayPort-0
-set $D2 DisplayPort-1
-set $D3 DisplayPort-2
+# set $D1 DisplayPort-0
+# set $D2 DisplayPort-1
+# set $D3 DisplayPort-2
 
-#set $D1 DP-1
-#set $D2 DP-2
-#set $D3 DP-3
+set $D1 DP-1
+set $D2 DP-2
+set $D3 DP-3
 
 # laptop
 # set $D1 eDP
@@ -130,10 +130,10 @@ $BIND $MOD+$SHFT+Down move down 245 px
 $BIND $MOD+$SHFT+Up move up 245 px
 $BIND $MOD+$SHFT+Right move right 360 px
 
-$BIND $MOD+$SHFT+s move left 360 px
-$BIND $MOD+$SHFT+d move down 245 px
-$BIND $MOD+$SHFT+e move up 245 px
-$BIND $MOD+$SHFT+f move right 360 px
+$BIND $MOD+$SHFT+a move left 360 px
+$BIND $MOD+$SHFT+s move down 245 px
+$BIND $MOD+$SHFT+w move up 245 px
+$BIND $MOD+$SHFT+d move right 360 px
 
 $BIND $MOD+$SHFT+h move left 360 px
 $BIND $MOD+$SHFT+j move down 245 px
@@ -147,10 +147,10 @@ $BIND $MOD+Down focus down
 $BIND $MOD+Up focus up
 $BIND $MOD+Right focus right
 
-$BIND $MOD+s focus left
-$BIND $MOD+d focus down
-$BIND $MOD+e focus up
-$BIND $MOD+f focus right
+$BIND $MOD+a focus left
+$BIND $MOD+s focus down
+$BIND $MOD+w focus up
+$BIND $MOD+d focus right
 
 $BIND $MOD+h focus left
 $BIND $MOD+j focus down
@@ -164,10 +164,10 @@ $BIND $MOD+$CTRL+Down resize shrink height 100 px or 15 ppt
 $BIND $MOD+$CTRL+Up resize grow height 100 px or 15 ppt
 $BIND $MOD+$CTRL+Right resize grow width 100 px or 15 ppt
 
-$BIND $MOD+$CTRL+s resize shrink width 100 px or 15 ppt
-$BIND $MOD+$CTRL+d resize shrink height 100 px or 15 ppt
-$BIND $MOD+$CTRL+e resize grow height 100 px or 15 ppt
-$BIND $MOD+$CTRL+f resize grow width 100 px or 15 ppt
+$BIND $MOD+$CTRL+a resize shrink width 100 px or 15 ppt
+$BIND $MOD+$CTRL+s resize shrink height 100 px or 15 ppt
+$BIND $MOD+$CTRL+w resize grow height 100 px or 15 ppt
+$BIND $MOD+$CTRL+d resize grow width 100 px or 15 ppt
 
 $BIND $MOD+$CTRL+h resize shrink width 100 px or 15 ppt
 $BIND $MOD+$CTRL+j resize shrink height 100 px or 15 ppt
@@ -209,7 +209,7 @@ $BIND $MOD+$SHFT+Mod2+KP_Right $MVTO $WS6, $WS6, $WDUNST "$WS6"
 $BIND $MOD+$SHFT+Mod2+KP_Home $MVTO $WS7, $WS7, $WDUNST "$WS7"
 $BIND $MOD+$SHFT+Mod2+KP_Up $MVTO $WS8, $WS8, $WDUNST "$WS8"
 $BIND $MOD+$SHFT+Mod2+KP_Prior $MVTO $WS9, $WS9, $WDUNST "$WS9"
-$BIND $MOD+$SHFT+Mod2+KP_Insert $MVTO $WS10, $WS10, $WDUNST "$WS11"
+$BIND $MOD+$SHFT+Mod2+KP_Insert $MVTO $WS10, $WS10, $WDUNST "$WS10"
 #$BIND $MOD+$SHFT+Mod2+KP_Delete $MVTO $WS11, $WS11, $WDUNST "$WS12"
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -217,14 +217,14 @@ $BIND $MOD+$SHFT+Mod2+KP_Insert $MVTO $WS10, $WS10, $WDUNST "$WS11"
 floating_modifier $MOD
 tiling_drag modifier titlebar
 set $CHILD i3-msg focus child
-$BIND $MOD+a $EXC i3-msg focus parent \
+$BIND $MOD+$ALT+a $EXC i3-msg focus parent \
 	|| ( $CHILD && $CHILD && $CHILD && $CHILD $CHILD && $CHILD \
 	&& $CHILD && $CHILD && $CHILD ) && i3-msg focus parent
 $BIND $MOD+$SHFT+r layout toggle splitv splith tabbed
 $BIND $MOD+r layout toggle splith tabbed splitv
 $BIND $MOD+q kill
 $BIND $MOD+z split toggle
-$BIND $MOD+g fullscreen toggle
+$BIND $MOD+$SHFT+f fullscreen toggle
 $BIND $MOD+$SHFT+space floating toggle, $RSZ 708 385, $MVC
 $BIND $MOD+$ALT+space floating toggle
 $BIND $MOD+space focus mode_toggle
@@ -239,13 +239,13 @@ $EXCA playerctld
 $EXC xfce4-clipman start
 $EXC kdeconnect-anyfm
 $EXC polkit-rofi-agent || $WARN "Error polkit"
-$EXC doas /usr/bin/zramen make -s 100 -a zstd || $WARN "Error zramen"
+# $EXC doas /usr/bin/zramen make -s 100 -a zstd || $WARN "Error zramen"
 
 for_window [tiling] split toggle
 for_window [class="SDL-demo"] floating enable, border none, no_focus
 $FW [class="^.*"] border 1pixel
 $FW [class="^steam$"] $FLOAT
-$FW [class="Alacritty" title="Xterminal"] $FLOAT, $RSZ 708 385, $MVC
+$FW [class="Reliabilitty" title="Xterminal"] $FLOAT, $RSZ 708 385, $MVC
 $FW [class="Mate-calc" instance="mate-calc"] $FLOAT
 $FW [class="Catfish" instance="catfish"] $FLOAT
 $FW [class="Connman-gtk"] $FLOAT
@@ -268,9 +268,9 @@ $FW [class="citron"] $MVTO $WS11, $WS11
 $FW [class="dolphin-emu"] $MVTO $WS11, $WS11
 $FW [class="PPSSPPSDL"] $MVTO $WS11, $WS11
 $FW [title="File Operation Progress"] $FLOAT, $MVC
-$FW [class="Deadbeef" title="^(?i)(?!Track Properties)(?!Spectrum options)\
+$FW [class="blue-dove" title="^(?i)(?!Track Properties)(?!Spectrum options)\
 (?!Waveform Properties)(?!Converter)(?!Preferences).*"] $FLOAT, \
-	$RSZ 708 353, $MVC, move up 257 px
+	$RSZ 800 500, $MVC, move up 181 px
 $FW [class="Deadbeef" title="^(?i)(?=Preferences|Converter|Waveform Properties\
 	|Track Properties|Spectrum options).*"] $FLOAT, $MVC
 
@@ -282,20 +282,20 @@ $BIND $MOD+F1 $EXC $RX1 && $ADUNST "Brave" \
 	|| ( brave-origin & $ADUNST "Launching Brave" )
 $BIND $MOD+$SHFT+F1 $EXC brave-origin & $ADUNST "New Brave Window"
 $BIND $MOD+F2 $EXC thunar
-$BIND $MOD+F3 $EXC deadbeef
+$BIND $MOD+F3 $EXC blue-dove
 
 $BIND $MOD+v $EXC xfce4-popup-clipman
 $BIND $MOD+$SHFT+z $EXC xfce4-screenshooter
 $BIND $ALT+Tab $EXC rofi -disable-history -monitor -1 -show-icons -show window
 $BIND $MOD+Tab $EXC rofi -disable-history -monitor -1 -show-icons -show window
-$BIND $MOD+Return $EXC "rofi -disable-history -monitor -1 -show-icons -show combi -display-drun '' -display-window '' -display-combi '' -combi-modes window,drun -terminal $TERMINAL"
-$BIND $MOD+grave $EXC "rofi -disable-history -monitor -1 -show-icons -show combi -display-drun '' -display-window '' -display-combi '' -combi-modes window,drun -terminal $TERMINAL"
+$BIND $MOD+Return $EXC "rofi -disable-history -monitor -1 -show-icons -show combi -display-drun '' -drun-show-actions '' -display-window '' -display-combi '' -combi-modes window,drun -terminal $TERMINAL"
+$BIND $MOD+grave $EXC "rofi -disable-history -monitor -1 -show-icons -show combi -display-drun '' -drun-show-actions '' -display-window '' -display-combi '' -combi-modes window,drun -terminal $TERMINAL"
 $BIND $MOD+o $EXC bemoji -t
 $BIND $MOD+n $EXC dunstctl history-pop
 $BIND $MOD+c $EXC killall speedcrunch || speedcrunch
 $BIND $MOD+b $EXC killall pavucontrol-qt || pavucontrol-qt
-$BIND $MOD+KP_Enter $EXC alacritty --title="Xterminal"
-$BIND $MOD+t $EXC alacritty
+$BIND $MOD+KP_Enter $EXC rtty --title "Xterminal"
+$BIND $MOD+t $EXC rtty
 $BIND $MOD+$SHFT+q $EXC rofi -disable-history -monitor -1 -show-icons -show p -modi "p:rofi-power-menu"
 $BIND XF86PowerOff $EXC rofi -disable-history -monitor -1 -show-icons -show p -modi "p:rofi-power-menu"
 $BIND $CTRL+$ALT+k $EXC xkill

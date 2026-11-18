@@ -41,12 +41,12 @@ return {
       ["doc:move-to-next-page"] = {
         [1] = "pagedown",
         [2] = "alt+down",
-        [3] = "alt+d"
+        [3] = "alt+s"
       },
       ["doc:move-to-previous-page"] = {
         [1] = "pageup",
         [2] = "alt+up",
-        [3] = "alt+e"
+        [3] = "alt+w"
       },
       ["doc:move-to-start-of-indentation"] = {
         [1] = "home",

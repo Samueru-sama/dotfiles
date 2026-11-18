@@ -47,7 +47,8 @@ if [[ -o login ]]; then
 	export QT_QPA_PLATFORMTHEME=gtk3
 	export LITE_SCALE=0.85
 	export RENDERER=egl
-	#export GDK_BACKEND=x11
+	export GDK_BACKEND=x11
+	export GTK_THEME=Dark-darose:dark
 	export PULSE_LATENCY_MSEC=60
 
 	# Start i3wm
@@ -70,8 +71,6 @@ if [[ -o interactive ]]; then
 	zle -N bracketed-paste bracketed-paste-magic
 	. /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 	. /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-	. /home/samuel/Local/share/bash-completion/completions/am
-	. /home/samuel/Local/share/bash-completion/completions/appman
 
 	ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 
@@ -93,7 +92,7 @@ if [[ -o interactive ]]; then
 	}
 
 	precmd() {
-		PROMPT="%F{178}$(printf "$PWD" | sed "s|$HOME/|~/|; s|$HOME|~/|") "
+		PROMPT="%F{178}$(printf "$PWD" | sed "s|$HOME/|~/|; s|$HOME|~/|") %f"
 		[ -z "$preexec_timestart" ] && return 1
 		now=$(($(date +%s%0N)/1000000))
 		elapsed=$(($now-$preexec_timestart))
@@ -118,7 +117,7 @@ if [[ -o interactive ]]; then
 					| column -t | grep MiB | sort -nk 2
 	}
 
-	why_lib() {
+	whylib() {
 		LIB=${1##*/}
 		for f in $(find "$PWD" -type f -executable); do
 			if found=$(patchelf --print-needed "$f" 2>/dev/null | grep "$LIB"); then

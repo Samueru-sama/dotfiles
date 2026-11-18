@@ -19,11 +19,6 @@
   },
   "modules": [
     "separator",
-    {
-     "key": "Weather",
-     "type": "command",
-     "text": "cat ${XDG_CACHE_HOME:-$HOME/.cache}/weatherinfo"
-    },
     "datetime",
     "uptime",
     "separator",

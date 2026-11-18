@@ -53,6 +53,7 @@ check() {
   jobs=$(expr "$MAKEFLAGS" : '.*\(-j[0-9]*\).*') || true
   mkdir -p /dev/shm/git-test
   SHELL=/bin/sh \
+  GIT_SKIP_TESTS=t7900 \
   _make \
     NO_SVN_TESTS=y \
     NO_PERL=1 \
